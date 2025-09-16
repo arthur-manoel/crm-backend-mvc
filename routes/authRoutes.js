@@ -1,6 +1,6 @@
 const express = require("express");
-const { login } = require("../controllers/auth/authControllers");
-const { cadastro } = require("../controllers/auth/usuarioControllers");
+const { login } = require("../controllers/authControllers");
+const { cadastro } = require("../controllers/usuarioControllers");
 
 const router = express.Router();
 

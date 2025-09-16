@@ -1,4 +1,4 @@
-const db = require("../../Model/db")
+const db = require("../Model/db")
 
 const dashboard = (req, res) => {
 

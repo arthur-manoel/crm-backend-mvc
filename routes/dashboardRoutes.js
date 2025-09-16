@@ -1,6 +1,6 @@
 const express = require("express");
-const dashboard = require("../controllers/dashboard/dashboardControllers");
-const { VerificarToken } = require("../controllers/auth/authControllers");
+const dashboard = require("../controllers/dashboardControllers");
+const { VerificarToken } = require("../controllers/authControllers");
 
 router = express.Router();
 

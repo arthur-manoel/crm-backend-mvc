@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
-const db = require("../../Model/db") 
+const db = require("../db") 
 
-const getAll = (req, res) => {
+const usuarios = (req, res) => {
 
     const sql = "SELECT * FROM Usuario";
 
@@ -48,4 +48,4 @@ const cadastro = async (req, res) => {
     }
 };
 
-module.exports = { cadastro, getAll } 
+module.exports = { cadastro, usuarios } 
