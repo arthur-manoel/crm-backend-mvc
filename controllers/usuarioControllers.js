@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const db = require("../db") 
+const db = require("../Model/db") 
 
 const usuarios = (req, res) => {
 
