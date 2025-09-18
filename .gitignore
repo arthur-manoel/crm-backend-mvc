@@ -30,3 +30,4 @@ Thumbs.db
 # Outros arquivos temporários
 *.tmp
 *.temp
+.env
