@@ -4,7 +4,7 @@ import db from "../database/db.js";  // este db agora é um pool.promise()
 const listarCnae = async (req, res) => {
   try {
     const [rows] = await db.query("SELECT * FROM cnae");
-    res.json(rows);
+    res.json(rows); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
