@@ -9,17 +9,16 @@ dotenv.config()
 
 app.use(express.json());
 
-import db from "./database/db.js"
-db.connect();
-
 import clientesRouters from "./routes/clientesRoutes.js"
 import authRouters from "./routes/authRoutes.js"
 import dashboardRouters from "./routes/dashboardRoutes.js"
+import niveis from "./routes/niveisRoute.js"
 
 app.use(express.json());
 app.use("/", authRouters);
 app.use("/", clientesRouters);
 app.use("/", dashboardRouters);
+app.use("/", niveis);
 
 
 

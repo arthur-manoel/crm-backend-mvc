@@ -1,23 +1,21 @@
 import db from "../database/db.js";
 
-const dashboard = (req, res) => {
+const dashboard = async (req, res) => {
+  try {
     const sql = `
-        SELECT
-            (SELECT COUNT(*) FROM Cliente) AS totalClientes, 
-            (SELECT COUNT(*) FROM Cliente_CNPJ) AS totalCNPJS
+      SELECT
+        (SELECT COUNT(*) FROM Cliente) AS totalClientes, 
+        (SELECT COUNT(*) FROM Cliente_CNPJ) AS totalCNPJS
     `;
-
-    db.query(sql, (err, result) => {
-        if (err) return res.status(500).json({ error: err.message });
-
-        const totalClientes = result[0].totalClientes;
-        const totalCNPJS = result[0].totalCNPJS;
-
-        res.json({
-            totalClientes,
-            totalCNPJS
-        });
-    });
+    const [rows] = await db.query(sql);
+    if (!rows || rows.length === 0) {
+      return res.status(200).json({ totalClientes: 0, totalCNPJS: 0 });
+    }
+    const { totalClientes, totalCNPJS } = rows[0];
+    res.json({ totalClientes, totalCNPJS });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 export default dashboard;

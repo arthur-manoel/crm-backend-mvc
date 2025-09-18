@@ -1,38 +1,35 @@
 import bcrypt from "bcrypt";
-import db from "../database/db.js";
+import db from "../database/db.js";  // este `db` agora é um pool promise
 
-const usuarios = (req, res) => {
-    const sql = "SELECT * FROM Usuario";
-
-    db.query(sql, (err, usuarios) => {
-        if (err) return res.status(500).json({ error: err.message });
-        res.json({ data: usuarios });
-    });
+const usuarios = async (req, res) => {
+  try {
+    const [rows] = await db.query("SELECT * FROM Usuario");
+    res.json({ data: rows });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 const cadastro = async (req, res) => {
-    const { Nome, Email, Senha } = req.body;
+  const { Nome, Email, Senha } = req.body;
 
-    try {
-        const senhaHashed = await bcrypt.hash(Senha, 10);
-        const sql = "INSERT INTO Usuario (Nome, Email, Senha) VALUES (?, ?, ?)";
+  try {
+    const senhaHashed = await bcrypt.hash(Senha, 10);
+    const sql = "INSERT INTO Usuario (Nome, Email, Senha) VALUES (?, ?, ?)";
 
-        db.query(sql, [Nome, Email, senhaHashed], (err, result) => {
-            if (err) {
-                if (err.code === "ER_DUP_ENTRY") {
-                    return res.status(500).json({ error: "Email já cadastrado" });
-                }
-                return res.status(500).json({ error: err.message });
-            }
+    const [result] = await db.execute(sql, [Nome, Email, senhaHashed]);
 
-            res.json({
-                message: "Cliente cadastrado com sucesso!",
-                id: result.insertId,
-            });
-        });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    res.status(201).json({
+      message: "Cliente cadastrado com sucesso!",
+      id: result.insertId,
+    });
+  } catch (err) {
+    // se for duplicado de email
+    if (err.code === "ER_DUP_ENTRY") {
+      return res.status(400).json({ error: "Email já cadastrado" });
     }
+    res.status(500).json({ error: err.message });
+  }
 };
 
-export { cadastro, usuarios };
+export { usuarios, cadastro };
