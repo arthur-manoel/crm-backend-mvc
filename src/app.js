@@ -13,12 +13,14 @@ import clientesRouters from "./routes/clientesRoutes.js"
 import authRouters from "./routes/authRoutes.js"
 import dashboardRouters from "./routes/dashboardRoutes.js"
 import niveis from "./routes/niveisRoute.js"
+import cnae from "./routes/cnaeRoute.js"
 
 app.use(express.json());
 app.use("/", authRouters);
 app.use("/", clientesRouters);
 app.use("/", dashboardRouters);
 app.use("/", niveis);
+app.use("/", cnae);
 
 
 
