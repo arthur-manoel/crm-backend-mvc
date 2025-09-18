@@ -1,233 +1,228 @@
--- MySQL Workbench Forward Engineering
+-- Desabilita FKs para criar na ordem (reabilita no fim)
+SET FOREIGN_KEY_CHECKS = 0;
 
-SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+-- -------------------------
+-- Tabela: nivel_usuario
+-- -------------------------
+DROP TABLE IF EXISTS nivel_usuario;
+CREATE TABLE nivel_usuario (
+  id_nivel_usuario INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  PRIMARY KEY (id_nivel_usuario)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Schema ProjetoEverton
--- -----------------------------------------------------
+-- -------------------------
+-- Tabela: usuario
+-- -------------------------
+DROP TABLE IF EXISTS usuario;
+CREATE TABLE usuario (
+  id_usuario INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  email VARCHAR(191) NOT NULL,
+  senha VARCHAR(255) NOT NULL,
+  nivel_usuario_id INT NOT NULL,
+  PRIMARY KEY (id_usuario),
+  UNIQUE KEY uq_usuario_email (email),
+  KEY idx_usuario_nivel (nivel_usuario_id),
+  CONSTRAINT fk_usuario_nivel
+    FOREIGN KEY (nivel_usuario_id)
+    REFERENCES nivel_usuario (id_nivel_usuario)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Schema ProjetoEverton
--- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `ProjetoEverton` DEFAULT CHARACTER SET utf8 ;
-USE `ProjetoEverton` ;
+-- -------------------------
+-- Tabela: cliente
+-- -------------------------
+DROP TABLE IF EXISTS cliente;
+CREATE TABLE cliente (
+  id_cliente INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NOT NULL,
+  fone VARCHAR(45) NULL,
+  cpf VARCHAR(45) NOT NULL,
+  usuario_id INT NOT NULL,
+  PRIMARY KEY (id_cliente),
+  UNIQUE KEY uq_cliente_cpf (cpf),
+  KEY idx_cliente_usuario (usuario_id),
+  CONSTRAINT fk_cliente_usuario
+    FOREIGN KEY (usuario_id)
+    REFERENCES usuario (id_usuario)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Nivel_Usuario`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Nivel_Usuario` (
-  `idNivel_Usuario` INT NOT NULL AUTO_INCREMENT,
-  `Nome` VARCHAR(45) NULL,
-  PRIMARY KEY (`idNivel_Usuario`),
-  UNIQUE INDEX `idNivel_Usuario_UNIQUE` (`idNivel_Usuario` ASC) VISIBLE)
-ENGINE = InnoDB;
+-- -------------------------
+-- Tabela: cnpj
+-- -------------------------
+DROP TABLE IF EXISTS cnpj;
+CREATE TABLE cnpj (
+  id_cnpj INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(100) NULL,
+  PRIMARY KEY (id_cnpj)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- -------------------------
+-- Tabela: cliente_cnpj (pivot)
+-- -------------------------
+DROP TABLE IF EXISTS cliente_cnpj;
+CREATE TABLE cliente_cnpj (
+  id_cliente_cnpj INT NOT NULL AUTO_INCREMENT,
+  cliente_id INT NOT NULL,
+  cnpj_id INT NOT NULL,
+  PRIMARY KEY (id_cliente_cnpj),
+  KEY idx_cliente_cnpj_cliente (cliente_id),
+  KEY idx_cliente_cnpj_cnpj (cnpj_id),
+  CONSTRAINT fk_cliente_cnpj_cliente
+    FOREIGN KEY (cliente_id)
+    REFERENCES cliente (id_cliente)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_cliente_cnpj_cnpj
+    FOREIGN KEY (cnpj_id)
+    REFERENCES cnpj (id_cnpj)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Usuario`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Usuario` (
-  `idUsuario` INT NOT NULL,
-  `Nome` VARCHAR(45) NOT NULL,
-  `Email` VARCHAR(45) NOT NULL,
-  `Senha` VARCHAR(45) NOT NULL,
-  `Nivel_Usuario_idNivel_Usuario` INT NOT NULL,
-  PRIMARY KEY (`idUsuario`),
-  INDEX `fk_Usuario_Nivel_Usuario1_idx` (`Nivel_Usuario_idNivel_Usuario` ASC) VISIBLE,
-  CONSTRAINT `fk_Usuario_Nivel_Usuario1`
-    FOREIGN KEY (`Nivel_Usuario_idNivel_Usuario`)
-    REFERENCES `ProjetoEverton`.`Nivel_Usuario` (`idNivel_Usuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+-- -------------------------
+-- Tabela: tipo_link
+-- -------------------------
+DROP TABLE IF EXISTS tipo_link;
+CREATE TABLE tipo_link (
+  id_tipo_link INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(45) NOT NULL,
+  PRIMARY KEY (id_tipo_link)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- -------------------------
+-- Tabela: cnae
+-- -------------------------
+DROP TABLE IF EXISTS cnae;
+CREATE TABLE cnae (
+  id_cnae INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(200) NOT NULL,
+  numero VARCHAR(45) NOT NULL,
+  PRIMARY KEY (id_cnae),
+  UNIQUE KEY uq_cnae_numero (numero)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Cliente`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Cliente` (
-  `idCliente` INT NOT NULL AUTO_INCREMENT,
-  `Nome` VARCHAR(45) NOT NULL,
-  `Fone` VARCHAR(45) NOT NULL,
-  `CPF` VARCHAR(45) NOT NULL,
-  `Usuario_idUsuario` INT NOT NULL,
-  PRIMARY KEY (`idCliente`),
-  INDEX `fk_Cliente_Usuario_idx` (`Usuario_idUsuario` ASC) VISIBLE,
-  UNIQUE INDEX `idCliente_UNIQUE` (`idCliente` ASC) VISIBLE,
-  CONSTRAINT `fk_Cliente_Usuario`
-    FOREIGN KEY (`Usuario_idUsuario`)
-    REFERENCES `ProjetoEverton`.`Usuario` (`idUsuario`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+-- -------------------------
+-- Tabela: geracao_link  (antes "Geração de LINK")
+-- -------------------------
+DROP TABLE IF EXISTS geracao_link;
+CREATE TABLE geracao_link (
+  id_geracao_link INT NOT NULL AUTO_INCREMENT,
+  link VARCHAR(255) NOT NULL,
+  tipo_link_id INT NOT NULL,
+  cliente_id INT NOT NULL,
+  cliente_cnpj_id INT NOT NULL,
+  cnae_id INT NOT NULL,
+  PRIMARY KEY (id_geracao_link),
+  KEY idx_gl_tipo_link (tipo_link_id),
+  KEY idx_gl_cliente (cliente_id),
+  KEY idx_gl_cliente_cnpj (cliente_cnpj_id),
+  KEY idx_gl_cnae (cnae_id),
+  CONSTRAINT fk_gl_tipo_link
+    FOREIGN KEY (tipo_link_id)
+    REFERENCES tipo_link (id_tipo_link)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_gl_cliente
+    FOREIGN KEY (cliente_id)
+    REFERENCES cliente (id_cliente)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_gl_cliente_cnpj
+    FOREIGN KEY (cliente_cnpj_id)
+    REFERENCES cliente_cnpj (id_cliente_cnpj)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_gl_cnae
+    FOREIGN KEY (cnae_id)
+    REFERENCES cnae (id_cnae)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- -------------------------
+-- Tabela: cnpj_cnae (pivot)
+-- -------------------------
+DROP TABLE IF EXISTS cnpj_cnae;
+CREATE TABLE cnpj_cnae (
+  id_cnpj_cnae INT NOT NULL AUTO_INCREMENT,
+  cnae_id INT NOT NULL,
+  cnpj_id INT NOT NULL,
+  PRIMARY KEY (id_cnpj_cnae),
+  KEY idx_cnpj_cnae_cnae (cnae_id),
+  KEY idx_cnpj_cnae_cnpj (cnpj_id),
+  CONSTRAINT fk_cnpj_cnae_cnae
+    FOREIGN KEY (cnae_id)
+    REFERENCES cnae (id_cnae)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_cnpj_cnae_cnpj
+    FOREIGN KEY (cnpj_id)
+    REFERENCES cnpj (id_cnpj)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`CNPJ`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`CNPJ` (
-  `idCNPJ` INT NOT NULL AUTO_INCREMENT,
-  `Nome` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idCNPJ`),
-  UNIQUE INDEX `idCNPJ_UNIQUE` (`idCNPJ` ASC) VISIBLE)
-ENGINE = InnoDB;
+-- -------------------------
+-- Tabela: tipo_documento
+-- -------------------------
+DROP TABLE IF EXISTS tipo_documento;
+CREATE TABLE tipo_documento (
+  id_tipo_documento INT NOT NULL AUTO_INCREMENT,
+  nome VARCHAR(45) NULL,
+  PRIMARY KEY (id_tipo_documento)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- -------------------------
+-- Tabela: documento
+-- -------------------------
+DROP TABLE IF EXISTS documento;
+CREATE TABLE documento (
+  id_documento INT NOT NULL AUTO_INCREMENT,
+  link VARCHAR(255) NOT NULL,
+  tipo_documento_id INT NOT NULL,
+  cliente_id INT NOT NULL,
+  cnpj_id INT NOT NULL,
+  PRIMARY KEY (id_documento),
+  KEY idx_doc_tipo (tipo_documento_id),
+  KEY idx_doc_cliente (cliente_id),
+  KEY idx_doc_cnpj (cnpj_id),
+  CONSTRAINT fk_doc_tipo
+    FOREIGN KEY (tipo_documento_id)
+    REFERENCES tipo_documento (id_tipo_documento)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_doc_cliente
+    FOREIGN KEY (cliente_id)
+    REFERENCES cliente (id_cliente)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT,
+  CONSTRAINT fk_doc_cnpj
+    FOREIGN KEY (cnpj_id)
+    REFERENCES cnpj (id_cnpj)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Cliente_CNPJ`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Cliente_CNPJ` (
-  `idCliente_CNPJ` INT NOT NULL AUTO_INCREMENT,
-  `Cliente_idCliente` INT NOT NULL,
-  `CNPJ_idCNPJ` INT NOT NULL,
-  PRIMARY KEY (`idCliente_CNPJ`),
-  INDEX `fk_Cliente_CNPJ_Cliente1_idx` (`Cliente_idCliente` ASC) VISIBLE,
-  UNIQUE INDEX `idCliente_CNPJ_UNIQUE` (`idCliente_CNPJ` ASC) VISIBLE,
-  INDEX `fk_Cliente_CNPJ_CNPJ1_idx` (`CNPJ_idCNPJ` ASC) VISIBLE,
-  CONSTRAINT `fk_Cliente_CNPJ_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`)
-    REFERENCES `ProjetoEverton`.`Cliente` (`idCliente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Cliente_CNPJ_CNPJ1`
-    FOREIGN KEY (`CNPJ_idCNPJ`)
-    REFERENCES `ProjetoEverton`.`CNPJ` (`idCNPJ`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+-- -------------------------
+-- Tabela: cnpj_status (corrigido o typo "CPNJ")
+-- -------------------------
+DROP TABLE IF EXISTS cnpj_status;
+CREATE TABLE cnpj_status (
+  id_cnpj_status INT NOT NULL AUTO_INCREMENT,
+  cnpj_id INT NOT NULL,
+  PRIMARY KEY (id_cnpj_status),
+  KEY idx_cnpj_status_cnpj (cnpj_id),
+  CONSTRAINT fk_cnpj_status_cnpj
+    FOREIGN KEY (cnpj_id)
+    REFERENCES cnpj (id_cnpj)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Tipo_Link`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Tipo_Link` (
-  `idTipo_Link` INT NOT NULL AUTO_INCREMENT,
-  `Nome` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idTipo_Link`),
-  UNIQUE INDEX `idTipo_Link_UNIQUE` (`idTipo_Link` ASC) VISIBLE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`CNAE`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`CNAE` (
-  `idCNAE` INT NOT NULL AUTO_INCREMENT,
-  `Nome` VARCHAR(45) NOT NULL,
-  `Numero` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idCNAE`),
-  UNIQUE INDEX `idCNAE_UNIQUE` (`idCNAE` ASC) VISIBLE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Geração de LINK`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Geração de LINK` (
-  `idGeração de LINK` INT NOT NULL AUTO_INCREMENT,
-  `Link` VARCHAR(45) NOT NULL,
-  `Tipo_Link_idTipo_Link` INT NOT NULL,
-  `Cliente_idCliente` INT NOT NULL,
-  `Cliente_CNPJ_idCliente_CNPJ` INT NOT NULL,
-  `CNAE_idCNAE` INT NOT NULL,
-  PRIMARY KEY (`idGeração de LINK`),
-  UNIQUE INDEX `idGeração de LINK_UNIQUE` (`idGeração de LINK` ASC) VISIBLE,
-  INDEX `fk_Geração de LINK_Tipo_Link1_idx` (`Tipo_Link_idTipo_Link` ASC) VISIBLE,
-  INDEX `fk_Geração de LINK_Cliente1_idx` (`Cliente_idCliente` ASC) VISIBLE,
-  INDEX `fk_Geração de LINK_Cliente_CNPJ1_idx` (`Cliente_CNPJ_idCliente_CNPJ` ASC) VISIBLE,
-  INDEX `fk_Geração de LINK_CNAE1_idx` (`CNAE_idCNAE` ASC) VISIBLE,
-  CONSTRAINT `fk_Geração de LINK_Tipo_Link1`
-    FOREIGN KEY (`Tipo_Link_idTipo_Link`)
-    REFERENCES `ProjetoEverton`.`Tipo_Link` (`idTipo_Link`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Geração de LINK_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`)
-    REFERENCES `ProjetoEverton`.`Cliente` (`idCliente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Geração de LINK_Cliente_CNPJ1`
-    FOREIGN KEY (`Cliente_CNPJ_idCliente_CNPJ`)
-    REFERENCES `ProjetoEverton`.`Cliente_CNPJ` (`idCliente_CNPJ`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Geração de LINK_CNAE1`
-    FOREIGN KEY (`CNAE_idCNAE`)
-    REFERENCES `ProjetoEverton`.`CNAE` (`idCNAE`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`CNPJ_CNAE`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`CNPJ_CNAE` (
-  `idCNPJ_CNAE` INT NOT NULL AUTO_INCREMENT,
-  `CNAE_idCNAE` INT NOT NULL,
-  `CNPJ_idCNPJ` INT NOT NULL,
-  PRIMARY KEY (`idCNPJ_CNAE`),
-  UNIQUE INDEX `idCNPJ_CNAE_UNIQUE` (`idCNPJ_CNAE` ASC) VISIBLE,
-  INDEX `fk_CNPJ_CNAE_CNAE1_idx` (`CNAE_idCNAE` ASC) VISIBLE,
-  INDEX `fk_CNPJ_CNAE_CNPJ1_idx` (`CNPJ_idCNPJ` ASC) VISIBLE,
-  CONSTRAINT `fk_CNPJ_CNAE_CNAE1`
-    FOREIGN KEY (`CNAE_idCNAE`)
-    REFERENCES `ProjetoEverton`.`CNAE` (`idCNAE`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_CNPJ_CNAE_CNPJ1`
-    FOREIGN KEY (`CNPJ_idCNPJ`)
-    REFERENCES `ProjetoEverton`.`CNPJ` (`idCNPJ`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Tipo_Documento`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Tipo_Documento` (
-  `idTipo_Documento` INT NOT NULL AUTO_INCREMENT,
-  `Nome` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idTipo_Documento`),
-  UNIQUE INDEX `idTipo_Documento_UNIQUE` (`idTipo_Documento` ASC) VISIBLE)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `ProjetoEverton`.`Documento`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ProjetoEverton`.`Documento` (
-  `idDocumento` INT NOT NULL AUTO_INCREMENT,
-  `Link` VARCHAR(45) NOT NULL,
-  `Tipo_Documento_idTipo_Documento` INT NOT NULL,
-  `Cliente_idCliente` INT NOT NULL,
-  `CNPJ_idCNPJ` INT NOT NULL,
-  PRIMARY KEY (`idDocumento`),
-  UNIQUE INDEX `idDocumento_UNIQUE` (`idDocumento` ASC) VISIBLE,
-  INDEX `fk_Documento_Tipo_Documento1_idx` (`Tipo_Documento_idTipo_Documento` ASC) VISIBLE,
-  INDEX `fk_Documento_Cliente1_idx` (`Cliente_idCliente` ASC) VISIBLE,
-  INDEX `fk_Documento_CNPJ1_idx` (`CNPJ_idCNPJ` ASC) VISIBLE,
-  CONSTRAINT `fk_Documento_Tipo_Documento1`
-    FOREIGN KEY (`Tipo_Documento_idTipo_Documento`)
-    REFERENCES `ProjetoEverton`.`Tipo_Documento` (`idTipo_Documento`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Documento_Cliente1`
-    FOREIGN KEY (`Cliente_idCliente`)
-    REFERENCES `ProjetoEverton`.`Cliente` (`idCliente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Documento_CNPJ1`
-    FOREIGN KEY (`CNPJ_idCNPJ`)
-    REFERENCES `ProjetoEverton`.`CNPJ` (`idCNPJ`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+-- Reabilita FKs
+SET FOREIGN_KEY_CHECKS = 1;
