@@ -10,7 +10,7 @@ const SECRET = process.env.SECRET;
 const login = async (req, res) => {
   const { Email, Senha } = req.body;
 
-  const sql = "SELECT * FROM Usuario WHERE Email = ?";
+  const sql = "SELECT * FROM usuario WHERE Email = ?";
 
   try {
     const [rows] = await db.execute(sql, [Email]);
@@ -19,13 +19,13 @@ const login = async (req, res) => {
     }
 
     const usuario = rows[0];
-    const senhaCorreta = await bcrypt.compare(Senha, usuario.Senha);
+    const senhaCorreta = await bcrypt.compare(Senha, usuario.senha);
     if (!senhaCorreta) {
       return res.status(401).json({ error: "Informações incorretas" });
     }
 
     const token = jwt.sign(
-      { id: usuario.idUsuario, email: usuario.Email },
+      { id: usuario.id_usuario, email: usuario.Email },
       SECRET,
       { expiresIn: "1h" }
     );

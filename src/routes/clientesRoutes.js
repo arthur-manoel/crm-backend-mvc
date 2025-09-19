@@ -4,7 +4,7 @@ import {
   cadastrarcliente,
   excluircliente,
   atualizarcliente,
-} from "../controllers/clientesControllers.js";
+} from "../controllers/clientesController.js";
 import { VerificarToken } from "../controllers/authControllers.js";
 
 const router = express.Router();

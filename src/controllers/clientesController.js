@@ -3,7 +3,7 @@ import db from "../database/db.js";  // agora é o pool.promise()
 const clientes = async (req, res) => {
   try {
     const userId = req.user.id;
-    const sql = "SELECT * FROM cliente WHERE Usuario_idUsuario = ?";
+    const sql = "SELECT * FROM cliente WHERE usuario_id = ?";
     const [rows] = await db.execute(sql, [userId]);
     res.json(rows);
   } catch (err) {
@@ -15,7 +15,7 @@ const cadastrarcliente = async (req, res) => {
   try {
     const { Nome, Fone, CPF } = req.body;
     const userId = req.user.id;
-    const sql = "INSERT INTO cliente (Nome, Fone, CPF, Usuario_idUsuario) VALUES (?, ?, ?, ?)";
+    const sql = "INSERT INTO cliente (nome, fone, cpf, usuario_id) VALUES (?, ?, ?, ?)";
     const [result] = await db.execute(sql, [Nome, Fone, CPF, userId]);
     res.status(201).json({ message: "Cliente cadastrado com sucesso!", id: result.insertId });
   } catch (err) {
@@ -26,7 +26,7 @@ const cadastrarcliente = async (req, res) => {
 const excluircliente = async (req, res) => {
   try {
     const id = req.params.id;
-    const sql = "DELETE FROM Cliente WHERE idCliente = ?";
+    const sql = "DELETE FROM cliente WHERE id_cliente = ?";
     const [result] = await db.execute(sql, [id]);
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Cliente não encontrado" });
@@ -43,9 +43,9 @@ const atualizarcliente = async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
     const sql = `
-      UPDATE Cliente
-      SET Nome = ?, Fone = ?, CPF = ?
-      WHERE idCliente = ? AND Usuario_idUsuario = ?
+      UPDATE cliente
+      SET nome = ?, fone = ?, cpf = ?
+      WHERE id_cliente = ? AND usuario_id = ?
     `;
     const [result] = await db.execute(sql, [Nome, Fone, CPF, id, userId]);
     if (result.affectedRows === 0) {

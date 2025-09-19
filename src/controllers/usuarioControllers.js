@@ -11,16 +11,16 @@ const usuarios = async (req, res) => {
 };
 
 const cadastro = async (req, res) => {
-  const { Nome, Email, Senha } = req.body;
+  const { Nome, Email, Senha, nivel_usuario_id } = req.body;
 
   try {
     const senhaHashed = await bcrypt.hash(Senha, 10);
-    const sql = "INSERT INTO Usuario (Nome, Email, Senha) VALUES (?, ?, ?)";
+    const sql = "INSERT INTO usuario (Nome, Email, Senha, nivel_usuario_id) VALUES (?, ?, ?, ?)";
 
-    const [result] = await db.execute(sql, [Nome, Email, senhaHashed]);
+    const [result] = await db.execute(sql, [Nome, Email, senhaHashed, nivel_usuario_id]);
 
     res.status(201).json({
-      message: "Cliente cadastrado com sucesso!",
+      message: "Usuario  cadastrado com sucesso!",
       id: result.insertId,
     });
   } catch (err) {
