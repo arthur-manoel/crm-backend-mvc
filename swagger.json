@@ -7,12 +7,13 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000"
+      "url": "https://projeto-back-ten.vercel.app/"
     }
   ], 
   "paths": {
     "/login": {
       "post": {
+        "tags": ["Autenticação"],
         "summary": "Realiza o login do usuário e retorna um token JWT",
         "description": "Este endpoint autentica o usuário com o email e senha e retorna um token JWT para uso em outras rotas protegidas.",
         "requestBody": {
@@ -64,6 +65,7 @@
     },
     "/verificar-token": {
       "get": {
+        "tags": ["Autenticação"],
         "summary": "Verifica a validade do token JWT",
         "description": "Este endpoint permite verificar se o token JWT fornecido na requisição é válido e não expirou.",
         "security": [
@@ -86,6 +88,7 @@
     },
     "/clientes/{id}/cnpjs": {
   "get": {
+    "tags": ["Clientes", "CNPJs"],
     "summary": "Retorna todos os CNPJs de um cliente",
     "description": "Este endpoint retorna todos os CNPJs associados a um cliente, com base no seu ID.",
     "parameters": [
@@ -131,6 +134,7 @@
 },
 "/clientes/{id}/cnpj": {
   "post": {
+    "tags": ["Clientes", "CNPJs"],
     "summary": "Adiciona um novo CNPJ a um cliente",
     "description": "Este endpoint associa um novo CNPJ ao cliente, através do seu ID.",
     "parameters": [
@@ -171,6 +175,7 @@
     }
   },
   "put": {
+    "tags": ["Clientes", "CNPJs"],
     "summary": "Atualiza o CNPJ de um cliente",
     "description": "Este endpoint permite atualizar o CNPJ associado a um cliente.",
     "parameters": [
@@ -215,6 +220,7 @@
     }
   },
   "delete": {
+    "tags": ["Clientes", "CNPJs"],
     "summary": "Exclui um CNPJ associado a um cliente",
     "description": "Este endpoint remove a associação de um CNPJ de um cliente.",
     "parameters": [
@@ -257,6 +263,7 @@
 },
 "/clientes": {
   "get": {
+    "tags": ["Clientes"],
     "summary": "Retorna todos os clientes de um usuário",
     "description": "Este endpoint retorna todos os clientes cadastrados por um usuário, baseado no ID do usuário que está autenticado.",
     "responses": {
@@ -297,6 +304,7 @@
     }
   },
   "post": {
+    "tags": ["Clientes"],
     "summary": "Cadastra um novo cliente",
     "description": "Este endpoint permite o cadastro de um novo cliente, com os dados nome, telefone e CPF.",
     "requestBody": {
@@ -353,6 +361,7 @@
 },
 "/clientes/{id}": {
   "delete": {
+    "tags": ["Clientes"],
     "summary": "Exclui um cliente",
     "description": "Este endpoint exclui um cliente específico com base no ID fornecido.",
     "parameters": [
@@ -379,6 +388,7 @@
     }
   },
   "put": {
+    "tags": ["Clientes"],
     "summary": "Atualiza um cliente",
     "description": "Este endpoint permite atualizar os dados de um cliente específico, como nome, telefone e CPF.",
     "parameters": [
@@ -432,6 +442,7 @@
 },
 "/cnae": {
   "get": {
+    "tags": ["CNAE"],
     "summary": "Lista todos os CNAEs",
     "description": "Este endpoint retorna todos os CNAEs cadastrados no sistema.",
     "responses": {
@@ -468,6 +479,7 @@
     }
   },
   "post": {
+    "tags": ["CNAE"],
     "summary": "Adiciona um novo CNAE",
     "description": "Este endpoint adiciona um novo CNAE no sistema.",
     "requestBody": {
@@ -520,6 +532,7 @@
 },
 "/cnae/{id}": {
   "put": {
+    "tags": ["CNAE"],
     "summary": "Atualiza os dados de um CNAE",
     "description": "Este endpoint permite atualizar o nome de um CNAE existente.",
     "parameters": [
@@ -563,6 +576,7 @@
     }
   },
   "delete": {
+    "tags": ["CNAE"],
     "summary": "Exclui um CNAE",
     "description": "Este endpoint exclui um CNAE com base no ID fornecido.",
     "parameters": [
@@ -591,6 +605,7 @@
 },
 "/cnpj": {
   "get": {
+    "tags": ["CNPJs"],
     "summary": "Lista todos os CNPJs",
     "description": "Este endpoint retorna todos os CNPJs cadastrados no sistema.",
     "responses": {
@@ -623,6 +638,7 @@
     }
   },
   "post": {
+    "tags": ["CNPJs"],
     "summary": "Cadastra um novo CNPJ",
     "description": "Este endpoint adiciona um novo CNPJ no sistema.",
     "requestBody": {
@@ -671,6 +687,7 @@
 },
 "/cnpj/{id}": {
   "put": {
+    "tags": ["CNPJs"],
     "summary": "Atualiza um CNPJ",
     "description": "Este endpoint permite atualizar o nome de um CNPJ existente.",
     "parameters": [
@@ -714,6 +731,7 @@
     }
   },
   "delete": {
+    "tags": ["CNPJs"],
     "summary": "Exclui um CNPJ",
     "description": "Este endpoint exclui um CNPJ com base no ID fornecido.",
     "parameters": [
@@ -742,6 +760,7 @@
 },
 "/dashboard": {
   "get": {
+     "tags": ["Dashboard"],
     "summary": "Retorna dados gerais do dashboard",
     "description": "Este endpoint retorna o total de clientes e CNPJs cadastrados no sistema.",
     "responses": {
@@ -773,6 +792,7 @@
 },
 "/nivel_usuario": {
   "get": {
+    "tags": ["Níveis de Usuário"],
     "summary": "Lista todos os níveis de usuários",
     "description": "Este endpoint retorna todos os níveis de usuários cadastrados no sistema.",
     "responses": {
@@ -809,6 +829,7 @@
     }
   },
   "post": {
+    "tags": ["Níveis de Usuário"],
     "summary": "Adiciona um novo nível de usuário",
     "description": "Este endpoint adiciona um novo nível de usuário ao sistema.",
     "requestBody": {
@@ -857,6 +878,7 @@
 },
 "/nivel_usuario/{id}": {
   "put": {
+    "tags": ["Níveis de Usuário"],
     "summary": "Atualiza um nível de usuário",
     "description": "Este endpoint permite atualizar os dados de um nível de usuário existente.",
     "parameters": [
@@ -904,6 +926,7 @@
     }
   },
   "delete": {
+    "tags": ["Níveis de Usuário"],
     "summary": "Exclui um nível de usuário",
     "description": "Este endpoint exclui um nível de usuário com base no ID fornecido.",
     "parameters": [
@@ -932,6 +955,7 @@
 },
 "/upload": {
   "post": {
+    "tags": ["Upload"],
     "summary": "Faz o upload de um arquivo",
     "description": "Este endpoint permite o upload de um arquivo para o servidor. O arquivo será armazenado no diretório 'uploads'.",
     "requestBody": {
@@ -967,6 +991,7 @@
 },
 "/usuarios": {
   "get": {
+    "tags": ["Usuários"],
     "summary": "Lista todos os usuários",
     "description": "Este endpoint retorna todos os usuários cadastrados no sistema.",
     "responses": {
@@ -1009,6 +1034,7 @@
 },
 "/cadastro": {
   "post": {
+    "tags": ["Usuários"],
     "summary": "Cadastra um novo usuário",
     "description": "Este endpoint permite cadastrar um novo usuário com nome, email e senha. A senha será criptografada antes de ser armazenada no banco de dados.",
     "requestBody": {
