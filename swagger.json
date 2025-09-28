@@ -1,0 +1,1083 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Autenticação",
+    "version": "1.0.0",
+    "description": "API para login de usuários e autenticação via JWT"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Realiza o login do usuário e retorna um token JWT",
+        "description": "Este endpoint autentica o usuário com o email e senha e retorna um token JWT para uso em outras rotas protegidas.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Email": {
+                    "type": "string",
+                    "description": "O e-mail do usuário"
+                  },
+                  "Senha": {
+                    "type": "string",
+                    "description": "A senha do usuário"
+                  }
+                },
+                "required": ["Email", "Senha"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login bem-sucedido, retorna o token JWT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "description": "Token JWT gerado para o usuário"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email ou senha inválidos"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/verificar-token": {
+      "get": {
+        "summary": "Verifica a validade do token JWT",
+        "description": "Este endpoint permite verificar se o token JWT fornecido na requisição é válido e não expirou.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Token válido, acesso permitido"
+          },
+          "401": {
+            "description": "Token não fornecido"
+          },
+          "403": {
+            "description": "Token inválido ou expirado"
+          }
+        }
+      }
+    },
+    "/clientes/{id}/cnpjs": {
+  "get": {
+    "summary": "Retorna todos os CNPJs de um cliente",
+    "description": "Este endpoint retorna todos os CNPJs associados a um cliente, com base no seu ID.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do cliente"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Lista de CNPJs associada ao cliente",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id_cnpj": {
+                    "type": "integer",
+                    "description": "ID do CNPJ"
+                  },
+                  "cnpj": {
+                    "type": "string",
+                    "description": "Número do CNPJ"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro ao buscar CNPJs do cliente"
+      }
+    }
+  }
+},
+"/clientes/{id}/cnpj": {
+  "post": {
+    "summary": "Adiciona um novo CNPJ a um cliente",
+    "description": "Este endpoint associa um novo CNPJ ao cliente, através do seu ID.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do cliente"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "cnpj_id": {
+                "type": "integer",
+                "description": "ID do CNPJ a ser associado ao cliente"
+              }
+            },
+            "required": ["cnpj_id"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "CNPJ associado com sucesso"
+      },
+      "500": {
+        "description": "Erro ao associar CNPJ ao cliente"
+      }
+    }
+  },
+  "put": {
+    "summary": "Atualiza o CNPJ de um cliente",
+    "description": "Este endpoint permite atualizar o CNPJ associado a um cliente.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do cliente"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "cnpj_id_antigo": {
+                "type": "integer",
+                "description": "ID do CNPJ anterior a ser atualizado"
+              },
+              "cnpj_id_novo": {
+                "type": "integer",
+                "description": "Novo ID do CNPJ a ser associado"
+              }
+            },
+            "required": ["cnpj_id_antigo", "cnpj_id_novo"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "CNPJ atualizado com sucesso"
+      },
+      "500": {
+        "description": "Erro ao atualizar o CNPJ"
+      }
+    }
+  },
+  "delete": {
+    "summary": "Exclui um CNPJ associado a um cliente",
+    "description": "Este endpoint remove a associação de um CNPJ de um cliente.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do cliente"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "cnpj_id": {
+                "type": "integer",
+                "description": "ID do CNPJ a ser excluído"
+              }
+            },
+            "required": ["cnpj_id"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "CNPJ excluído com sucesso"
+      },
+      "500": {
+        "description": "Erro ao excluir CNPJ"
+      }
+    }
+  }
+},
+"/clientes": {
+  "get": {
+    "summary": "Retorna todos os clientes de um usuário",
+    "description": "Este endpoint retorna todos os clientes cadastrados por um usuário, baseado no ID do usuário que está autenticado.",
+    "responses": {
+      "200": {
+        "description": "Lista de clientes associados ao usuário",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id_cliente": {
+                    "type": "integer",
+                    "description": "ID do cliente"
+                  },
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do cliente"
+                  },
+                  "fone": {
+                    "type": "string",
+                    "description": "Telefone do cliente"
+                  },
+                  "cpf": {
+                    "type": "string",
+                    "description": "CPF do cliente"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  },
+  "post": {
+    "summary": "Cadastra um novo cliente",
+    "description": "Este endpoint permite o cadastro de um novo cliente, com os dados nome, telefone e CPF.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "Nome": {
+                "type": "string",
+                "description": "Nome do cliente"
+              },
+              "Fone": {
+                "type": "string",
+                "description": "Telefone do cliente"
+              },
+              "CPF": {
+                "type": "string",
+                "description": "CPF do cliente"
+              }
+            },
+            "required": ["Nome", "Fone", "CPF"]
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Cliente cadastrado com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Mensagem de sucesso"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do cliente recém-criado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  }
+},
+"/clientes/{id}": {
+  "delete": {
+    "summary": "Exclui um cliente",
+    "description": "Este endpoint exclui um cliente específico com base no ID fornecido.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do cliente"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Cliente excluído com sucesso"
+      },
+      "404": {
+        "description": "Cliente não encontrado"
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  },
+  "put": {
+    "summary": "Atualiza um cliente",
+    "description": "Este endpoint permite atualizar os dados de um cliente específico, como nome, telefone e CPF.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do cliente"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "Nome": {
+                "type": "string",
+                "description": "Nome do cliente"
+              },
+              "Fone": {
+                "type": "string",
+                "description": "Telefone do cliente"
+              },
+              "CPF": {
+                "type": "string",
+                "description": "CPF do cliente"
+              }
+            },
+            "required": ["Nome", "Fone", "CPF"]
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Cliente atualizado com sucesso"
+        },
+        "404": {
+          "description": "Cliente não encontrado ou não pertence ao usuário"
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  }
+},
+"/cnae": {
+  "get": {
+    "summary": "Lista todos os CNAEs",
+    "description": "Este endpoint retorna todos os CNAEs cadastrados no sistema.",
+    "responses": {
+      "200": {
+        "description": "Lista de CNAEs",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do CNAE"
+                  },
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do CNAE"
+                  },
+                  "numero": {
+                    "type": "string",
+                    "description": "Número do CNAE"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  },
+  "post": {
+    "summary": "Adiciona um novo CNAE",
+    "description": "Este endpoint adiciona um novo CNAE no sistema.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "nome": {
+                "type": "string",
+                "description": "Nome do CNAE"
+              },
+              "numero": {
+                "type": "string",
+                "description": "Número do CNAE"
+              }
+            },
+            "required": ["nome", "numero"]
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "CNAE criado com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Mensagem de sucesso"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do CNAE recém-criado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  }
+},
+"/cnae/{id}": {
+  "put": {
+    "summary": "Atualiza os dados de um CNAE",
+    "description": "Este endpoint permite atualizar o nome de um CNAE existente.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do CNAE"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "nome": {
+                "type": "string",
+                "description": "Nome do CNAE"
+              }
+            },
+            "required": ["nome"]
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "CNAE atualizado com sucesso"
+        },
+        "404": {
+          "description": "CNAE não encontrado"
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  },
+  "delete": {
+    "summary": "Exclui um CNAE",
+    "description": "Este endpoint exclui um CNAE com base no ID fornecido.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do CNAE"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "CNAE excluído com sucesso"
+      },
+      "404": {
+        "description": "CNAE não encontrado"
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  }
+},
+"/cnpj": {
+  "get": {
+    "summary": "Lista todos os CNPJs",
+    "description": "Este endpoint retorna todos os CNPJs cadastrados no sistema.",
+    "responses": {
+      "200": {
+        "description": "Lista de CNPJs",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id_cnpj": {
+                    "type": "integer",
+                    "description": "ID do CNPJ"
+                  },
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do CNPJ"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  },
+  "post": {
+    "summary": "Cadastra um novo CNPJ",
+    "description": "Este endpoint adiciona um novo CNPJ no sistema.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "Nome": {
+                "type": "string",
+                "description": "Nome do CNPJ"
+              }
+            },
+            "required": ["Nome"]
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "CNPJ cadastrado com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Mensagem de sucesso"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do CNPJ recém-criado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  }
+},
+"/cnpj/{id}": {
+  "put": {
+    "summary": "Atualiza um CNPJ",
+    "description": "Este endpoint permite atualizar o nome de um CNPJ existente.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do CNPJ"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "Nome": {
+                "type": "string",
+                "description": "Nome do CNPJ"
+              }
+            },
+            "required": ["Nome"]
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "CNPJ atualizado com sucesso"
+        },
+        "404": {
+          "description": "CNPJ não encontrado"
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  },
+  "delete": {
+    "summary": "Exclui um CNPJ",
+    "description": "Este endpoint exclui um CNPJ com base no ID fornecido.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do CNPJ"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "CNPJ excluído com sucesso"
+      },
+      "404": {
+        "description": "CNPJ não encontrado"
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  }
+},
+"/dashboard": {
+  "get": {
+    "summary": "Retorna dados gerais do dashboard",
+    "description": "Este endpoint retorna o total de clientes e CNPJs cadastrados no sistema.",
+    "responses": {
+      "200": {
+        "description": "Dados do dashboard com o total de clientes e CNPJs",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "totalClientes": {
+                  "type": "integer",
+                  "description": "Total de clientes cadastrados"
+                },
+                "totalCNPJS": {
+                  "type": "integer",
+                  "description": "Total de CNPJs cadastrados"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  }
+},
+"/nivel_usuario": {
+  "get": {
+    "summary": "Lista todos os níveis de usuários",
+    "description": "Este endpoint retorna todos os níveis de usuários cadastrados no sistema.",
+    "responses": {
+      "200": {
+        "description": "Lista de níveis de usuários",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do nível de usuário"
+                  },
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do nível de usuário"
+                  },
+                  "descricao": {
+                    "type": "string",
+                    "description": "Descrição do nível de usuário"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  },
+  "post": {
+    "summary": "Adiciona um novo nível de usuário",
+    "description": "Este endpoint adiciona um novo nível de usuário ao sistema.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "nome": {
+                "type": "string",
+                "description": "Nome do nível de usuário"
+              }
+            },
+            "required": ["nome"]
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Nível de usuário criado com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Mensagem de sucesso"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do nível de usuário recém-criado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  }
+},
+"/nivel_usuario/{id}": {
+  "put": {
+    "summary": "Atualiza um nível de usuário",
+    "description": "Este endpoint permite atualizar os dados de um nível de usuário existente.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do nível de usuário"
+        }
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "nome": {
+                "type": "string",
+                "description": "Nome do nível de usuário"
+              },
+              "descricao": {
+                "type": "string",
+                "description": "Descrição do nível de usuário"
+              }
+            },
+            "required": ["nome", "descricao"]
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Nível de usuário atualizado com sucesso"
+        },
+        "404": {
+          "description": "Nível de usuário não encontrado"
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  },
+  "delete": {
+    "summary": "Exclui um nível de usuário",
+    "description": "Este endpoint exclui um nível de usuário com base no ID fornecido.",
+    "parameters": [
+      {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "description": "ID do nível de usuário"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Nível de usuário excluído com sucesso"
+      },
+      "404": {
+        "description": "Nível de usuário não encontrado"
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  }
+},
+"/upload": {
+  "post": {
+    "summary": "Faz o upload de um arquivo",
+    "description": "Este endpoint permite o upload de um arquivo para o servidor. O arquivo será armazenado no diretório 'uploads'.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "multipart/form-data": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "arquivo": {
+                "type": "string",
+                "format": "binary",
+                "description": "Arquivo a ser enviado"
+              }
+            },
+            "required": ["arquivo"]
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Arquivo enviado com sucesso!"
+        },
+        "400": {
+          "description": "Arquivo não encontrado"
+        },
+        "500": {
+          "description": "Erro ao enviar o arquivo"
+        }
+      }
+    }
+  }
+},
+"/usuarios": {
+  "get": {
+    "summary": "Lista todos os usuários",
+    "description": "Este endpoint retorna todos os usuários cadastrados no sistema.",
+    "responses": {
+      "200": {
+        "description": "Lista de usuários",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id_usuario": {
+                    "type": "integer",
+                    "description": "ID do usuário"
+                  },
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do usuário"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "Email do usuário"
+                  },
+                  "nivel_usuario_id": {
+                    "type": "integer",
+                    "description": "ID do nível de usuário"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Erro no servidor"
+      }
+    }
+  }
+},
+"/cadastro": {
+  "post": {
+    "summary": "Cadastra um novo usuário",
+    "description": "Este endpoint permite cadastrar um novo usuário com nome, email e senha. A senha será criptografada antes de ser armazenada no banco de dados.",
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "Nome": {
+                "type": "string",
+                "description": "Nome do usuário"
+              },
+              "Email": {
+                "type": "string",
+                "description": "Email do usuário"
+              },
+              "Senha": {
+                "type": "string",
+                "description": "Senha do usuário"
+              },
+              "nivel_usuario_id": {
+                "type": "integer",
+                "description": "ID do nível de usuário"
+              }
+            },
+            "required": ["Nome", "Email", "Senha", "nivel_usuario_id"]
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Usuário cadastrado com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Mensagem de sucesso"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "description": "ID do usuário recém-criado"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "Email já cadastrado"
+        },
+        "500": {
+          "description": "Erro no servidor"
+        }
+      }
+    }
+  }
+}
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
