@@ -18,7 +18,8 @@ import upload from "./routes/uploadRoute.js"
 import cnpj from "./routes/cnpjRoute.js";
 import cliente_cnpjs from "./routes/cliente_cnpjRoute.js";
 import atividadesCliente from "./routes/atividadeRoute.js";
-import cliente_cnae from "./routes/clienteCnaeRoute.js"
+import cliente_cnae from "./routes/clienteCnaeRoute.js";
+
 app.use(express.json());
 app.use("/", authRouters);
 app.use("/", clientesRouters);
@@ -26,7 +27,7 @@ app.use("/", dashboardRouters);
 app.use("/", niveis);
 app.use("/", cnae);
 app.use("/", cnpj);
-app.use("/", express.static("uploads")); 
+app.use("/uploads/", express.static("uploads"));
 app.use("/", upload);
 app.use("/", cliente_cnpjs)
 app.use("/", atividadesCliente)

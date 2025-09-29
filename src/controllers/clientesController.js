@@ -13,41 +13,56 @@ const clientes = async (req, res) => {
 
 const cadastrarcliente = async (req, res) => {
   try {
-    const { Nome, Fone, CPF } = req.body;
+    const { Nome, Fone, CPF, data_nascimento, cep, cidade, estado, rg } = req.body;
     const userId = req.user.id;
-    const sql = "INSERT INTO cliente (nome, fone, cpf, usuario_id) VALUES (?, ?, ?, ?)";
+
+    const sql = "INSERT INTO cliente (nome, fone, cpf, usuario_id, cep, cidade, estado, rg) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
     const [result] = await db.execute(sql, [Nome, Fone, CPF, userId]);
     res.status(201).json({ message: "Cliente cadastrado com sucesso!", id: result.insertId });
+
   } catch (err) {
     res.status(500).json({ error: "Erro no servidor", details: err.message });
   }
 };
 
 const excluircliente = async (req, res) => {
+
   try {
+
     const id = req.params.id;
+
     const sql = "DELETE FROM cliente WHERE id_cliente = ?";
+    
     const [result] = await db.execute(sql, [id]);
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Cliente não encontrado" });
     }
+
     res.json({ message: "Cliente excluído com sucesso!" });
+
   } catch (err) {
     res.status(500).json({ error: "Erro no servidor", details: err.message });
   }
 };
 
 const atualizarcliente = async (req, res) => {
+
   try {
-    const { Nome, Fone, CPF } = req.body;
+
+    const { Nome, Fone, CPF, cep, cidade, estado } = req.body;
     const { id } = req.params;
     const userId = req.user.id;
+
     const sql = `
       UPDATE cliente
-      SET nome = ?, fone = ?, cpf = ?
+      SET nome = ?, fone = ?, cpf = ?, cep = ?, cidade = ?, estado = ?
       WHERE id_cliente = ? AND usuario_id = ?
     `;
-    const [result] = await db.execute(sql, [Nome, Fone, CPF, id, userId]);
+    
+    const [result] = await db.execute(sql, [Nome, Fone, CPF, cep, cidade, estado, id, userId,]);
+
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: "Cliente não encontrado ou não pertence ao usuário" });
     }
