@@ -1,43 +1,29 @@
-/*
-import dotenv from "dotenv";
-import swaggerUi from "swagger-ui-express";
-import app from "./src/app.js";
-import swaggerDocument from "./swagger.json" assert { type: "json" };
-
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
-
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-
-app.listen(PORT, () => console.log("Servidor rodando na porta " + PORT));
-
-*/
-
-import dotenv from "dotenv";
+import express from "express";
 import swaggerUi from "swagger-ui-express";
 import fs from "fs";
-import app from "./src/app.js";
 import path from "path";
 import { fileURLToPath } from "url";
-
-dotenv.config();
-
-const PORT = process.env.PORT;
+import serverless from "serverless-http";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const swaggerPath = path.join(__dirname, "swagger.json");
+const app = express();
 
+const swaggerPath = path.join(__dirname, "swagger.json");
 const swaggerDocument = JSON.parse(fs.readFileSync(swaggerPath, "utf-8"));
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
+// ✅ Serve apenas o Swagger JSON
 app.get("/swagger.json", (req, res) => {
   res.sendFile(swaggerPath);
 });
 
-app.listen(PORT, () => console.log("Servidor rodando na porta " + PORT));
+// ✅ Use swaggerUrl para evitar assets quebrados
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(null, {
+  swaggerUrl: "/swagger.json", // importante: prefixado com "/api"
+}));
+
+app.listen(3000, () => console.log("Rodando localmente"));
+
+// ✅ Exporta como handler
+export default serverless(app);
