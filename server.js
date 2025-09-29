@@ -29,7 +29,7 @@ const swaggerDocument = JSON.parse(fs.readFileSync("./swagger.json", "utf-8"));
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.get("/swagger.json", (req, res) => {
+app.get("./swagger.json", (req, res) => {
   res.sendFile("swagger.json", { root: "." });
 });
 
