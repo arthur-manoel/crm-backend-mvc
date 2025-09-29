@@ -14,3 +14,4 @@ router.put("/niveis/:id", editarNivel);
 router.delete("/niveis/:id", excluirNivel);
 
 export default router;
+

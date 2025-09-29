@@ -44,12 +44,24 @@ function VerificarToken(req, res, next) {
     return res.status(401).json({ error: "Token não fornecido" });
   }
 
-  jwt.verify(token, SECRET, (err, payload) => {
+  jwt.verify(token, SECRET, (err, decoded) => {
     if (err) {
       return res.status(403).json({ error: "Token inválido" });
     }
-    req.user = payload;
-    next();
+
+
+
+  req.user = decoded;
+
+  const newToken = jwt.sign({ id: decoded.id }, SECRET, {
+      expiresIn: "1h",
+    });
+
+  res.setHeader("Authorization", "Bearer " + newToken);
+
+
+  next()
+
   });
 }
 
