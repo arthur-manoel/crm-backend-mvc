@@ -31,5 +31,8 @@ app.use("/", upload);
 app.use("/", cliente_cnpjs)
 app.use("/", atividadesCliente)
 app.use("/", cliente_cnae)
+app.get("/", (req, res) => {
+  res.send("Rota GET na raiz");
+});
 
 export default app;
