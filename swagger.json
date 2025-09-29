@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://projeto-back-ten.vercel.app/ "
+      "url": "https://projeto-back-ten.vercel.app/"
     }
   ], 
   "paths": {
