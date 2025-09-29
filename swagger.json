@@ -1095,7 +1095,329 @@
       }
     }
   }
-}
+},
+"/clientes/{id}/atividades": {
+    "get": {
+      "tags": ["Atividade"],
+      "summary": "Obter atividades de um cliente",
+      "description": "Retorna os nomes dos CNPJs e CNAEs associados a um cliente pelo ID.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID do cliente",
+          "schema": {
+            "type": "integer",
+            "example": 123
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Lista de CNPJs e atividades (CNAEs) associadas ao cliente",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "nome_cnpj": {
+                      "type": "string",
+                      "example": "Empresa Exemplo LTDA"
+                    },
+                    "nome_cnae": {
+                      "type": "string",
+                      "example": "Comércio varejista de artigos do vestuário e acessórios"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro interno do servidor",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Erro ao buscar atividades do cliente"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/clientes/{id}/cnaes": {
+    "get": {
+      "tags": ["Clientes","CNAE"],
+      "summary": "Listar CNAEs de um cliente",
+      "description": "Retorna os CNAEs associados aos CNPJs de um cliente.",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID do cliente",
+          "schema": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Lista de CNAEs",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id_cnae": {
+                      "type": "integer",
+                      "example": 1234
+                    },
+                    "nome_cnae": {
+                      "type": "string",
+                      "example": "Comércio varejista de alimentos"
+                    },
+                    "nome_cnpj": {
+                      "type": "string",
+                      "example": "Empresa Exemplo LTDA"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro interno",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Erro ao listar CNAEs"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "/clientes/cnaes": {
+    "post": {
+      "tags": ["Clientes","CNAE"],
+      "summary": "Adicionar CNAE a um CNPJ",
+      "description": "Adiciona um novo CNAE a um CNPJ existente.",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["cnpj_id", "cnae_id"],
+              "properties": {
+                "cnpj_id": {
+                  "type": "integer",
+                  "example": 101
+                },
+                "cnae_id": {
+                  "type": "integer",
+                  "example": 1234
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "CNAE adicionado com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "CNAE adicionado com sucesso"
+                  },
+                  "insertId": {
+                    "type": "integer",
+                    "example": 45
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro interno",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Erro ao adicionar CNAE"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "put": {
+      "tags": ["Clientes","CNAE"],
+      "summary": "Atualizar CNAE de um CNPJ",
+      "description": "Atualiza o CNAE de um CNPJ específico.",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["cnpj_id", "cnae_id_antigo", "cnae_id_novo"],
+              "properties": {
+                "cnpj_id": {
+                  "type": "integer",
+                  "example": 101
+                },
+                "cnae_id_antigo": {
+                  "type": "integer",
+                  "example": 1234
+                },
+                "cnae_id_novo": {
+                  "type": "integer",
+                  "example": 5678
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "CNAE atualizado com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "CNAE atualizado com sucesso"
+                  },
+                  "affectedRows": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro interno",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Erro ao atualizar CNAE"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "delete": {
+      "tags": ["Clientes","CNAE"],
+      "summary": "Excluir CNAE de um CNPJ",
+      "description": "Remove um CNAE associado a um CNPJ.",
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": ["cnpj_id", "cnae_id"],
+              "properties": {
+                "cnpj_id": {
+                  "type": "integer",
+                  "example": 101
+                },
+                "cnae_id": {
+                  "type": "integer",
+                  "example": 1234
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "CNAE excluído com sucesso",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "example": "CNAE excluído com sucesso"
+                  },
+                  "affectedRows": {
+                    "type": "integer",
+                    "example": 1
+                  }
+                }
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Erro interno",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "error": {
+                    "type": "string",
+                    "example": "Erro ao excluir CNAE"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   },
   "components": {
     "securitySchemes": {
