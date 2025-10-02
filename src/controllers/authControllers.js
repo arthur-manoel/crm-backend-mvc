@@ -10,7 +10,12 @@ const SECRET = process.env.SECRET;
 const login = async (req, res) => {
   const { Email, Senha } = req.body;
 
-  const sql = "SELECT * FROM usuario WHERE Email = ?";
+  const sql = `
+    SELECT u.*, n.nome AS role
+    FROM usuario u
+    JOIN nivelusuario n ON u.id_nivelusuario = n.id_nivelusuario
+    WHERE u.Email = ?
+  `;
 
   try {
     const [rows] = await db.execute(sql, [Email]);
@@ -25,12 +30,20 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: usuario.id_usuario, email: usuario.Email },
+      { id: usuario.id_usuario, email: usuario.Email, role: usuario.role },
       SECRET,
       { expiresIn: "30d" }
     );
 
-    res.json({ token });
+    res.json({
+  token,
+  user: {
+    id: usuario.id_usuario,
+    email: usuario.Email,
+    role: usuario.role
+  }
+});
+
   } catch (err) {
     res.status(500).json({ error: "Erro no servidor", details: err.message });
   }
