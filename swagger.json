@@ -759,36 +759,91 @@
   }
 },
 "/dashboard": {
-  "get": {
-     "tags": ["Dashboard"],
-    "summary": "Retorna dados gerais do dashboard",
-    "description": "Este endpoint retorna o total de clientes e CNPJs cadastrados no sistema.",
-    "responses": {
-      "200": {
-        "description": "Dados do dashboard com o total de clientes e CNPJs",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "properties": {
-                "totalClientes": {
-                  "type": "integer",
-                  "description": "Total de clientes cadastrados"
-                },
-                "totalCNPJS": {
-                  "type": "integer",
-                  "description": "Total de CNPJs cadastrados"
+      "patch": {
+        "tags": ["Dashboard"],
+        "summary": "Atualiza dados do dashboard",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "totalClientes": {
+                    "type": "integer"
+                  },
+                  "totalCNPJS": {
+                    "type": "integer"
+                  },
+                  "totalAtivos": {
+                    "type": "integer"
+                  },
+                  "totalPendentes": {
+                    "type": "integer"
+                  }
                 }
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "Dados do dashboard atualizados com sucesso"
+          },
+          "400": {
+            "description": "Solicitação inválida"
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
         }
-      },
-      "500": {
-        "description": "Erro no servidor"
       }
-    }
-  }
+    },
+"/tipos-processo/{id}": {
+      "patch": {
+        "tags": ["Tipos de Processo"],
+        "summary": "Atualiza o status de um tipo de processo",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tipo": {
+                    "type": "string",
+                    "enum": ["aberto", "alterado", "fechado"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tipo de processo atualizado com sucesso"
+          },
+          "400": {
+            "description": "Solicitação inválida"
+          },
+          "404": {
+            "description": "Tipo de processo não encontrado"
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
+        }
+      }
 },
 "/nivel_usuario": {
   "get": {
@@ -953,42 +1008,64 @@
     }
   }
 },
-"/upload": {
-  "post": {
-    "tags": ["Upload"],
-    "summary": "Faz o upload de um arquivo",
-    "description": "Este endpoint permite o upload de um arquivo para o servidor. O arquivo será armazenado no diretório 'uploads'.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "multipart/form-data": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "arquivo": {
-                "type": "string",
-                "format": "binary",
-                "description": "Arquivo a ser enviado"
+"/upload-arquivos/{cliente_id}": {
+      "post": {
+        "tags": ["Upload"],
+        "summary": "Faz o upload de um arquivo associado a um cliente",
+        "parameters": [
+          {
+            "name": "cliente_id",
+            "in": "path",
+            "required": true,
+            "description": "ID do cliente para associar o arquivo",
+            "schema": {
+              "type": "integer",
+              "example": 123
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "arquivo": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Arquivo a ser enviado"
+                  },
+                  "tipo_documento_id": {
+                    "type": "integer",
+                    "description": "ID do tipo de documento"
+                  },
+                  "cnpj_id": {
+                    "type": "integer",
+                    "description": "ID do CNPJ"
+                  }
+                },
+                "example": {
+                  "tipo_documento_id": 1,
+                  "cnpj_id": 1
+                }
               }
-            },
-            "required": ["arquivo"]
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Arquivo enviado com sucesso"
+          },
+          "400": {
+            "description": "Arquivo não encontrado ou parâmetros inválidos"
+          },
+          "500": {
+            "description": "Erro interno no servidor"
           }
         }
-      },
-      "responses": {
-        "200": {
-          "description": "Arquivo enviado com sucesso!"
-        },
-        "400": {
-          "description": "Arquivo não encontrado"
-        },
-        "500": {
-          "description": "Erro ao enviar o arquivo"
-        }
       }
-    }
-  }
-},
+    },
 "/usuarios": {
   "get": {
     "tags": ["Usuários"],
@@ -1417,7 +1494,43 @@
         }
       }
     }
-  }
+  },
+  "/documentos": {
+      "patch": {
+        "tags": ["Documentos"],
+        "summary": "Atualiza informações sobre tipos de documentos",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do tipo de documento"
+                  }
+                },
+                "example": {
+                  "nome": "Novo Documento"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tipo de documento atualizado com sucesso"
+          },
+          "400": {
+            "description": "Solicitação inválida"
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
+        }
+      }
+    }
   },
   "components": {
     "securitySchemes": {
