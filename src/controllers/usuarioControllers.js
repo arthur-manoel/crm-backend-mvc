@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import db from "../database/db.js";  // este `db` agora é um pool promise
+import db from "../database/db.js";
 
 const usuarios = async (req, res) => {
   try {
@@ -11,20 +11,39 @@ const usuarios = async (req, res) => {
 };
 
 const cadastro = async (req, res) => {
-  const { Nome, Email, Senha, nivel_usuario_id } = req.body;
+  const { Nome, Email, Senha, role } = req.body;
 
   try {
     const senhaHashed = await bcrypt.hash(Senha, 10);
-    const sql = "INSERT INTO usuario (Nome, Email, Senha, nivel_usuario_id) VALUES (?, ?, ?, ?)";
 
-    const [result] = await db.execute(sql, [Nome, Email, senhaHashed, nivel_usuario_id]);
+    let nivel_usuario_id;
+    
+    if (role === "client") {
+  nivel_usuario_id = 1;
+    }
+    
+    else if (role === "employee") {
+  nivel_usuario_id = 2;
+    } 
+
+    else {
+      return res.status(400).json({ error: "Role inválido" });
+}
+    const sql =
+      "INSERT INTO usuario (Nome, Email, Senha, nivel_usuario_id) VALUES (?, ?, ?, ?)";
+
+    const [result] = await db.execute(sql, [
+      Nome,
+      Email,
+      senhaHashed,
+      nivel_usuario_id,
+    ]);
 
     res.status(201).json({
-      message: "Usuario  cadastrado com sucesso!",
+      message: "Usuário cadastrado com sucesso!",
       id: result.insertId,
     });
   } catch (err) {
-    // se for duplicado de email
     if (err.code === "ER_DUP_ENTRY") {
       return res.status(400).json({ error: "Email já cadastrado" });
     }
