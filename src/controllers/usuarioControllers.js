@@ -11,7 +11,7 @@ const usuarios = async (req, res) => {
 };
 
 const cadastro = async (req, res) => {
-  const { Nome, Email, password, role } = req.body;
+  const { Nome, Email, phone, password, role } = req.body;
 
   try {
     const senhaHashed = await bcrypt.hash(password, 10);
@@ -30,11 +30,12 @@ const cadastro = async (req, res) => {
       return res.status(400).json({ error: "Role inválido" });
 }
     const sql =
-      "INSERT INTO usuario (Nome, Email, Senha, nivel_usuario_id) VALUES (?, ?, ?, ?)";
+      "INSERT INTO usuario (Nome, Email, telefone, Senha, nivel_usuario_id) VALUES (?, ?, ?, ?, ?)";
 
     const [result] = await db.execute(sql, [
       Nome,
       Email,
+      phone,
       senhaHashed,
       nivel_usuario_id,
     ]);
