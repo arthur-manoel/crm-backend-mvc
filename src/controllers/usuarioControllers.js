@@ -11,10 +11,10 @@ const usuarios = async (req, res) => {
 };
 
 const cadastro = async (req, res) => {
-  const { Nome, Email, Senha, role } = req.body;
+  const { Nome, Email, password, role } = req.body;
 
   try {
-    const senhaHashed = await bcrypt.hash(Senha, 10);
+    const senhaHashed = await bcrypt.hash(password, 10);
 
     let nivel_usuario_id;
     
