@@ -11,7 +11,7 @@ const usuarios = async (req, res) => {
 };
 
 const cadastro = async (req, res) => {
-  const { Nome, Email, phone, password, role } = req.body;
+  const { name, email, phone, password, role } = req.body;
 
   try {
     const senhaHashed = await bcrypt.hash(password, 10);
@@ -33,8 +33,8 @@ const cadastro = async (req, res) => {
       "INSERT INTO usuario (Nome, Email, telefone, Senha, nivel_usuario_id) VALUES (?, ?, ?, ?, ?)";
 
     const [result] = await db.execute(sql, [
-      Nome,
-      Email,
+      name,
+      email,
       phone,
       senhaHashed,
       nivel_usuario_id,
