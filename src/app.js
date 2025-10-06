@@ -22,6 +22,7 @@ import cliente_cnae from "./routes/clienteCnaeRoute.js";
 import tipo_documento from "./routes/tipodocumentoRoute.js";
 import processos from "./routes/processosRoute.js";
 
+
 app.use(express.json());
 app.use("/", authRouters);
 app.use("/", clientesRouters);

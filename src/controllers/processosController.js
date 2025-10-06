@@ -36,6 +36,7 @@ const abrirprocesso = async (req, res) => {
         
         const { id_cliente, id_cnpj, id_tipo_processo } = req.body;
 
+        //pegar data
         const sql = "INSERT INTO processo (id_cliente, id_cnpj, id_tipo_processo) VALUES (?, ?, ?)";
         await db.execute(sql, [id_cliente, id_cnpj, id_tipo_processo]);
 
