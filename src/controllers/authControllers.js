@@ -11,7 +11,7 @@ const login = async (req, res) => {
   const { Email, Senha } = req.body;
 
   const sql = `
-        SELECT u.*, n.nome AS role FROM usuario u JOIN nivel_usuario n ON u.nivel_usuario_id = n.id_nivel_usuario WHERE u.email = ?
+    SELECT u.*, n.nome AS role FROM usuario u JOIN nivel_usuario n ON u.nivel_usuario_id = n.id_nivel_usuario WHERE u.email = ?
   `;
 
   try {
