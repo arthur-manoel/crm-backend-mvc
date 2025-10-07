@@ -2,7 +2,7 @@ import express from "express";
 import {
   processos,
   processo,
-  abrirprocesso,
+  criarProcesso,
   excluirprocesso,
   atualizarprocesso
 } from "../controllers/processosController.js";
@@ -13,10 +13,10 @@ router.get("/processos", processos);
 
 router.get("/processo/:id", processo);
 
-router.post("/processo", abrirprocesso);
+router.post("/processo", criarProcesso);
 
-router.put("/processo/:id", atualizarprocesso)
+router.post("/atualizarprocesso", atualizarprocesso)
 
-router.delete("/processo/:id", excluirprocesso);
+router.post("/excluirprocesso", excluirprocesso);
 
 export default router;
