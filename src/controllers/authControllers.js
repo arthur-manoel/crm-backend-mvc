@@ -56,10 +56,8 @@ function VerificarToken(req, res, next) {
 
   jwt.verify(token, SECRET, (err, decoded) => {
     if (err) {
-      return res.status(403).json({ error: "Token inválido" });
-    }
-
-
+      return res.status(401).json({ error: "Token inválido ou expirado" });
+}
 
   req.user = decoded;
 
