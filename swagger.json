@@ -1972,7 +1972,7 @@
         }
       }
     },
-    "/processos/atualizar": {
+    "/atualizarprocesso": {
       "post": {
         "tags": [
           "Processos"
@@ -2038,7 +2038,7 @@
         }
       }
     },
-    "/processos/excluir": {
+    "/excluirprocesso": {
       "post": {
         "tags": [
           "Processos"
