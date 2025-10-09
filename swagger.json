@@ -9,11 +9,13 @@
     {
       "url": "https://projeto-back-ten.vercel.app/"
     }
-  ], 
+  ],
   "paths": {
     "/login": {
       "post": {
-        "tags": ["Autenticação"],
+        "tags": [
+          "Autenticação"
+        ],
         "summary": "Realiza o login do usuário e retorna um token JWT",
         "description": "Este endpoint autentica o usuário com o email e senha e retorna um token JWT para uso em outras rotas protegidas.",
         "requestBody": {
@@ -32,7 +34,10 @@
                     "description": "A senha do usuário"
                   }
                 },
-                "required": ["Email", "Senha"]
+                "required": [
+                  "Email",
+                  "Senha"
+                ]
               }
             }
           }
@@ -65,7 +70,9 @@
     },
     "/verificar-token": {
       "get": {
-        "tags": ["Autenticação"],
+        "tags": [
+          "Autenticação"
+        ],
         "summary": "Verifica a validade do token JWT",
         "description": "Este endpoint permite verificar se o token JWT fornecido na requisição é válido e não expirou.",
         "security": [
@@ -87,378 +94,447 @@
       }
     },
     "/clientes/{id}/cnpjs": {
-  "get": {
-    "tags": ["Clientes", "CNPJs"],
-    "summary": "Retorna todos os CNPJs de um cliente",
-    "description": "Este endpoint retorna todos os CNPJs associados a um cliente, com base no seu ID.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do cliente"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "Lista de CNPJs associada ao cliente",
-        "content": {
-          "application/json": {
+      "get": {
+        "tags": [
+          "Clientes",
+          "CNPJs"
+        ],
+        "summary": "Retorna todos os CNPJs de um cliente",
+        "description": "Este endpoint retorna todos os CNPJs associados a um cliente, com base no seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id_cnpj": {
-                    "type": "integer",
-                    "description": "ID do CNPJ"
-                  },
-                  "cnpj": {
-                    "type": "string",
-                    "description": "Número do CNPJ"
+              "type": "integer",
+              "description": "ID do cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de CNPJs associada ao cliente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_cnpj": {
+                        "type": "integer",
+                        "description": "ID do CNPJ"
+                      },
+                      "cnpj": {
+                        "type": "string",
+                        "description": "Número do CNPJ"
+                      }
+                    }
                   }
                 }
               }
             }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro ao buscar CNPJs do cliente"
-      }
-    }
-  }
-},
-"/clientes/{id}/cnpj": {
-  "post": {
-    "tags": ["Clientes", "CNPJs"],
-    "summary": "Adiciona um novo CNPJ a um cliente",
-    "description": "Este endpoint associa um novo CNPJ ao cliente, através do seu ID.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do cliente"
-        }
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "cnpj_id": {
-                "type": "integer",
-                "description": "ID do CNPJ a ser associado ao cliente"
-              }
-            },
-            "required": ["cnpj_id"]
+          },
+          "500": {
+            "description": "Erro ao buscar CNPJs do cliente"
           }
         }
       }
     },
-    "responses": {
-      "200": {
-        "description": "CNPJ associado com sucesso"
-      },
-      "500": {
-        "description": "Erro ao associar CNPJ ao cliente"
-      }
-    }
-  },
-  "put": {
-    "tags": ["Clientes", "CNPJs"],
-    "summary": "Atualiza o CNPJ de um cliente",
-    "description": "Este endpoint permite atualizar o CNPJ associado a um cliente.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do cliente"
-        }
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "cnpj_id_antigo": {
-                "type": "integer",
-                "description": "ID do CNPJ anterior a ser atualizado"
-              },
-              "cnpj_id_novo": {
-                "type": "integer",
-                "description": "Novo ID do CNPJ a ser associado"
-              }
-            },
-            "required": ["cnpj_id_antigo", "cnpj_id_novo"]
-          }
-        }
-      }
-    },
-    "responses": {
-      "200": {
-        "description": "CNPJ atualizado com sucesso"
-      },
-      "500": {
-        "description": "Erro ao atualizar o CNPJ"
-      }
-    }
-  },
-  "delete": {
-    "tags": ["Clientes", "CNPJs"],
-    "summary": "Exclui um CNPJ associado a um cliente",
-    "description": "Este endpoint remove a associação de um CNPJ de um cliente.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do cliente"
-        }
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "cnpj_id": {
-                "type": "integer",
-                "description": "ID do CNPJ a ser excluído"
-              }
-            },
-            "required": ["cnpj_id"]
-          }
-        }
-      }
-    },
-    "responses": {
-      "200": {
-        "description": "CNPJ excluído com sucesso"
-      },
-      "500": {
-        "description": "Erro ao excluir CNPJ"
-      }
-    }
-  }
-},
-"/clientes": {
-  "get": {
-    "tags": ["Clientes"],
-    "summary": "Retorna todos os clientes de um usuário",
-    "description": "Este endpoint retorna todos os clientes cadastrados por um usuário, baseado no ID do usuário que está autenticado.",
-    "responses": {
-      "200": {
-        "description": "Lista de clientes associados ao usuário",
-        "content": {
-          "application/json": {
+    "/clientes/{id}/cnpj": {
+      "post": {
+        "tags": [
+          "Clientes",
+          "CNPJs"
+        ],
+        "summary": "Adiciona um novo CNPJ a um cliente",
+        "description": "Este endpoint associa um novo CNPJ ao cliente, através do seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id_cliente": {
-                    "type": "integer",
-                    "description": "ID do cliente"
-                  },
-                  "nome": {
-                    "type": "string",
-                    "description": "Nome do cliente"
-                  },
-                  "fone": {
-                    "type": "string",
-                    "description": "Telefone do cliente"
-                  },
-                  "cpf": {
-                    "type": "string",
-                    "description": "CPF do cliente"
-                  }
-                }
-              }
+              "type": "integer",
+              "description": "ID do cliente"
             }
           }
-        }
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  },
-  "post": {
-    "tags": ["Clientes"],
-    "summary": "Cadastra um novo cliente",
-    "description": "Este endpoint permite o cadastro de um novo cliente, com os dados nome, telefone e CPF.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "Nome": {
-                "type": "string",
-                "description": "Nome do cliente"
-              },
-              "Fone": {
-                "type": "string",
-                "description": "Telefone do cliente"
-              },
-              "CPF": {
-                "type": "string",
-                "description": "CPF do cliente"
-              }
-            },
-            "required": ["Nome", "Fone", "CPF"]
-          }
-        }
-      },
-      "responses": {
-        "201": {
-          "description": "Cliente cadastrado com sucesso",
+        ],
+        "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Mensagem de sucesso"
-                  },
-                  "id": {
+                  "cnpj_id": {
                     "type": "integer",
-                    "description": "ID do cliente recém-criado"
+                    "description": "ID do CNPJ a ser associado ao cliente"
                   }
-                }
+                },
+                "required": [
+                  "cnpj_id"
+                ]
               }
             }
           }
         },
-        "500": {
-          "description": "Erro no servidor"
-        }
-      }
-    }
-  }
-},
-"/clientes/{id}": {
-  "delete": {
-    "tags": ["Clientes"],
-    "summary": "Exclui um cliente",
-    "description": "Este endpoint exclui um cliente específico com base no ID fornecido.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do cliente"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "Cliente excluído com sucesso"
-      },
-      "404": {
-        "description": "Cliente não encontrado"
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  },
-  "put": {
-    "tags": ["Clientes"],
-    "summary": "Atualiza um cliente",
-    "description": "Este endpoint permite atualizar os dados de um cliente específico, como nome, telefone e CPF.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do cliente"
-        }
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "Nome": {
-                "type": "string",
-                "description": "Nome do cliente"
-              },
-              "Fone": {
-                "type": "string",
-                "description": "Telefone do cliente"
-              },
-              "CPF": {
-                "type": "string",
-                "description": "CPF do cliente"
-              }
-            },
-            "required": ["Nome", "Fone", "CPF"]
+        "responses": {
+          "200": {
+            "description": "CNPJ associado com sucesso"
+          },
+          "500": {
+            "description": "Erro ao associar CNPJ ao cliente"
           }
         }
       },
-      "responses": {
-        "200": {
-          "description": "Cliente atualizado com sucesso"
-        },
-        "404": {
-          "description": "Cliente não encontrado ou não pertence ao usuário"
-        },
-        "500": {
-          "description": "Erro no servidor"
-        }
-      }
-    }
-  }
-},
-"/cnae": {
-  "get": {
-    "tags": ["CNAE"],
-    "summary": "Lista todos os CNAEs",
-    "description": "Este endpoint retorna todos os CNAEs cadastrados no sistema.",
-    "responses": {
-      "200": {
-        "description": "Lista de CNAEs",
-        "content": {
-          "application/json": {
+      "put": {
+        "tags": [
+          "Clientes",
+          "CNPJs"
+        ],
+        "summary": "Atualiza o CNPJ de um cliente",
+        "description": "Este endpoint permite atualizar o CNPJ associado a um cliente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "array",
-              "items": {
+              "type": "integer",
+              "description": "ID do cliente"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
+                  "cnpj_id_antigo": {
                     "type": "integer",
-                    "description": "ID do CNAE"
+                    "description": "ID do CNPJ anterior a ser atualizado"
                   },
+                  "cnpj_id_novo": {
+                    "type": "integer",
+                    "description": "Novo ID do CNPJ a ser associado"
+                  }
+                },
+                "required": [
+                  "cnpj_id_antigo",
+                  "cnpj_id_novo"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CNPJ atualizado com sucesso"
+          },
+          "500": {
+            "description": "Erro ao atualizar o CNPJ"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clientes",
+          "CNPJs"
+        ],
+        "summary": "Exclui um CNPJ associado a um cliente",
+        "description": "Este endpoint remove a associação de um CNPJ de um cliente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do cliente"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cnpj_id": {
+                    "type": "integer",
+                    "description": "ID do CNPJ a ser excluído"
+                  }
+                },
+                "required": [
+                  "cnpj_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CNPJ excluído com sucesso"
+          },
+          "500": {
+            "description": "Erro ao excluir CNPJ"
+          }
+        }
+      }
+    },
+    "/clientes": {
+      "get": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Retorna todos os clientes de um usuário",
+        "description": "Este endpoint retorna todos os clientes cadastrados por um usuário, baseado no ID do usuário que está autenticado.",
+        "responses": {
+          "200": {
+            "description": "Lista de clientes associados ao usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_cliente": {
+                        "type": "integer",
+                        "description": "ID do cliente"
+                      },
+                      "nome": {
+                        "type": "string",
+                        "description": "Nome do cliente"
+                      },
+                      "fone": {
+                        "type": "string",
+                        "description": "Telefone do cliente"
+                      },
+                      "cpf": {
+                        "type": "string",
+                        "description": "CPF do cliente"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Cadastra um novo cliente",
+        "description": "Este endpoint permite o cadastro de um novo cliente, com os dados nome, telefone e CPF.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Nome": {
+                    "type": "string",
+                    "description": "Nome do cliente"
+                  },
+                  "Fone": {
+                    "type": "string",
+                    "description": "Telefone do cliente"
+                  },
+                  "CPF": {
+                    "type": "string",
+                    "description": "CPF do cliente"
+                  }
+                },
+                "required": [
+                  "Nome",
+                  "Fone",
+                  "CPF"
+                ]
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Cliente cadastrado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "description": "ID do cliente recém-criado"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro no servidor"
+            }
+          }
+        }
+      }
+    },
+    "/clientes/{id}": {
+      "delete": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Exclui um cliente",
+        "description": "Este endpoint exclui um cliente específico com base no ID fornecido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do cliente"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente excluído com sucesso"
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clientes"
+        ],
+        "summary": "Atualiza um cliente",
+        "description": "Este endpoint permite atualizar os dados de um cliente específico, como nome, telefone e CPF.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do cliente"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Nome": {
+                    "type": "string",
+                    "description": "Nome do cliente"
+                  },
+                  "Fone": {
+                    "type": "string",
+                    "description": "Telefone do cliente"
+                  },
+                  "CPF": {
+                    "type": "string",
+                    "description": "CPF do cliente"
+                  }
+                },
+                "required": [
+                  "Nome",
+                  "Fone",
+                  "CPF"
+                ]
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Cliente atualizado com sucesso"
+            },
+            "404": {
+              "description": "Cliente não encontrado ou não pertence ao usuário"
+            },
+            "500": {
+              "description": "Erro no servidor"
+            }
+          }
+        }
+      }
+    },
+    "/cnae": {
+      "get": {
+        "tags": [
+          "CNAE"
+        ],
+        "summary": "Lista todos os CNAEs",
+        "description": "Este endpoint retorna todos os CNAEs cadastrados no sistema.",
+        "responses": {
+          "200": {
+            "description": "Lista de CNAEs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "ID do CNAE"
+                      },
+                      "nome": {
+                        "type": "string",
+                        "description": "Nome do CNAE"
+                      },
+                      "numero": {
+                        "type": "string",
+                        "description": "Número do CNAE"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "CNAE"
+        ],
+        "summary": "Adiciona um novo CNAE",
+        "description": "Este endpoint adiciona um novo CNAE no sistema.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
                   "nome": {
                     "type": "string",
                     "description": "Nome do CNAE"
@@ -467,301 +543,60 @@
                     "type": "string",
                     "description": "Número do CNAE"
                   }
-                }
+                },
+                "required": [
+                  "nome",
+                  "numero"
+                ]
               }
             }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  },
-  "post": {
-    "tags": ["CNAE"],
-    "summary": "Adiciona um novo CNAE",
-    "description": "Este endpoint adiciona um novo CNAE no sistema.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "nome": {
-                "type": "string",
-                "description": "Nome do CNAE"
-              },
-              "numero": {
-                "type": "string",
-                "description": "Número do CNAE"
-              }
-            },
-            "required": ["nome", "numero"]
-          }
-        }
-      },
-      "responses": {
-        "201": {
-          "description": "CNAE criado com sucesso",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Mensagem de sucesso"
-                  },
-                  "id": {
-                    "type": "integer",
-                    "description": "ID do CNAE recém-criado"
+          },
+          "responses": {
+            "201": {
+              "description": "CNAE criado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "description": "ID do CNAE recém-criado"
+                      }
+                    }
                   }
                 }
               }
+            },
+            "500": {
+              "description": "Erro no servidor"
             }
           }
-        },
-        "500": {
-          "description": "Erro no servidor"
         }
       }
-    }
-  }
-},
-"/cnae/{id}": {
-  "put": {
-    "tags": ["CNAE"],
-    "summary": "Atualiza os dados de um CNAE",
-    "description": "Este endpoint permite atualizar o nome de um CNAE existente.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do CNAE"
-        }
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "nome": {
-                "type": "string",
-                "description": "Nome do CNAE"
-              }
-            },
-            "required": ["nome"]
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "CNAE atualizado com sucesso"
-        },
-        "404": {
-          "description": "CNAE não encontrado"
-        },
-        "500": {
-          "description": "Erro no servidor"
-        }
-      }
-    }
-  },
-  "delete": {
-    "tags": ["CNAE"],
-    "summary": "Exclui um CNAE",
-    "description": "Este endpoint exclui um CNAE com base no ID fornecido.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do CNAE"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "CNAE excluído com sucesso"
-      },
-      "404": {
-        "description": "CNAE não encontrado"
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  }
-},
-"/cnpj": {
-  "get": {
-    "tags": ["CNPJs"],
-    "summary": "Lista todos os CNPJs",
-    "description": "Este endpoint retorna todos os CNPJs cadastrados no sistema.",
-    "responses": {
-      "200": {
-        "description": "Lista de CNPJs",
-        "content": {
-          "application/json": {
+    },
+    "/cnae/{id}": {
+      "put": {
+        "tags": [
+          "CNAE"
+        ],
+        "summary": "Atualiza os dados de um CNAE",
+        "description": "Este endpoint permite atualizar o nome de um CNAE existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "array",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "id_cnpj": {
-                    "type": "integer",
-                    "description": "ID do CNPJ"
-                  },
-                  "nome": {
-                    "type": "string",
-                    "description": "Nome do CNPJ"
-                  }
-                }
-              }
+              "type": "integer",
+              "description": "ID do CNAE"
             }
           }
-        }
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  },
-  "post": {
-    "tags": ["CNPJs"],
-    "summary": "Cadastra um novo CNPJ",
-    "description": "Este endpoint adiciona um novo CNPJ no sistema.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "Nome": {
-                "type": "string",
-                "description": "Nome do CNPJ"
-              }
-            },
-            "required": ["Nome"]
-          }
-        }
-      },
-      "responses": {
-        "201": {
-          "description": "CNPJ cadastrado com sucesso",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Mensagem de sucesso"
-                  },
-                  "id": {
-                    "type": "integer",
-                    "description": "ID do CNPJ recém-criado"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "500": {
-          "description": "Erro no servidor"
-        }
-      }
-    }
-  }
-},
-"/cnpj/{id}": {
-  "put": {
-    "tags": ["CNPJs"],
-    "summary": "Atualiza um CNPJ",
-    "description": "Este endpoint permite atualizar o nome de um CNPJ existente.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do CNPJ"
-        }
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "Nome": {
-                "type": "string",
-                "description": "Nome do CNPJ"
-              }
-            },
-            "required": ["Nome"]
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "CNPJ atualizado com sucesso"
-        },
-        "404": {
-          "description": "CNPJ não encontrado"
-        },
-        "500": {
-          "description": "Erro no servidor"
-        }
-      }
-    }
-  },
-  "delete": {
-    "tags": ["CNPJs"],
-    "summary": "Exclui um CNPJ",
-    "description": "Este endpoint exclui um CNPJ com base no ID fornecido.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do CNPJ"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "CNPJ excluído com sucesso"
-      },
-      "404": {
-        "description": "CNPJ não encontrado"
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  }
-},
-"/dashboard": {
-      "patch": {
-        "tags": ["Dashboard"],
-        "summary": "Atualiza dados do dashboard",
+        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -769,29 +604,262 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "totalClientes": {
-                    "type": "integer"
-                  },
-                  "totalCNPJS": {
-                    "type": "integer"
-                  },
-                  "totalAtivos": {
-                    "type": "integer"
-                  },
-                  "totalPendentes": {
-                    "type": "integer"
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do CNAE"
+                  }
+                },
+                "required": [
+                  "nome"
+                ]
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "CNAE atualizado com sucesso"
+            },
+            "404": {
+              "description": "CNAE não encontrado"
+            },
+            "500": {
+              "description": "Erro no servidor"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CNAE"
+        ],
+        "summary": "Exclui um CNAE",
+        "description": "Este endpoint exclui um CNAE com base no ID fornecido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do CNAE"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "CNAE excluído com sucesso"
+          },
+          "404": {
+            "description": "CNAE não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/cnpj": {
+      "get": {
+        "tags": [
+          "CNPJs"
+        ],
+        "summary": "Lista todos os CNPJs",
+        "description": "Este endpoint retorna todos os CNPJs cadastrados no sistema.",
+        "responses": {
+          "200": {
+            "description": "Lista de CNPJs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_cnpj": {
+                        "type": "integer",
+                        "description": "ID do CNPJ"
+                      },
+                      "nome": {
+                        "type": "string",
+                        "description": "Nome do CNPJ"
+                      }
+                    }
                   }
                 }
               }
             }
+          },
+          "500": {
+            "description": "Erro no servidor"
           }
-        },
+        }
+      },
+      "post": {
+        "tags": [
+          "CNPJs"
+        ],
+        "summary": "Cadastra um novo CNPJ",
+        "description": "Este endpoint adiciona um novo CNPJ no sistema.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Nome": {
+                    "type": "string",
+                    "description": "Nome do CNPJ"
+                  }
+                },
+                "required": [
+                  "Nome"
+                ]
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "CNPJ cadastrado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "description": "ID do CNPJ recém-criado"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro no servidor"
+            }
+          }
+        }
+      }
+    },
+    "/cnpj/{id}": {
+      "put": {
+        "tags": [
+          "CNPJs"
+        ],
+        "summary": "Atualiza um CNPJ",
+        "description": "Este endpoint permite atualizar o nome de um CNPJ existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do CNPJ"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "Nome": {
+                    "type": "string",
+                    "description": "Nome do CNPJ"
+                  }
+                },
+                "required": [
+                  "Nome"
+                ]
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "CNPJ atualizado com sucesso"
+            },
+            "404": {
+              "description": "CNPJ não encontrado"
+            },
+            "500": {
+              "description": "Erro no servidor"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "CNPJs"
+        ],
+        "summary": "Exclui um CNPJ",
+        "description": "Este endpoint exclui um CNPJ com base no ID fornecido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do CNPJ"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "Dados do dashboard atualizados com sucesso"
+            "description": "CNPJ excluído com sucesso"
           },
-          "400": {
-            "description": "Solicitação inválida"
+          "404": {
+            "description": "CNPJ não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/dashboard": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Obtém os dados gerais do dashboard",
+        "description": "Retorna contagens totais de clientes, CNPJs, CNPJs ativos e pendentes.",
+        "responses": {
+          "200": {
+            "description": "Dados obtidos com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalClientes": {
+                      "type": "integer",
+                      "example": 120
+                    },
+                    "totalCNPJS": {
+                      "type": "integer",
+                      "example": 300
+                    },
+                    "totalAtivos": {
+                      "type": "integer",
+                      "example": 180
+                    },
+                    "totalPendentes": {
+                      "type": "integer",
+                      "example": 45
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "description": "Erro interno no servidor"
@@ -799,9 +867,135 @@
         }
       }
     },
-"/tipos-processo/{id}": {
+    "/dashboard/qtd-tipos-processo": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Obtém a quantidade de tipos de processo",
+        "description": "Retorna a contagem de processos abertos, alterados e fechados.",
+        "responses": {
+          "200": {
+            "description": "Contagem obtida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "totalAbertos": {
+                      "type": "integer",
+                      "example": 25
+                    },
+                    "totalAlterados": {
+                      "type": "integer",
+                      "example": 15
+                    },
+                    "totalFechados": {
+                      "type": "integer",
+                      "example": 8
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
+        }
+      }
+    },
+    "/dashboard/tipos-processo": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Lista todos os tipos de processo",
+        "description": "Retorna todos os tipos de processo cadastrados no sistema.",
+        "responses": {
+          "200": {
+            "description": "Lista de tipos de processo retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_tipo_processo": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "tipo": {
+                        "type": "string",
+                        "example": "abertura"
+                      },
+                      "descricao": {
+                        "type": "string",
+                        "example": "Abertura de empresa"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
+        }
+      }
+    },
+    "/dashboard/clientes-detalhados": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Obtém lista detalhada de clientes e seus CNPJs",
+        "description": "Retorna os clientes com seus respectivos CNPJs e IDs de vínculo.",
+        "responses": {
+          "200": {
+            "description": "Lista de clientes detalhados retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_cliente": {
+                        "type": "integer",
+                        "example": 10
+                      },
+                      "cliente": {
+                        "type": "string",
+                        "example": "João Silva"
+                      },
+                      "cnpj": {
+                        "type": "string",
+                        "example": "Empresa Exemplo LTDA"
+                      },
+                      "id_cliente_cnpj": {
+                        "type": "integer",
+                        "example": 25
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno no servidor"
+          }
+        }
+      }
+    },
+    "/tipos-processo/{id}": {
       "patch": {
-        "tags": ["Tipos de Processo"],
+        "tags": [
+          "Tipos de Processo"
+        ],
         "summary": "Atualiza o status de um tipo de processo",
         "parameters": [
           {
@@ -822,7 +1016,11 @@
                 "properties": {
                   "tipo": {
                     "type": "string",
-                    "enum": ["aberto", "alterado", "fechado"]
+                    "enum": [
+                      "aberto",
+                      "alterado",
+                      "fechado"
+                    ]
                   }
                 }
               }
@@ -844,26 +1042,124 @@
           }
         }
       }
-},
-"/nivel_usuario": {
-  "get": {
-    "tags": ["Níveis de Usuário"],
-    "summary": "Lista todos os níveis de usuários",
-    "description": "Este endpoint retorna todos os níveis de usuários cadastrados no sistema.",
-    "responses": {
-      "200": {
-        "description": "Lista de níveis de usuários",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
+    },
+    "/nivel_usuario": {
+      "get": {
+        "tags": [
+          "Níveis de Usuário"
+        ],
+        "summary": "Lista todos os níveis de usuários",
+        "description": "Este endpoint retorna todos os níveis de usuários cadastrados no sistema.",
+        "responses": {
+          "200": {
+            "description": "Lista de níveis de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "description": "ID do nível de usuário"
+                      },
+                      "nome": {
+                        "type": "string",
+                        "description": "Nome do nível de usuário"
+                      },
+                      "descricao": {
+                        "type": "string",
+                        "description": "Descrição do nível de usuário"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Níveis de Usuário"
+        ],
+        "summary": "Adiciona um novo nível de usuário",
+        "description": "Este endpoint adiciona um novo nível de usuário ao sistema.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
                 "type": "object",
                 "properties": {
-                  "id": {
-                    "type": "integer",
-                    "description": "ID do nível de usuário"
-                  },
+                  "nome": {
+                    "type": "string",
+                    "description": "Nome do nível de usuário"
+                  }
+                },
+                "required": [
+                  "nome"
+                ]
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Nível de usuário criado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "description": "ID do nível de usuário recém-criado"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Erro no servidor"
+            }
+          }
+        }
+      }
+    },
+    "/nivel_usuario/{id}": {
+      "put": {
+        "tags": [
+          "Níveis de Usuário"
+        ],
+        "summary": "Atualiza um nível de usuário",
+        "description": "Este endpoint permite atualizar os dados de um nível de usuário existente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do nível de usuário"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
                   "nome": {
                     "type": "string",
                     "description": "Nome do nível de usuário"
@@ -872,145 +1168,62 @@
                     "type": "string",
                     "description": "Descrição do nível de usuário"
                   }
-                }
+                },
+                "required": [
+                  "nome",
+                  "descricao"
+                ]
               }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Nível de usuário atualizado com sucesso"
+            },
+            "404": {
+              "description": "Nível de usuário não encontrado"
+            },
+            "500": {
+              "description": "Erro no servidor"
             }
           }
         }
       },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  },
-  "post": {
-    "tags": ["Níveis de Usuário"],
-    "summary": "Adiciona um novo nível de usuário",
-    "description": "Este endpoint adiciona um novo nível de usuário ao sistema.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "nome": {
-                "type": "string",
-                "description": "Nome do nível de usuário"
-              }
-            },
-            "required": ["nome"]
-          }
-        }
-      },
-      "responses": {
-        "201": {
-          "description": "Nível de usuário criado com sucesso",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Mensagem de sucesso"
-                  },
-                  "id": {
-                    "type": "integer",
-                    "description": "ID do nível de usuário recém-criado"
-                  }
-                }
-              }
+      "delete": {
+        "tags": [
+          "Níveis de Usuário"
+        ],
+        "summary": "Exclui um nível de usuário",
+        "description": "Este endpoint exclui um nível de usuário com base no ID fornecido.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "description": "ID do nível de usuário"
             }
           }
-        },
-        "500": {
-          "description": "Erro no servidor"
-        }
-      }
-    }
-  }
-},
-"/nivel_usuario/{id}": {
-  "put": {
-    "tags": ["Níveis de Usuário"],
-    "summary": "Atualiza um nível de usuário",
-    "description": "Este endpoint permite atualizar os dados de um nível de usuário existente.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do nível de usuário"
-        }
-      }
-    ],
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "nome": {
-                "type": "string",
-                "description": "Nome do nível de usuário"
-              },
-              "descricao": {
-                "type": "string",
-                "description": "Descrição do nível de usuário"
-              }
-            },
-            "required": ["nome", "descricao"]
+        ],
+        "responses": {
+          "200": {
+            "description": "Nível de usuário excluído com sucesso"
+          },
+          "404": {
+            "description": "Nível de usuário não encontrado"
+          },
+          "500": {
+            "description": "Erro no servidor"
           }
         }
-      },
-      "responses": {
-        "200": {
-          "description": "Nível de usuário atualizado com sucesso"
-        },
-        "404": {
-          "description": "Nível de usuário não encontrado"
-        },
-        "500": {
-          "description": "Erro no servidor"
-        }
       }
-    }
-  },
-  "delete": {
-    "tags": ["Níveis de Usuário"],
-    "summary": "Exclui um nível de usuário",
-    "description": "Este endpoint exclui um nível de usuário com base no ID fornecido.",
-    "parameters": [
-      {
-        "name": "id",
-        "in": "path",
-        "required": true,
-        "schema": {
-          "type": "integer",
-          "description": "ID do nível de usuário"
-        }
-      }
-    ],
-    "responses": {
-      "200": {
-        "description": "Nível de usuário excluído com sucesso"
-      },
-      "404": {
-        "description": "Nível de usuário não encontrado"
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  }
-},
-"/upload-arquivos/{cliente_id}": {
+    },
+    "/upload-arquivos/{cliente_id}": {
       "post": {
-        "tags": ["Upload"],
+        "tags": [
+          "Upload"
+        ],
         "summary": "Faz o upload de um arquivo associado a um cliente",
         "parameters": [
           {
@@ -1066,164 +1279,251 @@
         }
       }
     },
-"/usuarios": {
-  "get": {
-    "tags": ["Usuários"],
-    "summary": "Lista todos os usuários",
-    "description": "Este endpoint retorna todos os usuários cadastrados no sistema.",
-    "responses": {
-      "200": {
-        "description": "Lista de usuários",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
+    "/usuarios": {
+      "get": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Lista todos os usuários",
+        "description": "Este endpoint retorna todos os usuários cadastrados no sistema.",
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_usuario": {
+                        "type": "integer",
+                        "description": "ID do usuário"
+                      },
+                      "nome": {
+                        "type": "string",
+                        "description": "Nome do usuário"
+                      },
+                      "email": {
+                        "type": "string",
+                        "description": "Email do usuário"
+                      },
+                      "Senha": {
+                        "type": "string",
+                        "description": "Senha do usuário"
+                      },
+                      "nivel_usuario_id": {
+                        "type": "integer",
+                        "description": "ID do nível de usuário"
+                      },
+                      "telefone": {
+                        "type": "string",
+                        "description": "Telefone do usuário"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro no servidor"
+          }
+        }
+      }
+    },
+    "/cadastro": {
+      "post": {
+        "tags": [
+          "Usuários"
+        ],
+        "summary": "Cadastra um novo usuário",
+        "description": "Este endpoint permite cadastrar um novo usuário com nome, email e senha. A senha será criptografada antes de ser armazenada no banco de dados.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
                 "type": "object",
                 "properties": {
-                  "id_usuario": {
-                    "type": "integer",
-                    "description": "ID do usuário"
-                  },
-                  "nome": {
+                  "Nome": {
                     "type": "string",
                     "description": "Nome do usuário"
                   },
-                  "email": {
+                  "Email": {
                     "type": "string",
                     "description": "Email do usuário"
+                  },
+                  "Senha": {
+                    "type": "string",
+                    "description": "Senha do usuário"
                   },
                   "nivel_usuario_id": {
                     "type": "integer",
                     "description": "ID do nível de usuário"
                   }
-                }
+                },
+                "required": [
+                  "Nome",
+                  "Email",
+                  "Senha",
+                  "nivel_usuario_id"
+                ]
               }
             }
-          }
-        }
-      },
-      "500": {
-        "description": "Erro no servidor"
-      }
-    }
-  }
-},
-"/cadastro": {
-  "post": {
-    "tags": ["Usuários"],
-    "summary": "Cadastra um novo usuário",
-    "description": "Este endpoint permite cadastrar um novo usuário com nome, email e senha. A senha será criptografada antes de ser armazenada no banco de dados.",
-    "requestBody": {
-      "required": true,
-      "content": {
-        "application/json": {
-          "schema": {
-            "type": "object",
-            "properties": {
-              "Nome": {
-                "type": "string",
-                "description": "Nome do usuário"
-              },
-              "Email": {
-                "type": "string",
-                "description": "Email do usuário"
-              },
-              "Senha": {
-                "type": "string",
-                "description": "Senha do usuário"
-              },
-              "nivel_usuario_id": {
-                "type": "integer",
-                "description": "ID do nível de usuário"
+          },
+          "responses": {
+            "201": {
+              "description": "Usuário cadastrado com sucesso",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "description": "Mensagem de sucesso"
+                      },
+                      "id": {
+                        "type": "integer",
+                        "description": "ID do usuário recém-criado"
+                      }
+                    }
+                  }
+                }
               }
             },
-            "required": ["Nome", "Email", "Senha", "nivel_usuario_id"]
+            "400": {
+              "description": "Email já cadastrado"
+            },
+            "500": {
+              "description": "Erro no servidor"
+            }
           }
         }
-      },
-      "responses": {
-        "201": {
-          "description": "Usuário cadastrado com sucesso",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Mensagem de sucesso"
-                  },
-                  "id": {
-                    "type": "integer",
-                    "description": "ID do usuário recém-criado"
+      }
+    },
+    "/clientes/{id}/atividades": {
+      "get": {
+        "tags": [
+          "Atividade"
+        ],
+        "summary": "Obter atividades de um cliente",
+        "description": "Retorna os nomes dos CNPJs e CNAEs associados a um cliente pelo ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do cliente",
+            "schema": {
+              "type": "integer",
+              "example": 123
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de CNPJs e atividades (CNAEs) associadas ao cliente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "nome_cnpj": {
+                        "type": "string",
+                        "example": "Empresa Exemplo LTDA"
+                      },
+                      "nome_cnae": {
+                        "type": "string",
+                        "example": "Comércio varejista de artigos do vestuário e acessórios"
+                      }
+                    }
                   }
                 }
               }
             }
-          }
-        },
-        "400": {
-          "description": "Email já cadastrado"
-        },
-        "500": {
-          "description": "Erro no servidor"
-        }
-      }
-    }
-  }
-},
-"/clientes/{id}/atividades": {
-    "get": {
-      "tags": ["Atividade"],
-      "summary": "Obter atividades de um cliente",
-      "description": "Retorna os nomes dos CNPJs e CNAEs associados a um cliente pelo ID.",
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "ID do cliente",
-          "schema": {
-            "type": "integer",
-            "example": 123
-          }
-        }
-      ],
-      "responses": {
-        "200": {
-          "description": "Lista de CNPJs e atividades (CNAEs) associadas ao cliente",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
+          },
+          "500": {
+            "description": "Erro interno do servidor",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "nome_cnpj": {
+                    "error": {
                       "type": "string",
-                      "example": "Empresa Exemplo LTDA"
-                    },
-                    "nome_cnae": {
-                      "type": "string",
-                      "example": "Comércio varejista de artigos do vestuário e acessórios"
+                      "example": "Erro ao buscar atividades do cliente"
                     }
                   }
                 }
               }
             }
           }
-        },
-        "500": {
-          "description": "Erro interno do servidor",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "example": "Erro ao buscar atividades do cliente"
+        }
+      }
+    },
+    "/clientes/{id}/cnaes": {
+      "get": {
+        "tags": [
+          "Clientes",
+          "CNAE"
+        ],
+        "summary": "Listar CNAEs de um cliente",
+        "description": "Retorna os CNAEs associados aos CNPJs de um cliente.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do cliente",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de CNAEs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_cnae": {
+                        "type": "integer",
+                        "example": 1234
+                      },
+                      "nome_cnae": {
+                        "type": "string",
+                        "example": "Comércio varejista de alimentos"
+                      },
+                      "nome_cnpj": {
+                        "type": "string",
+                        "example": "Empresa Exemplo LTDA"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Erro ao listar CNAEs"
+                    }
                   }
                 }
               }
@@ -1231,129 +1531,216 @@
           }
         }
       }
-    }
-  },
-  "/clientes/{id}/cnaes": {
-    "get": {
-      "tags": ["Clientes","CNAE"],
-      "summary": "Listar CNAEs de um cliente",
-      "description": "Retorna os CNAEs associados aos CNPJs de um cliente.",
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
+    },
+    "/clientes/cnaes": {
+      "post": {
+        "tags": [
+          "Clientes",
+          "CNAE"
+        ],
+        "summary": "Adicionar CNAE a um CNPJ",
+        "description": "Adiciona um novo CNAE a um CNPJ existente.",
+        "requestBody": {
           "required": true,
-          "description": "ID do cliente",
-          "schema": {
-            "type": "integer",
-            "example": 1
-          }
-        }
-      ],
-      "responses": {
-        "200": {
-          "description": "Lista de CNAEs",
           "content": {
             "application/json": {
               "schema": {
-                "type": "array",
-                "items": {
+                "type": "object",
+                "required": [
+                  "cnpj_id",
+                  "cnae_id"
+                ],
+                "properties": {
+                  "cnpj_id": {
+                    "type": "integer",
+                    "example": 101
+                  },
+                  "cnae_id": {
+                    "type": "integer",
+                    "example": 1234
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "CNAE adicionado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "id_cnae": {
+                    "message": {
+                      "type": "string",
+                      "example": "CNAE adicionado com sucesso"
+                    },
+                    "insertId": {
                       "type": "integer",
-                      "example": 1234
-                    },
-                    "nome_cnae": {
+                      "example": 45
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
                       "type": "string",
-                      "example": "Comércio varejista de alimentos"
-                    },
-                    "nome_cnpj": {
-                      "type": "string",
-                      "example": "Empresa Exemplo LTDA"
+                      "example": "Erro ao adicionar CNAE"
                     }
                   }
                 }
               }
             }
           }
-        },
-        "500": {
-          "description": "Erro interno",
+        }
+      },
+      "put": {
+        "tags": [
+          "Clientes",
+          "CNAE"
+        ],
+        "summary": "Atualizar CNAE de um CNPJ",
+        "description": "Atualiza o CNAE de um CNPJ específico.",
+        "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "cnpj_id",
+                  "cnae_id_antigo",
+                  "cnae_id_novo"
+                ],
                 "properties": {
-                  "error": {
-                    "type": "string",
-                    "example": "Erro ao listar CNAEs"
+                  "cnpj_id": {
+                    "type": "integer",
+                    "example": 101
+                  },
+                  "cnae_id_antigo": {
+                    "type": "integer",
+                    "example": 1234
+                  },
+                  "cnae_id_novo": {
+                    "type": "integer",
+                    "example": 5678
                   }
                 }
               }
             }
           }
-        }
-      }
-    }
-  },
-  "/clientes/cnaes": {
-    "post": {
-      "tags": ["Clientes","CNAE"],
-      "summary": "Adicionar CNAE a um CNPJ",
-      "description": "Adiciona um novo CNAE a um CNPJ existente.",
-      "requestBody": {
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": ["cnpj_id", "cnae_id"],
-              "properties": {
-                "cnpj_id": {
-                  "type": "integer",
-                  "example": 101
-                },
-                "cnae_id": {
-                  "type": "integer",
-                  "example": 1234
+        },
+        "responses": {
+          "200": {
+            "description": "CNAE atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "CNAE atualizado com sucesso"
+                    },
+                    "affectedRows": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Erro ao atualizar CNAE"
+                    }
+                  }
                 }
               }
             }
           }
         }
       },
-      "responses": {
-        "200": {
-          "description": "CNAE adicionado com sucesso",
+      "delete": {
+        "tags": [
+          "Clientes",
+          "CNAE"
+        ],
+        "summary": "Excluir CNAE de um CNPJ",
+        "description": "Remove um CNAE associado a um CNPJ.",
+        "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "cnpj_id",
+                  "cnae_id"
+                ],
                 "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "CNAE adicionado com sucesso"
-                  },
-                  "insertId": {
+                  "cnpj_id": {
                     "type": "integer",
-                    "example": 45
+                    "example": 101
+                  },
+                  "cnae_id": {
+                    "type": "integer",
+                    "example": 1234
                   }
                 }
               }
             }
           }
         },
-        "500": {
-          "description": "Erro interno",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "example": "Erro ao adicionar CNAE"
+        "responses": {
+          "200": {
+            "description": "CNAE excluído com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "CNAE excluído com sucesso"
+                    },
+                    "affectedRows": {
+                      "type": "integer",
+                      "example": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro interno",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string",
+                      "example": "Erro ao excluir CNAE"
+                    }
                   }
                 }
               }
@@ -1362,142 +1749,11 @@
         }
       }
     },
-    "put": {
-      "tags": ["Clientes","CNAE"],
-      "summary": "Atualizar CNAE de um CNPJ",
-      "description": "Atualiza o CNAE de um CNPJ específico.",
-      "requestBody": {
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": ["cnpj_id", "cnae_id_antigo", "cnae_id_novo"],
-              "properties": {
-                "cnpj_id": {
-                  "type": "integer",
-                  "example": 101
-                },
-                "cnae_id_antigo": {
-                  "type": "integer",
-                  "example": 1234
-                },
-                "cnae_id_novo": {
-                  "type": "integer",
-                  "example": 5678
-                }
-              }
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "CNAE atualizado com sucesso",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "CNAE atualizado com sucesso"
-                  },
-                  "affectedRows": {
-                    "type": "integer",
-                    "example": 1
-                  }
-                }
-              }
-            }
-          }
-        },
-        "500": {
-          "description": "Erro interno",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "example": "Erro ao atualizar CNAE"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "delete": {
-      "tags": ["Clientes","CNAE"],
-      "summary": "Excluir CNAE de um CNPJ",
-      "description": "Remove um CNAE associado a um CNPJ.",
-      "requestBody": {
-        "required": true,
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "object",
-              "required": ["cnpj_id", "cnae_id"],
-              "properties": {
-                "cnpj_id": {
-                  "type": "integer",
-                  "example": 101
-                },
-                "cnae_id": {
-                  "type": "integer",
-                  "example": 1234
-                }
-              }
-            }
-          }
-        }
-      },
-      "responses": {
-        "200": {
-          "description": "CNAE excluído com sucesso",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "CNAE excluído com sucesso"
-                  },
-                  "affectedRows": {
-                    "type": "integer",
-                    "example": 1
-                  }
-                }
-              }
-            }
-          }
-        },
-        "500": {
-          "description": "Erro interno",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "error": {
-                    "type": "string",
-                    "example": "Erro ao excluir CNAE"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "/documentos": {
+    "/documentos": {
       "patch": {
-        "tags": ["Documentos"],
+        "tags": [
+          "Documentos"
+        ],
         "summary": "Atualiza informações sobre tipos de documentos",
         "requestBody": {
           "required": true,
@@ -1527,6 +1783,323 @@
           },
           "500": {
             "description": "Erro interno no servidor"
+          }
+        }
+      }
+    },
+    "/processos": {
+      "get": {
+        "tags": [
+          "Processos"
+        ],
+        "summary": "Lista todos os processos",
+        "description": "Retorna todos os registros da tabela de processos cadastrados no sistema.",
+        "responses": {
+          "200": {
+            "description": "Lista de processos retornada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_processo": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "id_cliente": {
+                        "type": "integer",
+                        "example": 12
+                      },
+                      "id_cnpj": {
+                        "type": "integer",
+                        "example": 45
+                      },
+                      "id_tipo_processo": {
+                        "type": "integer",
+                        "example": 50
+                      },
+                      "data_atualizacao": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-09T14:30:00Z"
+                      },
+                      "geracao_link_id": {
+                        "type": "integer",
+                        "example": 7
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao buscar processos"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Processos"
+        ],
+        "summary": "Cria um novo processo de abertura",
+        "description": "Cria um novo processo de abertura de CNPJ para um cliente e gera um link único para acompanhamento.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id_cliente",
+                  "id_cnpj",
+                  "tipo_link_id",
+                  "cnae_id"
+                ],
+                "properties": {
+                  "id_cliente": {
+                    "type": "integer",
+                    "example": 12
+                  },
+                  "id_cnpj": {
+                    "type": "integer",
+                    "example": 45
+                  },
+                  "tipo_link_id": {
+                    "type": "integer",
+                    "example": 1
+                  },
+                  "cnae_id": {
+                    "type": "integer",
+                    "example": 101
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Processo criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Processo criado com sucesso!"
+                    },
+                    "link": {
+                      "type": "string",
+                      "example": "https://projeto-back-ten.vercel.app/adicionarcnpjcliente/12"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "CNPJ não encontrado"
+          },
+          "500": {
+            "description": "Erro interno ao criar processo"
+          }
+        }
+      }
+    },
+    "/processos/{id}": {
+      "get": {
+        "tags": [
+          "Processos"
+        ],
+        "summary": "Obtém um processo específico",
+        "description": "Retorna os detalhes de um processo com base no seu ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID do processo",
+            "schema": {
+              "type": "integer",
+              "example": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Processo encontrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id_processo": {
+                        "type": "integer",
+                        "example": 1
+                      },
+                      "id_cliente": {
+                        "type": "integer",
+                        "example": 12
+                      },
+                      "id_cnpj": {
+                        "type": "integer",
+                        "example": 45
+                      },
+                      "id_tipo_processo": {
+                        "type": "integer",
+                        "example": 50
+                      },
+                      "data_atualizacao": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-10-09T14:30:00Z"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Erro ao buscar processo"
+          }
+        }
+      }
+    },
+    "/processos/atualizar": {
+      "post": {
+        "tags": [
+          "Processos"
+        ],
+        "summary": "Cria um processo de atualização",
+        "description": "Gera um novo processo para atualização de CNPJ de um cliente e retorna o link correspondente.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id_cliente",
+                  "id_cnpj",
+                  "cnae_id"
+                ],
+                "properties": {
+                  "id_cliente": {
+                    "type": "integer",
+                    "example": 12
+                  },
+                  "id_cnpj": {
+                    "type": "integer",
+                    "example": 45
+                  },
+                  "cnae_id": {
+                    "type": "integer",
+                    "example": 101
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Processo de atualização criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Processo de atualização criado com sucesso!"
+                    },
+                    "link": {
+                      "type": "string",
+                      "example": "https://projeto-back-ten.vercel.app/atualizarcnpjcliente/12"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "CNPJ não encontrado"
+          },
+          "500": {
+            "description": "Erro interno ao criar processo de atualização"
+          }
+        }
+      }
+    },
+    "/processos/excluir": {
+      "post": {
+        "tags": [
+          "Processos"
+        ],
+        "summary": "Cria um processo de exclusão",
+        "description": "Cria um novo processo de exclusão de CNPJ vinculado a um cliente e retorna o link de execução.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id_cliente",
+                  "id_cnpj",
+                  "cnae_id"
+                ],
+                "properties": {
+                  "id_cliente": {
+                    "type": "integer",
+                    "example": 12
+                  },
+                  "id_cnpj": {
+                    "type": "integer",
+                    "example": 45
+                  },
+                  "cnae_id": {
+                    "type": "integer",
+                    "example": 101
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Processo de exclusão criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Processo de exclusão criado com sucesso!"
+                    },
+                    "link": {
+                      "type": "string",
+                      "example": "https://projeto-back-ten.vercel.app/excluircnpjcliente/12"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "CNPJ não encontrado"
+          },
+          "500": {
+            "description": "Erro interno ao criar processo de exclusão"
           }
         }
       }
