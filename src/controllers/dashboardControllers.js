@@ -7,7 +7,7 @@ const dashboard = async (req, res) => {
         (SELECT COUNT(*) FROM cliente) AS totalClientes, 
         (SELECT COUNT(*) FROM cnpj) AS totalCNPJS,
         (SELECT SUM(ativo) FROM cnpj_status) AS totalAtivos,
-        (SELECT SUM(pendente) FROM cnpj_status) AS totalPendentes
+        (SELECT SUM(esperando_documentos) FROM cnpj_status) AS totalPendentes
     `;
     const [rows] = await db.query(sql);
 
