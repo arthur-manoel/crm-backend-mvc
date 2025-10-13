@@ -16,11 +16,14 @@ const totalCNPJS = async (req, res) => {
 
 const cadastrarCNPJ = async (req, res) => {
 
-  const { Nome } = req.body;
+  const { nome, numero_cnpj } = req.body;
   try {
-    const sql = "INSERT INTO cnpj (nome) VALUES (?)"
 
-    const [result] = await db.execute(sql, [Nome]);
+    const sql = "INSERT INTO cnpj (nome, numero_cnpj, data_criacao) VALUES (?, ?, ?)"
+
+    const dataAtual = new Date();
+
+    const [result] = await db.execute(sql, [nome, numero_cnpj, dataAtual]);
 
     res.status(201).json({ message: "CNPJ cadastrado com sucesso!", id: result.insertId });
 
