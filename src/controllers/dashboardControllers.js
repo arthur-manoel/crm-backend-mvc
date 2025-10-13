@@ -71,9 +71,9 @@ const clientes_detalhados = async (req, res) => {
       SELECT 
         cl.id_cliente,
         cl.nome AS cliente,
-        cl.gmail AS gmail,  -- Retorna o campo 'email' da tabela cliente (assumindo que o campo seja 'email')
-        c.numero_cnpj,     -- Retorna o 'numero_cnpj' da tabela 'cnpj'
-        c.nome,   -- Retorna o 'nome_fantasia' da tabela 'cnpj'
+        cl.gmail AS email,  -- Retorna o campo 'email' da tabela cliente (assumindo que o campo seja 'email')
+        c.numero_cnpj AS CNPJ,     -- Retorna o 'numero_cnpj' da tabela 'cnpj'
+        c.nome AS nome_fantasia,   -- Retorna o 'nome_fantasia' da tabela 'cnpj'
         c.data_criacao     -- Retorna a 'data_criacao' da tabela 'cnpj'
       FROM cliente cl
       LEFT JOIN cliente_cnpj cc ON cl.id_cliente = cc.cliente_id
