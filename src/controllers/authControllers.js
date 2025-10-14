@@ -27,7 +27,7 @@ const login = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: usuario.id_usuario, email: usuario.Email, role: usuario.role },
+      { id: usuario.id_usuario, email: usuario.Email, role: usuario.role, nome: usuario.nome },
       SECRET,
       { expiresIn: "30d" }
     );
