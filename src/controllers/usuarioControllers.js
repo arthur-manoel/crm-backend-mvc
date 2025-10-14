@@ -17,18 +17,12 @@ const cadastro = async (req, res) => {
     const senhaHashed = await bcrypt.hash(password, 10);
 
     let nivel_usuario_id;
-    
-    if (role === "client") {
-  nivel_usuario_id = 1;
-    }
-    
-    else if (role === "employee") {
-  nivel_usuario_id = 2;
-    } 
 
-    else {
+    if (role === "client") {
+      nivel_usuario_id = 1;
+    } else {
       return res.status(400).json({ error: "Role inválido" });
-}
+    }
     const sql =
       "INSERT INTO usuario (Nome, Email, telefone, Senha, nivel_usuario_id) VALUES (?, ?, ?, ?, ?)";
 
