@@ -24,7 +24,7 @@ const uploadArquivos = (req, res, next) => {
 
     upload(req, res, async (err) => {
 
-        if (err) return res.status(500).send("Erro ao enviar arquivo! " + err.message);
+       
         if (!req.file) return res.status(400).send("Arquivo não encontrado");
         
         try {
