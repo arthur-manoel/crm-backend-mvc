@@ -93,7 +93,7 @@
         }
       }
     },
-    "/clientes/{id}/cnpjs": {
+    "/cliente_cnpjs/:id": {
       "get": {
         "tags": [
           "Clientes",
@@ -142,7 +142,7 @@
         }
       }
     },
-    "/clientes/{id}/cnpj": {
+    "/adicionarcnpjcliente/:id": {
       "post": {
         "tags": [
           "Clientes",
@@ -189,6 +189,7 @@
           }
         }
       },
+      "/atualizarcnpjcliente/:id": {
       "put": {
         "tags": [
           "Clientes",
@@ -239,7 +240,9 @@
             "description": "Erro ao atualizar o CNPJ"
           }
         }
-      },
+      }
+    },
+      "/excluircnpjcliente/:id": {
       "delete": {
         "tags": [
           "Clientes",
@@ -286,7 +289,8 @@
           }
         }
       }
-    },
+    }
+  },
     "/clientes": {
       "get": {
         "tags": [
@@ -331,6 +335,7 @@
           }
         }
       },
+      "/cadastrarcliente":{
       "post": {
         "tags": [
           "Clientes"
@@ -392,8 +397,9 @@
           }
         }
       }
-    },
-    "/clientes/{id}": {
+    }
+  },
+    "/excluircliente/:id": {
       "delete": {
         "tags": [
           "Clientes"
@@ -423,6 +429,7 @@
           }
         }
       },
+      "/atualizarcliente/:id": {
       "put": {
         "tags": [
           "Clientes"
@@ -481,8 +488,9 @@
           }
         }
       }
-    },
-    "/cnae": {
+    }
+  },
+    "/Cnae": {
       "get": {
         "tags": [
           "CNAE"
@@ -579,7 +587,7 @@
         }
       }
     },
-    "/cnae/{id}": {
+    "/Cnae/:id": {
       "put": {
         "tags": [
           "CNAE"
@@ -694,6 +702,7 @@
           }
         }
       },
+      "/cadastrarcnpj":{
       "post": {
         "tags": [
           "CNPJs"
@@ -745,8 +754,9 @@
           }
         }
       }
-    },
-    "/cnpj/{id}": {
+    }
+  },
+    "/atualizarcnpj/:id": {
       "put": {
         "tags": [
           "CNPJs"
@@ -795,6 +805,7 @@
           }
         }
       },
+      "/excluircnpj/:id": {
       "delete": {
         "tags": [
           "CNPJs"
@@ -824,7 +835,8 @@
           }
         }
       }
-    },
+    }
+  },
     "/dashboard": {
       "get": {
         "tags": [
@@ -867,7 +879,7 @@
         }
       }
     },
-    "/dashboard/qtd-tipos-processo": {
+    "/qtd-tiposProcesso": {
       "get": {
         "tags": [
           "Dashboard"
@@ -905,7 +917,7 @@
         }
       }
     },
-    "/dashboard/tipos-processo": {
+    "/tiposProcesso": {
       "get": {
         "tags": [
           "Dashboard"
@@ -946,7 +958,7 @@
         }
       }
     },
-    "/dashboard/clientes-detalhados": {
+    "/clientes-detalhes": {
       "get": {
         "tags": [
           "Dashboard"
@@ -1043,7 +1055,7 @@
         }
       }
     },
-    "/nivel_usuario": {
+    "/niveis": {
       "get": {
         "tags": [
           "Níveis de Usuário"
@@ -1135,7 +1147,7 @@
         }
       }
     },
-    "/nivel_usuario/{id}": {
+    "/niveis/:id": {
       "put": {
         "tags": [
           "Níveis de Usuário"
@@ -1219,7 +1231,7 @@
         }
       }
     },
-    "/upload-arquivos/{cliente_id}": {
+    "/uploadarquivo/:cliente_id": {
       "post": {
         "tags": [
           "Upload"
@@ -1403,7 +1415,7 @@
         }
       }
     },
-    "/clientes/{id}/atividades": {
+    "/atividades_cliente/:id": {
       "get": {
         "tags": [
           "Atividade"
@@ -1465,7 +1477,7 @@
         }
       }
     },
-    "/clientes/{id}/cnaes": {
+    "/cnaes_cliente/:id": {
       "get": {
         "tags": [
           "Clientes",
@@ -1532,7 +1544,7 @@
         }
       }
     },
-    "/clientes/cnaes": {
+    "/cnaes_cliente": {
       "post": {
         "tags": [
           "Clientes",
@@ -1840,6 +1852,7 @@
           }
         }
       },
+      "/processo": {
       "post": {
         "tags": [
           "Processos"
@@ -1909,8 +1922,9 @@
           }
         }
       }
-    },
-    "/processos/{id}": {
+    }
+  },
+    "/processo/:id": {
       "get": {
         "tags": [
           "Processos"
