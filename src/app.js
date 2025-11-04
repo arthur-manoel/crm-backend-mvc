@@ -21,7 +21,7 @@ import atividadesCliente from "./routes/atividadeRoute.js";
 import cliente_cnae from "./routes/clienteCnaeRoute.js";
 import tipo_documento from "./routes/tipodocumentoRoute.js";
 import processos from "./routes/processosRoute.js";
-
+import links from "./routes/linkRoute.js";
 
 app.use(express.json());
 app.use("/", authRouters);
@@ -37,6 +37,7 @@ app.use("/", atividadesCliente)
 app.use("/", cliente_cnae)
 app.use("/", tipo_documento)
 app.use("/", processos)
+app.use("/", links)
 
 app.get("/", (req, res) => {
   res.send("Rota GET na raiz");
