@@ -6,7 +6,7 @@ const router = express.Router();
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB (ajuste se quiser)
+  limits: { fileSize: 10 * 1024 * 1024 }, // 50MB (ajuste se quiser)
 });
 
 router.post("/uploadarquivo/:cliente_id", upload.single("arquivo"), uploadArquivos);
