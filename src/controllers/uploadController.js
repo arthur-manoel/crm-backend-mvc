@@ -1,55 +1,85 @@
 import multer from "multer";
 import path from "path";
-import db from "../database/db.js"
-
+import db from "../database/db.js";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { r2Client } from "../r2.js";
+import { v4 as uuid } from "uuid";
 
 const storage = multer.diskStorage({
-    
-    destination: (req, file, cb) => {
-        
-        cb(null, "uploads");
-        
-    },
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
 
-    filename: (req, file, cb) => {
-        const identificador = Date.now() + "-" + Math.round(Math.random() * 1e9);
-        cb(null, identificador + path.extname(file.originalname));
+  filename: (req, file, cb) => {
+    const identificador = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, identificador + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50MB (ajuste se quiser)
+});
+
+const uploadArquivos = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res
+        .status(400)
+        .json({ message: "Arquivo não enviado (campo 'arquivo')." });
     }
 
+    const { cliente_id } = req.params;
+
+    const { tipo_documento_id, cnpj_id } = req.body;
+
+    const bucket = process.env.R2_BUCKET_NAME;
+    const prefix = process.env.UPLOAD_PREFIX || "uploads";
+
+    // Gera um nome único (mantenha a extensão original se souber)
+    const original = req.file.originalname || "arquivo.bin";
+    const ext = original.includes(".") ? original.split(".").pop() : "";
+    const key = `${prefix}/${cliente_id}/${uuid()}${ext ? "." + ext : ""}`;
+
+    // Monta o PUT no R2
+    const put = new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype || "application/octet-stream",
+      // Se o bucket for público por policy e você quer leitura pública:
+      // ACL: "public-read"  // (R2 geralmente ignora ACL e usa bucket policy)
     });
 
-const upload = multer({ storage }).single("arquivo");
+    await r2Client.send(put);
 
-const uploadArquivos = (req, res, next) => {
+    // URL pública, se você tiver um custom domain configurado (opcional)
+    const publicBase = process.env.R2_PUBLIC_BASE_URL; // ex.: https://files.seudominio.com
+    const publicUrl = publicBase ? `${publicBase}/${key}` : null;
 
-    upload(req, res, async (err) => {
+    const sql =
+      "INSERT INTO documento (link, tipo_documento_id, cliente_id, cnpj_id) VALUES (?, ?, ?, ?)";
 
-       
-        if (!req.file) return res.status(400).send("Arquivo não encontrado");
-        
-        try {
+    const [rows] = await db.execute(sql, [
+      publicUrl,
+      tipo_documento_id,
+      cliente_id,
+      cnpj_id,
+    ]);
 
-            const link = `uploads/${req.file.filename}`;
-            const { cliente_id } = req.params;
-
-            const { tipo_documento_id, cnpj_id } = req.body;
-
-            const sql = "INSERT INTO documento (link, tipo_documento_id, cliente_id, cnpj_id) VALUES (?, ?, ?, ?)";
-
-            const [rows] = await db.execute(sql, [link, tipo_documento_id, cliente_id, cnpj_id]);
-            
-            res.send("arquivo enviado com sucesso!")
-
-        } catch (error) {
-            res.status(500).json({message: error});
-        }
+     return res.status(201).json({
+      message: "Arquivo enviado com sucesso!",
+      key,
+      publicUrl,
     });
-
+  } catch (error) {
+    res.status(500).json({ message: error });
+  }
 };
 
 const criarLink = async (req, res) => {
   const { link, id_cliente, id_cnpj, id_tipo_processo } = req.body;
-  const cnae_id = 3282;  // CNAE fixado como 3282
+  const cnae_id = 3282; // CNAE fixado como 3282
 
   try {
     // Verificar se o CNPJ existe
@@ -85,14 +115,12 @@ const criarLink = async (req, res) => {
 
     res.status(201).json({
       message: "Link gerado com sucesso!",
-      link: linkGerado
+      link: linkGerado,
     });
-    
   } catch (error) {
     console.error("Erro ao criar link:", error);
     res.status(500).json({ error: "Erro ao criar link" });
   }
 };
-
 
 export { uploadArquivos, criarLink };
