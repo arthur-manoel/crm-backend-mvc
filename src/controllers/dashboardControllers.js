@@ -73,6 +73,7 @@ const clientes_detalhados = async (req, res) => {
         cl.nome AS cliente,
         cl.gmail AS email,  -- Retorna o campo 'email' da tabela cliente (assumindo que o campo seja 'email')
         c.numero_cnpj AS CNPJ,     -- Retorna o 'numero_cnpj' da tabela 'cnpj'
+        c.id_cnpj AS id_CNPJ,
         c.nome AS nome_fantasia,   -- Retorna o 'nome_fantasia' da tabela 'cnpj'
         c.data_criacao     -- Retorna a 'data_criacao' da tabela 'cnpj'
       FROM cliente cl
