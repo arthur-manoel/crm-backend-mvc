@@ -6,7 +6,7 @@ const documentos = async (req, res) => {
 
         const { cliente_id } = req.params;
 
-        const sql = "SELECT link from documento WHERE cliente_id = ?";
+        const sql = "SELECT * FROM `documento` as d INNER JOIN `tipo_documento` as td on d.tipo_documento_id = td.id_tipo_documento";
 
         const [rows] = await db.execute(sql, [cliente_id])
 
