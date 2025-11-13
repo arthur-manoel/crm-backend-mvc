@@ -6,7 +6,7 @@ const documentos = async (req, res) => {
 
         const { cliente_id } = req.params;
 
-        const sql = "SELECT link from geracao_link WHERE cliente_id = ?";
+        const sql = "SELECT link from documento WHERE cliente_id = ?";
 
         const [rows] = await db.execute(sql, [cliente_id])
 
