@@ -21,6 +21,24 @@ const upload = multer({
   limits: { fileSize: 50 * 1024 * 1024 }, // 50MB (ajuste se quiser)
 });
 
+const inserir_documentos = async (req, res) => {
+  try {
+
+    const { tipo_documento_id, cliente_id, cnpj_id, geracao_link_id } = req.body;
+
+    const sql = "INSERT INTO documento (tipo_documento_id, cliente_id, cnpj_id, geracao_link_id) VALUES (?, ?, ?, ?)";
+
+    const [rows] = await db.execute(sql, [tipo_documento_id, cliente_id, cnpj_id, geracao_link_id]);
+
+    res.json(rows);
+
+  } catch (error) {
+    console.error("Erro ao inserir documento:", error);
+    return res.status(500).json({ message: error.message || "Erro interno." });
+  }
+};
+
+
 const uploadArquivos = async (req, res, next) => {
   try {
     if (!req.file) {
@@ -31,7 +49,7 @@ const uploadArquivos = async (req, res, next) => {
 
     const { cliente_id } = req.params;
 
-    const { tipo_documento_id, cnpj_id } = req.body;
+    const { geracao_link_id } = req.body;
 
     const bucket = process.env.R2_BUCKET_NAME;
     const prefix = process.env.UPLOAD_PREFIX || "uploads";
@@ -58,13 +76,11 @@ const uploadArquivos = async (req, res, next) => {
     const publicUrl = publicBase ? `${publicBase}/${key}` : null;
 
     const sql =
-      "INSERT INTO documento (link, tipo_documento_id, cliente_id, cnpj_id) VALUES (?, ?, ?, ?)";
+      "UPDATE documento SET link = ? WHERE geracao_link_id = ?";
 
     const [rows] = await db.execute(sql, [
       publicUrl,
-      tipo_documento_id,
-      cliente_id,
-      cnpj_id,
+      geracao_link_id
     ]);
 
      return res.status(201).json({
@@ -73,7 +89,7 @@ const uploadArquivos = async (req, res, next) => {
       publicUrl,
     });
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -123,4 +139,4 @@ const criarLink = async (req, res) => {
   }
 };
 
-export { uploadArquivos, criarLink };
+export { uploadArquivos, criarLink, inserir_documentos };
