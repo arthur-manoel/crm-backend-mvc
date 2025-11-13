@@ -93,6 +93,65 @@ const uploadArquivos = async (req, res, next) => {
   }
 };
 
+const inserirDocumentoComLink = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res
+        .status(412)
+        .json({ message: "Arquivo não enviado (campo 'arquivo')." });
+    }
+
+    const { cliente_id } = req.params;
+    const { tipo_documento_id, cnpj_id, geracao_link_id } = req.body;
+
+
+
+    const bucket = process.env.R2_BUCKET_NAME;
+    const prefix = process.env.UPLOAD_PREFIX || "uploads";
+
+    // Gera um nome único (mantenha a extensão original se souber)
+    const original = req.file.originalname || "arquivo.bin";
+    const ext = original.includes(".") ? original.split(".").pop() : "";
+    const key = `${prefix}/${cliente_id}/${uuid()}${ext ? "." + ext : ""}`;
+
+    // Monta o PUT no R2
+    const put = new PutObjectCommand({
+      Bucket: bucket,
+      Key: key,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype || "application/octet-stream",
+      // Se o bucket for público por policy e você quer leitura pública:
+      // ACL: "public-read"  // (R2 geralmente ignora ACL e usa bucket policy)
+    });
+
+    await r2Client.send(put);
+
+    // URL pública, se você tiver um custom domain configurado (opcional)
+    const publicBase = process.env.R2_PUBLIC_BASE_URL; // ex.: https://files.seudominio.com
+    const publicUrl = publicBase ? `${publicBase}/${key}` : null;
+
+    const sql =
+      "INSERT INTO documento (link, tipo_documento_id, cliente_id, cnpj_id, geracao_link_id) VALUES(?, ?, ?, ?, ?)";
+
+    const [rows] = await db.execute(sql, [
+      publicUrl,
+      tipo_documento_id,
+      cliente_id,
+      cnpj_id,
+      geracao_link_id
+    ]);
+
+     return res.status(201).json({
+      message: "Arquivo enviado com sucesso!",
+      key,
+      publicUrl,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 const criarLink = async (req, res) => {
   const { link, id_cliente, id_cnpj, id_tipo_processo } = req.body;
   const cnae_id = 3282; // CNAE fixado como 3282
@@ -139,4 +198,4 @@ const criarLink = async (req, res) => {
   }
 };
 
-export { uploadArquivos, criarLink, inserir_documentos };
+export { uploadArquivos, criarLink, inserir_documentos, inserirDocumentoComLink };
