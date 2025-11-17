@@ -13,9 +13,35 @@ const documentos = async (req, res) => {
         res.json(rows)
 
     } catch (error) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: error.message });
     }
 
 }
 
-export { documentos };
+const documentos_solicitados = async (req, res) => {
+
+    try {
+
+        const { ids } = req.body;
+        
+        if (!Array.isArray(ids) || ids.length === 0) {
+            return res.status(400).json({ error: "Envie um array de ids" });
+        }
+
+        const sql = `
+            SELECT nome 
+            FROM tipo_documento 
+            WHERE id_tipo_documento IN (${ids.map(() => '?').join(',')})
+        `;
+
+        const [rows] = await db.execute(sql, ids)
+
+        res.json(rows)
+
+    } catch (error) {
+    res.status(500).json({ error: error.message });
+    }
+
+}
+
+export { documentos, documentos_solicitados };

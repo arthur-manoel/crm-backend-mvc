@@ -51,7 +51,7 @@ const criarProcesso = async (req, res) => {
 
     const id_cliente_cnpj = clienteCnpjResult[0].id_cliente_cnpj;
 
-    const linkGerado = `https://projeto-back-ten.vercel.app/adicionarcnpjcliente/${id_cliente}`;
+    const linkGerado = `https://facilita-compet.vercel.app/abrir-empresa/documentos`;
 
     const dataExpiracao = new Date();
 
@@ -107,7 +107,7 @@ const excluirprocesso = async (req, res) => {
 
     const id_cliente_cnpj = clienteCnpjResult[0].id_cliente_cnpj;
 
-    const linkGerado = `https://projeto-back-ten.vercel.app/excluircnpjcliente/${id_cliente}`;
+    const linkGerado = `https://facilita-compet.vercel.app/abrir-empresa/documentos`;
 
     const dataExpiracao = new Date();
 
@@ -163,7 +163,7 @@ const atualizarprocesso = async (req, res) => {
 
     const id_cliente_cnpj = clienteCnpjResult[0].id_cliente_cnpj;
     
-    const linkGerado = `https://projeto-back-ten.vercel.app/atualizarcnpjcliente/${id_cliente}`;
+    const linkGerado = `https://facilita-compet.vercel.app/abrir-empresa/documentos`;
 
     const dataExpiracao = new Date();
 
