@@ -44,4 +44,17 @@ const documentos_solicitados = async (req, res) => {
 
 }
 
-export { documentos, documentos_solicitados };
+const visualizar_documentos = async (req, res) => {
+    try {
+        const sql = "SELECT id_tipo_documento, nome FROM tipo_documento";
+
+        const [rows] = await db.execute(sql);
+
+        res.json(rows);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export { documentos, documentos_solicitados, visualizar_documentos };
