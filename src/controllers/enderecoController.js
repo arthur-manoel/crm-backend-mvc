@@ -28,7 +28,7 @@ const adicionar_endereco = async (req, res) => {
     
         const [rows] = await db.execute(sql, [id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado]);
 
-        res.json(rows)
+        res.json({ message: "Endereço atualizado com sucesso" });
 
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -39,11 +39,11 @@ const atualizar_endereco = async (req, res) => {
 
     try {
 
-        const { id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado } = req.body;
+        const { id_endereco, id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado } = req.body;
         
-        const sql = "UPDATE endereco SET id_cnpj = ?, id_cliente = ?, cep = ?, rua = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, estado = ?";
+        const sql = "UPDATE endereco SET id_cnpj = ?, id_cliente = ?, cep = ?, rua = ?, numero = ?, complemento = ?, bairro = ?, cidade = ?, estado = ? WHERE id_endereco = ?";
 
-        const [rows] = await db.execute(sql, [id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado]);
+        const [rows] = await db.execute(sql, [id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado, id_endereco]);
 
         res.json(rows)
         
@@ -62,6 +62,8 @@ const excluir_endereco = async (req, res) => {
         const sql = "DELETE FROM endereco WHERE id_endereco = ?";
 
         const [rows] = await db.execute(sql, [id_endereco]);
+
+        res.json({ message: "Endereço excluído com sucesso" });
 
     } catch (error) {
         return res.status(500).json({ error: error.message })
