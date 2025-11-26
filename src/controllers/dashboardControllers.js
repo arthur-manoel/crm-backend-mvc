@@ -6,11 +6,11 @@ const dashboard = async (req, res) => {
       SELECT
         (SELECT COUNT(*) FROM cliente) AS totalClientes, 
         (SELECT COUNT(*) FROM cnpj) AS totalCNPJS,
-        (SELECT COUNT(status) FROM status_link WHERE status = "ativo") AS totalAtivos,
-        (SELECT COUNT(status) FROM status_link WHERE status = "pendente") AS totalPendentes,
-        (SELECT COUNT(id_tipo_processo) FROM processo WHERE id_tipo_processo = "50") AS totalAberturaCnpj,
-        (SELECT COUNT(id_tipo_processo) FROM processo WHERE id_tipo_processo = "51") AS totalAlteracaoCnpj,
-        (SELECT COUNT(id_tipo_processo) FROM processo WHERE id_tipo_processo = "52") AS totalFechamentoCnpj
+        (SELECT COUNT(status) FROM status_link WHERE status = 'ativo') AS totalAtivos,
+        (SELECT COUNT(status) FROM status_link WHERE status = 'pendente') AS totalPendentes,
+        (SELECT COUNT(*) FROM processo WHERE id_tipo_processo = 50) AS totalAberturaCnpj,
+        (SELECT COUNT(*) FROM processo WHERE id_tipo_processo = 51) AS totalAlteracaoCnpj,
+        (SELECT COUNT(*) FROM processo WHERE id_tipo_processo = 52) AS totalFechamentoCnpj
     `;
 
     //se der erro trocar de string pra inteiro os ids do tipo de processo
