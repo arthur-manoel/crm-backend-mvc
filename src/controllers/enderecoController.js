@@ -6,7 +6,7 @@ const endereco = async (req, res) => {
         
         const id_endereco = req.params;
 
-        const sql = "SELECT * FROM endereco WHERE id_endereco";
+        const sql = "SELECT * FROM endereco WHERE id_endereco = ?";
 
         const [rows] = await db.execute(sql, [id_endereco]);
 
@@ -28,7 +28,10 @@ const adicionar_endereco = async (req, res) => {
     
         const [rows] = await db.execute(sql, [id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado]);
 
-        res.json({ message: "Endereço atualizado com sucesso" });
+        res.json({
+            message: "Endereço adicionado com sucesso",
+            id_endereco: rows.insertId
+        });
 
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -87,11 +90,11 @@ const excluir_endereco = async (req, res) => {
 
     try {
         
-        const { id_endereco } = req.body;
+        const { id } = req.params;
 
         const sql = "DELETE FROM endereco WHERE id_endereco = ?";
 
-        const [rows] = await db.execute(sql, [id_endereco]);
+        const [rows] = await db.execute(sql, [id]);
 
         res.json({ message: "Endereço excluído com sucesso" });
 
