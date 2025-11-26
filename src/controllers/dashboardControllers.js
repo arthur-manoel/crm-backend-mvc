@@ -7,16 +7,32 @@ const dashboard = async (req, res) => {
         (SELECT COUNT(*) FROM cliente) AS totalClientes, 
         (SELECT COUNT(*) FROM cnpj) AS totalCNPJS,
         (SELECT COUNT(status) FROM status_link WHERE status = "ativo") AS totalAtivos,
-        (SELECT COUNT(status) FROM status_link WHERE status = "pendente") AS totalPendentes
+        (SELECT COUNT(status) FROM status_link WHERE status = "pendente") AS totalPendentes,
+        (SELECT COUNT(id_tipo_processo) FROM processo WHERE id_tipo_processo = "50") AS totalAberturaCnpj,
+        (SELECT COUNT(id_tipo_processo) FROM processo WHERE id_tipo_processo = "51") AS totalAlteracaoCnpj,
+        (SELECT COUNT(id_tipo_processo) FROM processo WHERE id_tipo_processo = "52") AS totalFechamentoCnpj
     `;
+
+    //se der erro trocar de string pra inteiro os ids do tipo de processo
+    
     const [rows] = await db.query(sql);
 
     if (!rows || rows.length === 0) {
-      return res.status(200).json({ totalClientes: 0, totalCNPJS: 0, totalAtivos: 0, totalPendentes: 0 });
+
+      return res.status(200).json({
+        totalClientes: 0,
+        totalCNPJS: 0,
+        totalAtivos: 0,
+        totalPendentes: 0,
+        totalAberturaCnpj: 0,
+        totalAlteracaoCnpj: 0,
+        totalFechamentoCnpj: 0
+      });
     }
-    const { totalClientes, totalCNPJS, totalAtivos, totalPendentes } = rows[0];
+
+    const { totalClientes, totalCNPJS, totalAtivos, totalPendentes, totalAberturaCnpj, totalAlteracaoCnpj, totalFechamentoCnpj } = rows[0];
     
-    res.json({ totalClientes, totalCNPJS, totalAtivos, totalPendentes });
+    res.json({ totalClientes, totalCNPJS, totalAtivos, totalPendentes, totalAberturaCnpj, totalAlteracaoCnpj, totalFechamentoCnpj });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
