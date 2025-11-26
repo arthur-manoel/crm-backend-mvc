@@ -35,6 +35,36 @@ const adicionar_endereco = async (req, res) => {
     }
 }
 
+const atualizar_endereco_cliente = async (req, res) => {
+
+    try {
+
+        const { id_endereco, id_cliente } = req.body;
+
+        const sql = `UPDATE endereco e
+                    JOIN cliente c ON e.id_cliente = c.id_cliente
+                    SET 
+                        e.cep = c.cep,
+                        e.rua = c.rua,
+                        e.cidade = c.cidade,
+                        e.estado = c.estado,
+                        e.numero = c.numero_casa,
+                        e.complemento = c.complemento,
+                        e.bairro = c.bairro
+                    WHERE e.id_cliente = c.id_cliente
+                        AND e.id_endereco = ?
+                        AND c.id_cliente = ?
+`;
+        const [rows] = await db.execute(sql, [id_endereco, id_cliente]);
+
+        res.json({message: "Empresa atualizada com sucesso!"})
+
+    } catch (error) {
+        return res.status(500).json({ error: error.message })
+    }
+
+}
+
 const atualizar_endereco = async (req, res) => {
 
     try {
@@ -70,4 +100,4 @@ const excluir_endereco = async (req, res) => {
     }
 }
 
-export { endereco, adicionar_endereco, atualizar_endereco, excluir_endereco };
+export { endereco, adicionar_endereco, atualizar_endereco_cliente ,atualizar_endereco, excluir_endereco };
