@@ -7,7 +7,7 @@ const processos = async (req, res) => {
         p.*, 
         t.tipo,
         g.data_expiracao,
-        s.status_link
+        s.status
       FROM processo p
       JOIN tipo_processo t 
         ON p.id_tipo_processo = t.id_tipo_processo
