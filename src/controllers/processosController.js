@@ -67,7 +67,7 @@ const criarProcesso = async (req, res) => {
     const geracao_link_id = linkResult.insertId;
 
     await db.execute(
-      `INSERT INTO status_link (status_link, geracao_link_id)
+      `INSERT INTO status_link (status, geracao_link_id)
        VALUES (?, ?)`,
       [status || "pendente", geracao_link_id]
     );
@@ -85,8 +85,7 @@ const criarProcesso = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Erro ao criar processo:", error);
-    res.status(500).json({ error: "Erro ao criar processo" });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -123,7 +122,7 @@ const excluirprocesso = async (req, res) => {
     const geracao_link_id = linkResult.insertId;
 
     await db.execute(
-      `INSERT INTO status_link (status_link, geracao_link_id)
+      `INSERT INTO status_link (status, geracao_link_id)
        VALUES (?, ?)`,
       [status || "pendente", geracao_link_id]
     );
@@ -179,7 +178,7 @@ const atualizarprocesso = async (req, res) => {
     const geracao_link_id = linkResult.insertId;
 
     await db.execute(
-      `INSERT INTO status_link (status_link, geracao_link_id)
+      `INSERT INTO status_link (status, geracao_link_id)
        VALUES (?, ?)`,
       [status || "pendente", geracao_link_id]
     );
