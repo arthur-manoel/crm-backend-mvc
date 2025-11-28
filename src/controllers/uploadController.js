@@ -75,6 +75,7 @@ const uploadArquivos = async (req, res, next) => {
     const publicBase = process.env.R2_PUBLIC_BASE_URL; // ex.: https://files.seudominio.com
     const publicUrl = publicBase ? `${publicBase}/${key}` : null;
 
+    
     const sql =
       "UPDATE documento SET link = ? WHERE geracao_link_id = ?";
 

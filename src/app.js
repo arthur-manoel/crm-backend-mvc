@@ -9,12 +9,12 @@ dotenv.config()
 
 app.use(express.json());
 
-import clientesRouters from "./routes/clientesRoutes.js"
-import authRouters from "./routes/authRoutes.js"
-import dashboardRouters from "./routes/dashboardRoutes.js"
-import niveis from "./routes/niveisRoute.js"
-import cnae from "./routes/cnaeRoute.js"
-import upload from "./routes/uploadRoute.js"
+import clientesRouters from "./routes/clientesRoutes.js";
+import authRouters from "./routes/authRoutes.js";
+import dashboardRouters from "./routes/dashboardRoutes.js";
+import niveis from "./routes/niveisRoute.js";
+import cnae from "./routes/cnaeRoute.js";
+import upload from "./routes/uploadRoute.js";
 import cnpj from "./routes/cnpjRoute.js";
 import cliente_cnpjs from "./routes/cliente_cnpjRoute.js";
 import atividadesCliente from "./routes/atividadeRoute.js";

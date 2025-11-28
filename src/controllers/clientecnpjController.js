@@ -37,6 +37,7 @@ const adicionar_cnpj = async (req, res) => {
         res.json(rows)
 
     } catch (error) {
+        console.error(error)
         if (error) return res.status(500).json({error: error.message});
     }
 

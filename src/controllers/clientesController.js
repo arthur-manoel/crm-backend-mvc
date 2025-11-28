@@ -16,13 +16,14 @@ const cadastrarcliente = async (req, res) => {
     const { Nome, Fone, CPF, data_nascimento, cep, cidade, estado, rg, gmail, numero_casa, endereco } = req.body;
     const userId = req.user.id;
 
-    const sql = "INSERT INTO cliente (nome, fone, cpf, usuario_id, data_nascimento, cep, cidade, estado, rg, gmail, numero_casa, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    const sql = "INSERT INTO cliente (nome, fone, cpf, usuario_id, data_nascimento, cep, cidade, estado, rg, gmail, numero_casa, endereco) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     const [result] = await db.execute(sql, [Nome, Fone, CPF, userId, data_nascimento, cep, cidade, estado, rg, gmail, numero_casa, endereco]);
     res.status(201).json({ message: "Cliente cadastrado com sucesso!", id: result.insertId });
 
   } catch (err) {
-    res.status(500).json({ error: "Erro no servidor", details: err.message });
+    console.error(err)
+    res.status(500).json({ error: "Erro no servidor", details: err.message, stack: err.stack  });
   }
 };
 

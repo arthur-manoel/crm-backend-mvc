@@ -38,6 +38,26 @@ const adicionar_endereco = async (req, res) => {
     }
 }
 
+const adicionar_endereco_vazio = async (req, res) => {
+
+    try {
+    
+        const { id_cnpj, id_cliente } = req.body;
+
+        const sql = "INSERT INTO endereco (id_cnpj, id_cliente) VALUES (?, ?)";
+    
+        const [rows] = await db.execute(sql, [id_cnpj, id_cliente]);
+
+        res.json({
+            message: "Endereço adicionado com sucesso",
+            id_endereco: rows.insertId
+        });
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
+
 const atualizar_endereco_cliente = async (req, res) => {
 
     try {
@@ -103,4 +123,4 @@ const excluir_endereco = async (req, res) => {
     }
 }
 
-export { endereco, adicionar_endereco, atualizar_endereco_cliente ,atualizar_endereco, excluir_endereco };
+export { endereco, adicionar_endereco, adicionar_endereco_vazio, atualizar_endereco_cliente ,atualizar_endereco, excluir_endereco };
