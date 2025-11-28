@@ -5,10 +5,11 @@ const documentos = async (req, res) => {
     try {
 
         const { cliente_id } = req.params;
+        const { id_tipo_documento } = req.body;
 
-        const sql = "SELECT * FROM `documento` as d INNER JOIN `tipo_documento` as td on d.tipo_documento_id = td.id_tipo_documento";
+        const sql = "SELECT * FROM `documento` as d INNER JOIN `tipo_documento` as td on d.tipo_documento_id = td.id_tipo_documento WHERE id_tipo_documento = ?";
 
-        const [rows] = await db.execute(sql, [cliente_id])
+        const [rows] = await db.execute(sql, [cliente_id, id_tipo_documento])
 
         res.json(rows)
 
@@ -29,7 +30,7 @@ const documentos_solicitados = async (req, res) => {
         }
 
         const sql = `
-            SELECT nome 
+            SELECT nome
             FROM tipo_documento 
             WHERE id_tipo_documento IN (${ids.map(() => '?').join(',')})
         `;
@@ -45,7 +46,11 @@ const documentos_solicitados = async (req, res) => {
 }
 
 const visualizar_documentos = async (req, res) => {
+
     try {
+
+        
+
         const sql = "SELECT id_tipo_documento, nome FROM tipo_documento";
 
         const [rows] = await db.execute(sql);

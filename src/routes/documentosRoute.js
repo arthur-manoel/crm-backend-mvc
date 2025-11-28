@@ -4,7 +4,7 @@ import { VerificarToken } from "../controllers/authControllers.js";
 
 const router = express.Router();
 
-router.get("/documentos/:cliente_id", VerificarToken, documentos);
+router.post("/documentos/:cliente_id", VerificarToken, documentos);
 router.post("/documentos_solicitados", documentos_solicitados);
 router.get("/visualizardocumentos", visualizar_documentos);
 
