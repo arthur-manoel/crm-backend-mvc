@@ -51,7 +51,7 @@ const criarProcesso = async (req, res) => {
 
     const id_cliente_cnpj = clienteCnpjResult[0].id_cliente_cnpj;
 
-    const linkGerado = `https://projeto-back-ten.vercel.app/abrir-empresa/documentos/${id_cliente}`;
+    const linkGerado = `https://facilita-compet.vercel.app/abrir-empresa/documentos/${id_cliente}`;
 
     const dataExpiracao = new Date();
 
