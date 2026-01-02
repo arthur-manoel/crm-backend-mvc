@@ -5,16 +5,16 @@ import {
   excluircliente,
   atualizarcliente,
 } from "../controllers/clientesController.js";
-import { VerificarToken } from "../controllers/authControllers.js";
+// import { VerificarToken } from "../controllers/authControllers.js";
 
 const router = express.Router();
 
-router.get("/clientes", VerificarToken, clientes);
+router.get("/clientes", clientes);
 
-router.post("/cadastrarcliente", VerificarToken, cadastrarcliente);
+router.post("/cadastrarcliente", cadastrarcliente);
 
-router.put("/atualizarcliente/:id", VerificarToken, atualizarcliente);
+router.put("/atualizarcliente/:id", atualizarcliente);
 
-router.delete("/excluircliente/:id", VerificarToken, excluircliente);
+router.delete("/excluircliente/:id", excluircliente);
 
 export default router;

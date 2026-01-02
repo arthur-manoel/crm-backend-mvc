@@ -1,4 +1,4 @@
-import { VerificarToken } from "../controllers/authControllers.js";
+// import { VerificarToken } from "../controllers/authControllers.js";
 
 import {
     cadastrarCNPJ, 
@@ -11,12 +11,12 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/totalcnpjs", VerificarToken, totalCNPJS);
+router.get("/totalcnpjs", totalCNPJS);
 
-router.post("/cadastrarcnpj", VerificarToken, cadastrarCNPJ);
+router.post("/cadastrarcnpj", cadastrarCNPJ);
 
-router.put("/atualizarcnpj/:id", VerificarToken, atualizarCNPJ);
+router.put("/atualizarcnpj/:id", atualizarCNPJ);
 
-router.delete("/excluircnpj/:id", VerificarToken, excluirCNPJ);
+router.delete("/excluircnpj/:id", excluirCNPJ);
 
 export default router;
