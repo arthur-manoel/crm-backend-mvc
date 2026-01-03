@@ -25,7 +25,8 @@
     "serverless-http": "^4.0.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "zod": "^4.3.4"
   },
   "devDependencies": {
     "@vercel/node": "^2.8.16",

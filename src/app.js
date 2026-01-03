@@ -45,4 +45,8 @@ app.get("/", (req, res) => {
   res.send("Rota GET na raiz");
 });
 
+//refatorados
+import usuarioref from "./modules/usuario/usuarioRoute.js";
+app.use("/", usuarioref)
+
 export default app;
