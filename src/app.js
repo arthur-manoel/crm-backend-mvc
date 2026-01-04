@@ -10,7 +10,7 @@ dotenv.config()
 app.use(express.json());
 
 import clientesRouters from "./routes/clientesRoutes.js";
-import authRouters from "./routes/authRoutes.js";
+import authRouters from "./modules/auth/authRoutes.js";
 import dashboardRouters from "./routes/dashboardRoutes.js";
 import niveis from "./routes/niveisRoute.js";
 import cnae from "./routes/cnaeRoute.js";

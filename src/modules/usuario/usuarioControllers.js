@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { usuarioService } from "./usuarioService.js";
+import { DomainError } from "../../errors/domainError.js";
 
 const usuarios = async (req, res) => {
   try {
@@ -28,8 +29,13 @@ const cadastro = async (req, res) => {
       message: "Usuário cadastrado com sucesso!",
       user: novoUsuario
     });
+
   } catch (error) {
-    res.status(500).json({ error: message });
+    if (error instanceof DomainError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    res.status(500).json({ error: "Erro interno" });
   }
 };
 

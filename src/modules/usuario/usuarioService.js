@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { usuarioModel } from "./usuarioModel.js";
+import { DomainError } from "../../errors/domainError.js";
 
 export const usuarioService = {
 
@@ -8,9 +9,12 @@ export const usuarioService = {
         const existe = await usuarioModel.buscaEmail(email);
 
         if (existe) {
-            throw new Error("Email já cadastrado");
+            throw new DomainError("Email já cadastrado");
+    }
+    
+        if (![1, 2].includes(role)) {
+            throw new DomainError("Nível de usuário inválido");
         }
-
         const senhaHashed = await bcrypt.hash(password, 10);
 
         const novoUsuario = await usuarioModel.cadastrar({

@@ -1,18 +1,19 @@
-import { authService } from "../services/authService.js";
+import { DomainError } from "../../errors/domainError.js";
+import { authService } from "./authService.js";
 
 const login = async (req, res) => {
 
   try {
 
-    const { Email, Senha } = req.body;
+    const { email, senha } = req.body;
 
-    const result = await authService.login(Email, Senha);
+    const result = await authService.login(email, senha);
 
     res.json(result);
 
   } catch (error) {
 
-    if (error.message === "INVALID_CREDENTIALS") {
+    if (error instanceof DomainError) {
     return res.status(401).json({ error: "Email ou senha inválidos" });
     }
 

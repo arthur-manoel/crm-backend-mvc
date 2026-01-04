@@ -1,32 +1,13 @@
 import { z } from "zod";
 
-export const usuarioSchema = z.object({
-  name: z
-    .string()
-    .min(3, { message: "O nome deve ter no mínimo 3 caracteres" })
-    .max(255, { message: "O nome deve ter no máximo 255 caracteres" })
-    .trim(),
+export const cadastroSchema = z.object({
+  name: z.string().min(3).max(255).trim(),
 
-  email: z
-    .string()
-    .email({ message: "Email inválido" })
-    .max(255, { message: "O email deve ter no máximo 255 caracteres" })
-    .toLowerCase()
-    .trim(),
+  email: z.string().email().max(255).toLowerCase().trim(),
 
-  phone: z
-    .string()
-    .regex(/^(\d{10,11})$/, { message: "Telefone inválido. Use apenas números, ex: 81987654321" })
-    .optional(),
+  phone: z.string().regex(/^\d{10,11}$/).optional(),
 
-  password: z
-    .string()
-    .min(6, { message: "A senha deve ter no mínimo 6 caracteres" })
-    .max(255, { message: "A senha deve ter no máximo 255 caracteres" })
-    .trim(),
+  password: z.string().min(6).max(255),
 
-  role: z
-  .number()
-  .int()
-  .refine(val => val === 1 || val === 2, { message: "Nível de usuário inválido" })
+  role: z.number().int()
 });
