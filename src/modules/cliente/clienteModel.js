@@ -52,6 +52,30 @@ export const clienteModel = {
         const [rows] = await db.execute(sql, [email]);
 
         return rows[0] || null;
+    },
+
+    async clientes(userId) {
+        const sql = "SELECT * FROM cliente WHERE usuario_id = ?";
+
+        const [rows] = await db.execute(sql, [userId]);
+
+        return rows
+    },
+
+    async atualizarCliente(dados) {
+
+        const { nome, fone, cpf, userId, data_nascimento, cep, cidade, estado, rg, email, numero_casa, endereco, complemento, rua, bairro, id } = dados;
+        
+            const sql = `
+            UPDATE cliente
+            SET nome = ?, fone = ?, cpf = ?, data_nascimento = ?, cep = ?, cidade = ?, estado = ?, rg = ?, gmail = ?, numero_casa = ?, endereco = ?, complemento = ?, rua = ?, bairro = ?
+            WHERE id_cliente = ? AND usuario_id = ?
+        `;
+
+        const [rows] = await db.execute(sql, [nome, fone, cpf, data_nascimento, cep, cidade, estado, rg, email, numero_casa, endereco, complemento, rua, bairro, id, userId]);
+
+        return dados;
+
     }
 
 }

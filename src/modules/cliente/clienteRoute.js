@@ -1,11 +1,13 @@
 import express from "express";
-import { cadastrarCliente } from "./clienteController.js";
+import { cadastrarCliente, clientes, atualizarCliente } from "./clienteController.js";
 import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateBody } from "../../middlewares/validateBody.js";
-import { cadastroClienteSchema } from "./cliente.schema.js";
+import { clienteSchema } from "./cliente.schema.js";
 
 const router = express.Router();
 
-router.post("/cadastrarcliente", verifyToken, validateBody(cadastroClienteSchema), cadastrarCliente);
+router.get("/clientes", verifyToken, clientes);
+router.post("/clientes", verifyToken, validateBody(clienteSchema), cadastrarCliente);
+router.put("/clientes/:id", verifyToken, validateBody(clienteSchema), atualizarCliente)
 
-export default router;
+export default router;  

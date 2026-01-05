@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { cpf } from "cpf-cnpj-validator";
 
-export const cadastroClienteSchema = z.object({
+export const clienteSchema = z.object({
 
     nome: z.string().min(3).max(255).trim(),
 
@@ -41,8 +41,7 @@ export const cadastroClienteSchema = z.object({
     .trim()
     .toLowerCase()
     .email()
-    .max(200)
-    ,
+    .max(200),
 
     numero_casa: z.string().trim().max(10),
 

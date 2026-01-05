@@ -1,6 +1,6 @@
 import express from "express";
 import {
-  clientes,
+  // clientes,
   // cadastrarcliente,
   excluircliente,
   atualizarcliente,
@@ -9,11 +9,11 @@ import {
 
 const router = express.Router();
 
-router.get("/clientes", clientes);
+// router.get("/clientes", clientes);
 
 // router.post("/cadastrarcliente", cadastrarcliente);
 
-router.put("/atualizarcliente/:id", atualizarcliente);
+// router.put("/atualizarcliente/:id", atualizarcliente);
 
 router.delete("/excluircliente/:id", excluircliente);
 

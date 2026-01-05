@@ -39,4 +39,57 @@ const cadastrarCliente = async (req, res) => {
 
 }
 
-export { cadastrarCliente }
+const clientes = async (req, res) => {
+    try {
+
+    const userId = req.user.id;
+
+    const clientes = await clienteService.clientes(userId);
+
+    return res.json({ clientes })
+
+    } catch (error) {
+        return res.status(500).json({ error: "Erro interno" })
+    }
+}
+
+const atualizarCliente = async (req, res) => {
+
+    try {
+
+        const { nome, fone, cpf, data_nascimento, cep, cidade, estado, rg, email, numero_casa, endereco, complemento, rua, bairro } = req.body;
+        
+        const { id } = req.params;
+        const userId = req.user.id;
+
+        const clienteAtualizado = await clienteService.atualizarCliente({            
+            nome, 
+            fone, 
+            cpf, 
+            userId, 
+            data_nascimento, 
+            cep, 
+            cidade, 
+            estado, 
+            rg, 
+            email, 
+            numero_casa, 
+            endereco, 
+            complemento, 
+            rua, 
+            bairro,
+            id,
+    })
+
+        return res.json(clienteAtualizado)
+        
+    } catch (error) {
+
+        if (error instanceof DomainError) {
+            return res.status(error.status).json({ error: error.message })
+        }
+
+        return res.status(500).json({ error: "Erro interno", error: error.message })
+    }
+}
+export { cadastrarCliente, clientes, atualizarCliente }

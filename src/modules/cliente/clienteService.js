@@ -4,7 +4,7 @@ import { clienteModel } from "./clienteModel.js";
 function validarDataNascimento(data) {
 
     if (Number.isNaN(data.getTime())) {
-  throw new DomainError("Data de nascimento inválida");
+        throw new DomainError("Data de nascimento inválida");
 }
 
     const hoje = new Date();
@@ -20,8 +20,33 @@ function validarDataNascimento(data) {
         idade--;
     }
 
+    if (idade > 100) {
+        throw new DomainError("Cliente deve ter no máximo 100 anos")
+    }
     if (idade < 18) {
         throw new DomainError("Cliente deve ser maior de idade");
+    }
+}
+
+
+export async function validarDuplicidade({ cpf, rg, email, idAtual = null }) {
+
+    const existeCPF = await clienteModel.buscarCPF(cpf);
+
+    if (existeCPF && existeCPF.id_cliente !== Number(idAtual)) {
+        throw new DomainError("CPF já cadastrado");
+    }
+
+    const existeRG = await clienteModel.buscarRG(rg);
+
+    if (existeRG && existeRG.id_cliente !== Number(idAtual)) {
+        throw new DomainError("RG já cadastrado");
+    }
+
+    const existeEmail = await clienteModel.buscarEmail(email);
+
+    if (existeEmail && existeEmail.id_cliente !== Number(idAtual)) {
+        throw new DomainError("Email já cadastrado");
     }
 }
 
@@ -32,23 +57,7 @@ export const clienteService = {
 
         validarDataNascimento(data_nascimento);
 
-        const existeCPF = await clienteModel.buscarCPF(cpf)
-
-        if (existeCPF) {
-            throw new DomainError("CPF já cadastrado");
-        }
-
-        const existeRG = await clienteModel.buscarRG(rg);
-
-        if (existeRG) {
-            throw new DomainError("RG já cadastrado")
-        }
-
-        const existeEmail = await clienteModel.buscarEmail(email);
-
-        if (existeEmail) {
-            throw new DomainError("Email já cadastrado")
-        }
+        await validarDuplicidade(cpf, rg, email, idAtual);
 
         const novoCliente = await clienteModel.cadastrarCliente({
             nome, 
@@ -69,5 +78,42 @@ export const clienteService = {
         })
 
         return novoCliente;
+    },
+
+    async clientes(userId) {
+        
+
+        const clientes = await clienteModel.clientes(userId);
+
+        return clientes;
+
+    },
+
+    async atualizarCliente(dados) {
+        
+        const { nome, fone, cpf, userId, data_nascimento, cep, cidade, estado, rg, email, numero_casa, endereco, complemento, rua, bairro, id } = dados;
+        
+        await validarDuplicidade({ cpf, rg, email, idAtual: id });
+
+        const clienteAtualizado = await clienteModel.atualizarCliente({           
+            nome, 
+            fone, 
+            cpf, 
+            userId, 
+            data_nascimento, 
+            cep, 
+            cidade, 
+            estado, 
+            rg, 
+            email, 
+            numero_casa, 
+            endereco,
+            complemento, 
+            rua, 
+            bairro,
+            id
+        })
+
+            return clienteAtualizado;
     }
 }
