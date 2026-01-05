@@ -26,5 +26,13 @@ export const usuarioService = {
         });
         
         return novoUsuario;
+    },
+
+    async usuarios() {
+
+        const usuarios = await usuarioModel.usuarios();
+
+        return usuarios;
+        
     }
 }

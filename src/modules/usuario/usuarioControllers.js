@@ -1,13 +1,15 @@
-import bcrypt from "bcrypt";
 import { usuarioService } from "./usuarioService.js";
 import { DomainError } from "../../errors/domainError.js";
 
 const usuarios = async (req, res) => {
   try {
-    const [rows] = await db.query("SELECT * FROM usuario");
-    res.json({ data: rows });
+
+    const usuarios = await usuarioService.usuarios();
+    console.log(usuarios)
+    res.json({ data: usuarios });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Erro interno" });
   }
 };
 

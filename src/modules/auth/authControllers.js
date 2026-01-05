@@ -21,5 +21,10 @@ const login = async (req, res) => {
   }
 };
 
+const usuarios = async (req, res) => {
+
+  
+
+}
 
 export { login };

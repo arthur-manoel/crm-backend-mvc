@@ -27,5 +27,14 @@ export const usuarioModel = {
 
       return result[0] || null
       
+    },
+    
+    async usuarios() {
+
+      const sql = "SELECT * FROM usuario";
+
+      const [rows] = await db.execute(sql);
+
+      return rows;
     }
 }

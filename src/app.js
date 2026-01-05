@@ -47,6 +47,9 @@ app.get("/", (req, res) => {
 
 //refatorados
 import usuarioref from "./modules/usuario/usuarioRoute.js";
+import clienteref from "./modules/cliente/clienteRoute.js";
+
+app.use("/", clienteref)
 app.use("/", usuarioref)
 
 export default app;
