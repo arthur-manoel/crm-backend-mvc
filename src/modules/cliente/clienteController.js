@@ -92,4 +92,26 @@ const atualizarCliente = async (req, res) => {
         return res.status(500).json({ error: "Erro interno", error: error.message })
     }
 }
-export { cadastrarCliente, clientes, atualizarCliente }
+
+const excluirCliente = async (req, res) => {
+
+    try {
+
+        const id_cliente = req.params.id;
+        const userId = req.user.id;
+
+        const clienteExcluido = await clienteService.excluirCliente(id_cliente, userId);
+
+        return res.json(clienteExcluido);
+
+    } catch (error) {
+        if (error instanceof DomainError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: "Erro interno", error: error.message })
+    }
+
+}
+
+export { cadastrarCliente, clientes, atualizarCliente, excluirCliente }

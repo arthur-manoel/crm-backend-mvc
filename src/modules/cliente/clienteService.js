@@ -115,5 +115,16 @@ export const clienteService = {
         })
 
             return clienteAtualizado;
+    },
+
+    async excluirCliente(id_cliente, userId) {
+
+        const deletar = await clienteModel.excluirCliente(id_cliente, userId);
+
+        if (deletar === 0) {
+            throw new DomainError("Cliente não encontrado");
+        }
+
+        return { message: "Cliente excluido com sucesso" };
     }
 }

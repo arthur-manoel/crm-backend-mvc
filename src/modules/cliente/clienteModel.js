@@ -76,6 +76,15 @@ export const clienteModel = {
 
         return dados;
 
+    },
+
+    async excluirCliente(id_cliente, userId) {
+
+        const sql = "DELETE FROM cliente WHERE id_cliente = ? AND usuario_id = ?";
+
+        const [rows] = await db.execute(sql, [id_cliente, userId]);
+
+        return rows.affectedRows;
     }
 
 }
