@@ -1,6 +1,6 @@
 import db from "../../database/db.js";
 
-export const cnpjModel = {
+export const empresaModel = {
 
     async cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade) {
 
@@ -33,4 +33,15 @@ export const cnpjModel = {
 
         return rows;
     },
+
+    async atualizarEmpresa(dados) {
+
+        const { nome, descricao_atividade, id } = dados;
+
+        const sql = "UPDATE cnpj SET nome = ?, descricao_atividade = ? WHERE id_cnpj = ?";
+
+        const [rows] = await db.execute(sql, [nome, descricao_atividade, id]);
+
+        return rows.affectedRows;
+    }
 }

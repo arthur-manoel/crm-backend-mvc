@@ -1,4 +1,5 @@
 import { DomainError } from "../../errors/domainError.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
 import { clienteModel } from "./clienteModel.js";
 
 function validarDataNascimento(data) {
@@ -112,9 +113,11 @@ export const clienteService = {
             rua, 
             bairro,
             id
-        })
+        });
 
-            return clienteAtualizado;
+        if (clienteAtualizado === 0) {
+            throw new NotFoundError("Cliente não encontrado")
+        }
     },
 
     async excluirCliente(id_cliente, userId) {
@@ -122,9 +125,7 @@ export const clienteService = {
         const deletar = await clienteModel.excluirCliente(id_cliente, userId);
 
         if (deletar === 0) {
-            throw new DomainError("Cliente não encontrado");
+            throw new NotFoundError("Cliente não encontrado");
         }
-
-        return { message: "Cliente excluido com sucesso" };
     }
 }

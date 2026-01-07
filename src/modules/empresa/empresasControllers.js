@@ -1,4 +1,5 @@
 import { DomainError } from "../../errors/domainError.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
 import { cnpjService } from "./empresaService.js";
 
 const cadastroEmpresa = async (req, res) => {
@@ -34,4 +35,28 @@ const empresas = async (req, res) => {
     }
 }
 
-export { cadastroEmpresa, empresas };
+const atualizarEmpresa = async (req, res) => {
+
+    try {
+        
+        const { nome, descricao_atividade } = req.body;
+
+        const { id } = req.params;
+
+        const empresaAtualizada = await cnpjService.atualizarEmpresa({nome, descricao_atividade, id});
+
+        return res.status(204).send();
+
+    } catch (error) {
+
+        if (error instanceof NotFoundError) {
+
+            return res.status(error.status).json({error: error.message});
+        }
+
+        return res.status(500).json({ error: "Erro interno", error: error.message });
+    }
+
+}
+
+export { cadastroEmpresa, empresas, atualizarEmpresa };

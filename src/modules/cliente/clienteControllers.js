@@ -1,4 +1,5 @@
 import { DomainError } from "../../errors/domainError.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
 import { clienteService } from "./clienteService.js";
 
 const cadastrarCliente = async (req, res) => {
@@ -46,7 +47,7 @@ const clientes = async (req, res) => {
 
     const clientes = await clienteService.clientes(userId);
 
-    return res.json({ clientes })
+    return res.status(200).json({ clientes })
 
     } catch (error) {
         return res.status(500).json({ error: "Erro interno" })
@@ -81,11 +82,11 @@ const atualizarCliente = async (req, res) => {
             id,
     })
 
-        return res.json(clienteAtualizado)
+        return res.status(204).send();
         
     } catch (error) {
 
-        if (error instanceof DomainError) {
+        if (error instanceof DomainError || error instanceof NotFoundError) {
             return res.status(error.status).json({ error: error.message })
         }
 
@@ -102,10 +103,10 @@ const excluirCliente = async (req, res) => {
 
         const clienteExcluido = await clienteService.excluirCliente(id_cliente, userId);
 
-        return res.json(clienteExcluido);
+        return res.status(204).send();
 
     } catch (error) {
-        if (error instanceof DomainError) {
+        if (error instanceof NotFoundError) {
             return res.status(error.status).json({ error: error.message });
         }
 

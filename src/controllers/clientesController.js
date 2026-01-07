@@ -11,18 +11,16 @@ const clientes = async (req, res) => {
   }
 };
 
-const cadastrarcliente = async (req, res) => {
-  try {
-    const { Nome, Fone, CPF, data_nascimento, cep, cidade, estado, rg, gmail, numero_casa, endereco } = req.body;
-    const userId = req.user.id;
+// const cadastrarcliente = async (req, res) => {
+//   try {
 
-    res.status(201).json({ message: "Cliente cadastrado com sucesso!", id: result.insertId });
+//     res.status(201).json({ message: "Cliente cadastrado com sucesso!", id: result.insertId });
 
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: "Erro no servidor", details: err.message, stack: err.stack  });
-  }
-};
+//   } catch (err) {
+//     console.error(err)
+//     res.status(500).json({ error: "Erro no servidor", details: err.message, stack: err.stack  });
+//   }
+// };
 
 const excluircliente = async (req, res) => {
 

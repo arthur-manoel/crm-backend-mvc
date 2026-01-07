@@ -84,8 +84,7 @@ export const clienteModel = {
 
         const [rows] = await db.execute(sql, [nome, fone, cpf, data_nascimento, cep, cidade, estado, rg, email, numero_casa, endereco, complemento, rua, bairro, id, userId]);
 
-        return dados;
-
+        return rows.affectedRows;
     },
 
     async excluirCliente(id_cliente, userId) {

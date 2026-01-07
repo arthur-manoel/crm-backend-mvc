@@ -11,11 +11,11 @@ import express from "express";
 
 const router = express.Router();
 
-router.get("/totalcnpjs", totalCNPJS);
+// router.get("/totalcnpjs", totalCNPJS);
 
-router.post("/cadastrarcnpj", cadastrarCNPJ);
+// router.post("/cadastrarcnpj", cadastrarCNPJ);
 
-router.put("/atualizarcnpj/:id", atualizarCNPJ);
+// router.put("/atualizarcnpj/:id", atualizarCNPJ);
 
 router.delete("/excluircnpj/:id", excluirCNPJ);
 
