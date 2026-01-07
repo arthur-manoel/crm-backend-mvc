@@ -1,5 +1,5 @@
 import express from "express";
-import { cadastrarCliente, clientes, atualizarCliente, excluirCliente } from "./clienteController.js";
+import { cadastrarCliente, clientes, atualizarCliente, excluirCliente } from "./clienteControllers.js";
 import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 import { clienteSchema } from "./cliente.schema.js";
@@ -11,4 +11,4 @@ router.post("/clientes", verifyToken, validateBody(clienteSchema), cadastrarClie
 router.put("/clientes/:id", verifyToken, validateBody(clienteSchema), atualizarCliente)
 router.delete("/clientes/:id", verifyToken, excluirCliente);
 
-export default router;  
+export default router; 

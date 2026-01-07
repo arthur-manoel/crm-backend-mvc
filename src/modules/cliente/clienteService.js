@@ -57,7 +57,7 @@ export const clienteService = {
 
         validarDataNascimento(data_nascimento);
 
-        await validarDuplicidade(cpf, rg, email, idAtual);
+        await validarDuplicidade({cpf, rg, email});
 
         const novoCliente = await clienteModel.cadastrarCliente({
             nome, 

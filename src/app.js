@@ -9,8 +9,7 @@ dotenv.config()
 
 app.use(express.json());
 
-import clientesRouters from "./routes/clientesRoutes.js";
-import authRouters from "./modules/auth/authRoutes.js";
+// import clientesRouters from "./routes/clientesRoutes.js";
 import dashboardRouters from "./routes/dashboardRoutes.js";
 import niveis from "./routes/niveisRoute.js";
 import cnae from "./routes/cnaeRoute.js";
@@ -25,8 +24,7 @@ import documentos from "./routes/documentosRoute.js";
 import endereco from "./routes/enderecoRoute.js";
 
 app.use(express.json());
-app.use("/", authRouters);
-app.use("/", clientesRouters);
+// app.use("/", clientesRouters);
 app.use("/", dashboardRouters);
 app.use("/", niveis);
 app.use("/", cnae);
@@ -46,10 +44,14 @@ app.get("/", (req, res) => {
 });
 
 //refatorados
-import usuarioref from "./modules/usuario/usuarioRoute.js";
-import clienteref from "./modules/cliente/clienteRoute.js";
+import authRef from "./modules/auth/authRoutes.js";
+import usuarioRef from "./modules/usuario/usuarioRoutes.js";
+import clienteRef from "./modules/cliente/clienteRoutes.js";
+import empresaRef from "./modules/empresa/empresasRoutes.js"
 
-app.use("/", clienteref)
-app.use("/", usuarioref)
+app.use("/", authRef);
+app.use("/", usuarioRef);
+app.use("/", clienteRef);
+app.use("/", empresaRef);
 
 export default app;

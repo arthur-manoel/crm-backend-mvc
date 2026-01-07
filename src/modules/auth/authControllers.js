@@ -9,7 +9,7 @@ const login = async (req, res) => {
 
     const result = await authService.login(email, senha);
 
-    res.json(result);
+    res.status(200).json(result);
 
   } catch (error) {
 
@@ -20,11 +20,5 @@ const login = async (req, res) => {
     return res.status(500).json({ error: "Erro interno" });
   }
 };
-
-const usuarios = async (req, res) => {
-
-  
-
-}
 
 export { login };

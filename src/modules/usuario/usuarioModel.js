@@ -31,7 +31,16 @@ export const usuarioModel = {
     
     async usuarios() {
 
-      const sql = "SELECT * FROM usuario";
+      const sql = `
+        SELECT
+          id_usuario,
+          nome,
+          email,
+          telefone
+        FROM usuario
+        ORDER BY nome ASC;
+
+      `;
 
       const [rows] = await db.execute(sql);
 

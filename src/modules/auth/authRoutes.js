@@ -1,6 +1,5 @@
 import express from "express";
 import { login } from "./authControllers.js";
-import { usuarios } from "../../controllers/usuarioControllers.js";
 import { loginSchema } from "./auth.schema.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 

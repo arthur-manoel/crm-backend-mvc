@@ -26,7 +26,7 @@ const cadastrarCliente = async (req, res) => {
             bairro,
         })
     
-        return res.json({ message: "Cliente cadastrado com sucesso!", novoCliente })
+        return res.status(201).json({ message: "Cliente cadastrado com sucesso!", novoCliente })
 
     } catch (error) {
 
@@ -34,7 +34,7 @@ const cadastrarCliente = async (req, res) => {
             return res.status(error.status).json({ error: error.message })
         }
 
-        return res.status(500).json({ error: "Erro interno" })
+        return res.status(500).json({ error: error.message })
     }
 
 }
