@@ -48,10 +48,12 @@ import authRef from "./modules/auth/authRoutes.js";
 import usuarioRef from "./modules/usuario/usuarioRoutes.js";
 import clienteRef from "./modules/cliente/clienteRoutes.js";
 import empresaRef from "./modules/empresa/empresasRoutes.js"
+import empresaClienteRef from "./modules/empresaCliente/empresaClienteRoutes.js"
 
 app.use("/", authRef);
 app.use("/", usuarioRef);
 app.use("/", clienteRef);
 app.use("/", empresaRef);
+app.use("/", empresaClienteRef);
 
 export default app;

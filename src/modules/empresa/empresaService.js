@@ -8,20 +8,30 @@ import { processoModel } from "../processos/processoModel.js";
 
 import db from "../../database/db.js";
 
-async function validarDuplicidade({cnpj, idAtual = null}) {
+export const empresaService = {
+    
+    async validarDuplicidade({cnpj, idAtual = null}) {
+    
+        const existeCNPJ = await empresaModel.buscarCNPJ(cnpj)
+    
+        if (existeCNPJ && existeCNPJ.id_cnpj !== Number(idAtual)) {
+            throw new DomainError("CNPJ já cadastrado");
+        }
+    },
 
-    const existeCNPJ = await empresaModel.buscarCNPJ(cnpj)
-
-    if (existeCNPJ && existeCNPJ.id_cnpj !== Number(idAtual)) {
-        throw new DomainError("CNPJ já cadastrado");
-    }
-}
-
-export const cnpjService = {
+    async validarExistenciaEmpresa(idCnpj) {
+      const empresa = await empresaModel.buscarPorId(idCnpj);
+    
+      if (!empresa) {
+        throw new NotFoundError("Empresa não encontrada");
+      }
+    
+      return empresa;
+    },
 
     async cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade) {
-
-        await validarDuplicidade({cnpj});
+        
+        await this.validarDuplicidade({cnpj});
 
         const novaEmpresa = await empresaModel.cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade);
 
@@ -38,11 +48,11 @@ export const cnpjService = {
 
         const { nome, descricao_atividade, id } = dados;
 
+        await this.validarExistenciaEmpresa(id);
+
         const empresaAtualizada = await empresaModel.atualizarEmpresa({nome, descricao_atividade, id});
 
-        if (empresaAtualizada === 0) {
-            throw new NotFoundError("Empresa não encontrada");
-        }
+        return empresaAtualizada;
     },
     
     async excluirEmpresa(idCnpj) {
@@ -52,11 +62,7 @@ export const cnpjService = {
 
         try {
             
-            const existeEmpresa = await empresaModel.buscarPorId(idCnpj);
-
-            if (!existeEmpresa) {
-                throw new NotFoundError("Empresa não encontrada");
-            }
+            await this.validarExistenciaEmpresa(idCnpj)
 
             await conn.beginTransaction();
 
@@ -66,10 +72,12 @@ export const cnpjService = {
             await empresaCnaeModel.excluirEmpresaCnae(idCnpj, conn);
             await enderecoModel.excluirEndereco(idCnpj, conn);
 
-            const excluirEmpresa = await empresaModel.excluirEmpresa(idCnpj, conn)
+            const empresaExcluida = await empresaModel.excluirEmpresa(idCnpj, conn)
 
             await conn.commit();
 
+            return empresaExcluida;
+            
         } catch (error) {
             await conn.rollback();
             throw error;

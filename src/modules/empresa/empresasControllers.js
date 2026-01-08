@@ -1,6 +1,6 @@
 import { DomainError } from "../../errors/domainError.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
-import { cnpjService } from "./empresaService.js";
+import { empresaService } from "./empresaService.js";
 
 const cadastroEmpresa = async (req, res) => {
     try {
@@ -8,7 +8,7 @@ const cadastroEmpresa = async (req, res) => {
         const { nome, cnpj, descricao_atividade } = req.body;
 
         const data_criacao = new Date()
-        const novaEmpresa = await cnpjService.cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade);
+        const novaEmpresa = await empresaService.cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade);
 
         return res.status(201).json(novaEmpresa);
 
@@ -26,7 +26,7 @@ const empresas = async (req, res) => {
 
     try {
 
-        const empresasCadastradas = await cnpjService.empresas();
+        const empresasCadastradas = await empresaService.empresas();
 
         return res.status(200).json({ empresas: empresasCadastradas });
 
@@ -43,7 +43,7 @@ const atualizarEmpresa = async (req, res) => {
 
         const { id } = req.params;
 
-        const empresaAtualizada = await cnpjService.atualizarEmpresa({nome, descricao_atividade, id});
+        const empresaAtualizada = await empresaService.atualizarEmpresa({nome, descricao_atividade, id});
 
         return res.status(204).send();
 
@@ -64,7 +64,7 @@ const excluirEmpresa = async (req, res) => {
         
         const { id } = req.params;
 
-        const empresaExcluida = await cnpjService.excluirEmpresa(id);
+        const empresaExcluida = await empresaService.excluirEmpresa(id);
 
         return res.status(204).send();
 

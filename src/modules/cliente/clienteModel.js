@@ -55,6 +55,15 @@ export const clienteModel = {
         return rows[0] || null;
     },
 
+    async buscarClientePorId(idCliente) {
+
+        const sql = "SELECT id_cliente FROM cliente WHERE id_cliente = ?";
+
+        const [rows] = await db.execute(sql, [idCliente]);
+
+        return rows[0] || null;
+    },
+
     async clientes(userId) {
         const sql = `
         SELECT
