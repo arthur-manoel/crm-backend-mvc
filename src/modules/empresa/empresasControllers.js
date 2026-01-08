@@ -56,7 +56,26 @@ const atualizarEmpresa = async (req, res) => {
 
         return res.status(500).json({ error: "Erro interno", error: error.message });
     }
-
 }
 
-export { cadastroEmpresa, empresas, atualizarEmpresa };
+const excluirEmpresa = async (req, res) => {
+
+    try {
+        
+        const { id } = req.params;
+
+        const empresaExcluida = await cnpjService.excluirEmpresa(id);
+
+        return res.status(204).send();
+
+    } catch (error) {
+        
+        if (error instanceof NotFoundError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+export { cadastroEmpresa, empresas, atualizarEmpresa, excluirEmpresa };

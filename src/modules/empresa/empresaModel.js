@@ -21,6 +21,15 @@ export const empresaModel = {
     return rows[0] || null;
     },
 
+    async buscarPorId(idCnpj) {
+        
+        const sql = "SELECT id_cnpj FROM cnpj WHERE id_cnpj = ?";
+
+        const [rows] = await db.execute(sql, [idCnpj]);
+
+        return rows[0] || null;
+    },
+
     async empresas() {
         
         const sql = `
@@ -43,5 +52,15 @@ export const empresaModel = {
         const [rows] = await db.execute(sql, [nome, descricao_atividade, id]);
 
         return rows.affectedRows;
+    },
+    
+    async excluirEmpresa(idCnpj, conn) {
+
+        const sql =  "DELETE FROM cnpj WHERE id_cnpj = ?";
+
+        const [rows] = await conn.execute(sql, [idCnpj]);
+
+        return rows.affectedRows;
+
     }
 }
