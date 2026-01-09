@@ -61,6 +61,7 @@ export const clienteService = {
             throw new NotFoundError("Cliente não existe");
         }
     
+        return existeCliente
     },
 
     async cadastrarCliente({ nome, fone, cpf, userId, data_nascimento, cep, cidade, estado, rg, email, numero_casa, endereco, complemento, rua, bairro }) {
