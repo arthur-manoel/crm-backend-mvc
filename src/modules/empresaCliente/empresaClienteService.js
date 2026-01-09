@@ -3,6 +3,8 @@ import  { empresaClienteModel } from "./empresaClienteModel.js";
 import { empresaService } from "../empresa/empresaService.js";
 import { clienteService } from "../cliente/clienteService.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
+import { processoModel } from "../processos/processoModel.js";
+import db from "../../database/db.js";
 
 export const empresaClienteService = {
 
@@ -61,6 +63,36 @@ export const empresaClienteService = {
         }
         return linhasAfetadas;
 
+    },
+
+    async excluirVinculoClienteEmpresa(idClienteCnpj, userId) {
+
+        const conn = await db.getConnection();
+
+        try {
+
+            const vinculo = await empresaClienteModel.buscarVinculoAutorizado(idClienteCnpj, userId);
+
+            if (!vinculo) {
+                throw new NotFoundError("Vinculo não encontrado");
+            }
+
+            await conn.beginTransaction();
+
+            await processoModel.excluirGeracaoLink(idClienteCnpj, conn);
+            const linhasExcluidas = await empresaClienteModel.excluirVinculoPorId(idClienteCnpj, conn);
+
+            await conn.commit();
+
+            return linhasExcluidas;
+
+        } catch (error) {
+            await conn.rollback();
+            throw error;
+        }
+        finally {
+            conn.release();
+        }
     }
     
 }   

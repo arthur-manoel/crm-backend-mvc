@@ -76,6 +76,7 @@ export const empresaService = {
 
             await conn.commit();
 
+            console.log(empresaExcluida)
             return empresaExcluida;
             
         } catch (error) {

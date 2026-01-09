@@ -25,7 +25,21 @@ export const empresaClienteModel = {
 
         return rows[0] || null;
     },
+    
+    async buscarVinculoAutorizado(idClienteCnpj, userId) {
 
+        const sql = `
+        SELECT cc.id_cliente_cnpj
+        FROM cliente_cnpj cc
+        JOIN cliente c ON c.id_cliente = cc.cliente_id
+        WHERE cc.id_cliente_cnpj = ?
+        AND c.usuario_id = ?
+        `;
+
+        const [rows] = await db.execute(sql, [idClienteCnpj, userId]);
+
+        return rows[0] || null;
+    },
     async criarEmpresaCliente(clienteId, cnpjId) {
 
         const sql = "INSERT INTO cliente_cnpj (cliente_id, cnpj_id) VALUES (?, ?)";
@@ -49,6 +63,14 @@ export const empresaClienteModel = {
         const sql = "DELETE FROM cliente_cnpj WHERE cnpj_id = ?";
 
         const [rows] = await conn.execute(sql, [idCnpj]);
+
+        return rows.affectedRows;
+    },
+
+    async excluirVinculoPorId(idClienteCnpj, conn) {
+        const sql = "DELETE FROM cliente_cnpj WHERE id_cliente_cnpj = ?";
+
+        const [rows] = await conn.execute(sql, [idClienteCnpj]);
 
         return rows.affectedRows;
     }

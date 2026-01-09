@@ -63,4 +63,24 @@ const atualizarEmpresaCliente = async (req, res) => {
     }
 }
 
-export { cadastrarEmpresaCliente, empresasCliente, atualizarEmpresaCliente };
+const excluirVinculoClienteEmpresa = async (req, res) => {
+    try {
+
+        const { id: idClienteEmpresa } = req.params;
+        const userId = req.user.id;
+
+        console.log(userId)
+        await empresaClienteService.excluirVinculoClienteEmpresa(idClienteEmpresa, userId);
+
+        return res.status(204).send();
+
+    } catch (error) {
+        if (error instanceof DomainError || error instanceof NotFoundError) {
+            return res.status(error.status).json({error: error.message});
+        }
+
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+export { cadastrarEmpresaCliente, empresasCliente, atualizarEmpresaCliente, excluirVinculoClienteEmpresa };

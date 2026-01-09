@@ -10,4 +10,13 @@ export const processoModel = {
 
         return rows.affectedRows;
     },
+
+    async excluirGeracaoLink(idClienteCnpj, conn) {
+        
+        const sql = "DELETE FROM geracao_link WHERE cliente_cnpj_id = ?";
+
+        const [rows] = await conn.execute(sql, [idClienteCnpj]);
+
+        return rows.affectedRows;
+    }
 }
