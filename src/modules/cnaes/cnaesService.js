@@ -15,6 +15,12 @@ export const cnaesService = {
 
         return cnaes;
 
+    },
+
+    async VinculoCnaeCnpj(cnae_id, cnpjId) {
+
+        // const 
+
     }
 
 }

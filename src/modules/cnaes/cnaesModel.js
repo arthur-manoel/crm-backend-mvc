@@ -49,6 +49,16 @@ export const cnaesModel = {
 
         return rows;
 
+    },
+
+    async VinculoCnaeCnpj(cnaeId, cnpjId) {
+
+        const sql = "INSERT INTO (cnaeId, cnpjId) VALUES (?, ?)";
+
+        const [rows] = await db.execute(sql, [cnaeId, cnpjId]);
+
+        return rows.affectedRows;
+
     }
 
 }
