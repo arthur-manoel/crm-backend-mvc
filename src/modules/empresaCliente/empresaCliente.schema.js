@@ -1,12 +1,19 @@
 import z from "zod";
 
+export const idSchema = z.object({
+  id: z.coerce.number().int().positive()
+});
+
 export const cadastrarEmpresaClienteSchema = z.object({
+    clienteId: z.coerce.number().int().positive(),
     cnpjId: z.coerce.number().int().positive()
 });
 
-export const atualizarEmpresaClienteSchema = z.object({
-    clienteIdNovo: z.coerce.number().int().positive(),
-    cnpjIdNovo: z.coerce.number().int().positive(),
-    clienteIdAntigo: z.coerce.number().int().positive(),
-    cnpjIdAntigo: z.coerce.number().int().positive()
-})
+export const atualizarEmpresaClienteParamsSchema = z.object({
+  idVinculo: z.coerce.number().int().positive(),
+  cnpjId: z.coerce.number().int().positive()
+});
+
+export const atualizarEmpresaClienteBodySchema = z.object({
+  clienteId: z.coerce.number().int().positive()
+});

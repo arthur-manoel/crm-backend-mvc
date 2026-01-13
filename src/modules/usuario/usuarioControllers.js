@@ -5,7 +5,7 @@ const usuarios = async (req, res) => {
   try {
 
     const usuarios = await usuarioService.usuarios();
-    console.log(usuarios)
+
     res.json({ data: usuarios });
 
   } catch (err) {

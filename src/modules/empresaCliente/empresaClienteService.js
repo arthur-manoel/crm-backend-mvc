@@ -5,6 +5,7 @@ import { clienteService } from "../cliente/clienteService.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 import { processoModel } from "../processos/processoModel.js";
 import db from "../../database/db.js";
+import { AuthorizationError } from "../../errors/AuthorizationError.js";
 
 export const empresaClienteService = {
 
@@ -35,28 +36,34 @@ export const empresaClienteService = {
         return novoVinculo;
     },
 
-    async atualizarEmpresaCliente(clienteIdNovo, cnpjIdNovo, clienteIdAntigo, cnpjIdAntigo) {
+    async atualizarEmpresaCliente(idVinculo, clienteId, cnpjId) {
 
-        const vinculoAntigo = await empresaClienteModel.buscarVinculoEmpresa(
-        clienteIdAntigo,
-        cnpjIdAntigo
-        );
+        
+        await empresaService.validarExistenciaEmpresa(cnpjId);
 
-        if (!vinculoAntigo) {
-            throw new NotFoundError("Vínculo original não encontrado");
+        await clienteService.validarExistenciaCliente(clienteId);
+
+        const empresaVinculos = await empresaClienteModel.buscarVinculoEmpresa(idVinculo);
+
+        if (!empresaVinculos) {
+            throw new NotFoundError("Vínculo não encontrado");
         }
 
-        await empresaService.validarExistenciaEmpresa(cnpjIdNovo);
-
-        await clienteService.validarExistenciaCliente(clienteIdNovo);
-
-        const empresaVinculos = await empresaClienteModel.buscarVinculoEmpresa(clienteIdNovo, cnpjIdNovo);
-
-        if (empresaVinculos) {
-            throw new DomainError("Vínculo já existente");
+        if (empresaVinculos.cnpj_id !== cnpjId) {
+            throw new AuthorizationError("Acesso não autorizado a este vínculo");
         }
         
-        const linhasAfetadas = await empresaClienteModel.atualizarClienteEmpresa(clienteIdNovo, cnpjIdNovo, clienteIdAntigo, cnpjIdAntigo);
+        const duplicado = await empresaClienteModel.buscarPorClienteECnpj(
+            clienteId,
+            cnpjId,
+            idVinculo
+        );
+
+        if (duplicado) {
+            throw new DomainError("Vínculo já existente");
+        }
+
+        const linhasAfetadas = await empresaClienteModel.atualizarClienteEmpresa(idVinculo, clienteId, cnpjId);
 
         if (linhasAfetadas === 0) {
             throw new DomainError("Falha ao atualizar vínculo")

@@ -25,10 +25,10 @@ const empresasCliente = async (req, res) => {
 const cadastrarEmpresaCliente = async (req, res) => {
     try {
     
-        const { id } = req.params
-        const { cnpjId } = req.body;
+        const { clienteId } = req.params
+        const { cnpjId } = req.params;
 
-        await empresaClienteService.cadastrarEmpresaCliente(id, cnpjId);
+        await empresaClienteService.cadastrarEmpresaCliente(clienteId, cnpjId);
         
         return res.status(204).send();
 
@@ -43,12 +43,16 @@ const cadastrarEmpresaCliente = async (req, res) => {
 }
 
 const atualizarEmpresaCliente = async (req, res) => {
-
     try {
-        
-        const { clienteIdNovo, cnpjIdNovo, clienteIdAntigo, cnpjIdAntigo } = req.body;
 
-        await empresaClienteService.atualizarEmpresaCliente(clienteIdNovo, cnpjIdNovo, clienteIdAntigo, cnpjIdAntigo);
+        const { idVinculo, cnpjId } = req.params;
+        const { clienteId } = req.body;
+
+        await empresaClienteService.atualizarEmpresaCliente(
+            idVinculo,
+            clienteId,
+            cnpjId
+        );
 
         return res.status(204).send();
 
@@ -69,7 +73,6 @@ const excluirVinculoClienteEmpresa = async (req, res) => {
         const { id: idClienteEmpresa } = req.params;
         const userId = req.user.id;
 
-        console.log(userId)
         await empresaClienteService.excluirVinculoClienteEmpresa(idClienteEmpresa, userId);
 
         return res.status(204).send();

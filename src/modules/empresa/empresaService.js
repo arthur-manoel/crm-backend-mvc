@@ -7,6 +7,7 @@ import { enderecoModel } from "../endereco/enderecoModel.js";
 import { processoModel } from "../processos/processoModel.js";
 
 import db from "../../database/db.js";
+import { empresaUsuarioModel } from "../empresaUsuario/empresaUsuarioModel.js";
 
 export const empresaService = {
     
@@ -20,20 +21,28 @@ export const empresaService = {
     },
 
     async validarExistenciaEmpresa(idCnpj) {
-      const empresa = await empresaModel.buscarPorId(idCnpj);
+    const empresa = await empresaModel.buscarPorId(idCnpj);
     
-      if (!empresa) {
+    if (!empresa) {
         throw new NotFoundError("Empresa não encontrada");
-      }
+    }
     
-      return empresa;
+    return empresa;
     },
 
-    async cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade) {
+    async cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade, userId) {
         
         await this.validarDuplicidade({cnpj});
 
         const novaEmpresa = await empresaModel.cadastrarEmpresa(nome, cnpj, data_criacao, descricao_atividade);
+        
+        const idNovaEmpresa = novaEmpresa.id;
+
+        await empresaUsuarioModel.criarVinculo({
+        usuarioId: userId,
+        cnpjId: idNovaEmpresa,
+        papel: 'ADMIN'
+        });
 
         return novaEmpresa;
     },
@@ -76,7 +85,6 @@ export const empresaService = {
 
             await conn.commit();
 
-            console.log(empresaExcluida)
             return empresaExcluida;
             
         } catch (error) {

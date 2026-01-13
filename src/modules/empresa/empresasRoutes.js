@@ -3,6 +3,7 @@ import { cadastroEmpresa, empresas, atualizarEmpresa, excluirEmpresa } from "./e
 import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { cadastroEmpresaSchema, atualizarEmpresaSchema } from "./empresa.schema.js";
 import { validateBody } from "../../middlewares/validateBody.js";
+import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
 
 const router = express.Router();
 

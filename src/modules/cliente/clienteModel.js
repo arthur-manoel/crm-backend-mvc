@@ -4,7 +4,6 @@ export const clienteModel = {
 
     async cadastrarCliente(dados) {
 
-        console.log(dados)
         const { nome, fone, cpf, userId, data_nascimento, cep, cidade, estado, rg, email, numero_casa, endereco, complemento, rua, bairro } = dados;
 
         const sql = "INSERT INTO cliente (nome, fone, cpf, usuario_id, data_nascimento, cep, cidade, estado, rg, gmail, numero_casa, endereco, complemento, rua, bairro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

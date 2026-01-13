@@ -17,14 +17,34 @@ export const empresaClienteModel = {
 
     },
 
-    async buscarVinculoEmpresa(clienteId, cnpjId) {
+    async buscarVinculoEmpresa(idVinculo) {
 
-        const sql = "SELECT cliente_id, cnpj_id FROM cliente_cnpj WHERE cliente_id = ? AND cnpj_id = ?";
+        const sql = "SELECT cliente_id, cnpj_id FROM cliente_cnpj WHERE id_cliente_cnpj = ?";
 
-        const [rows] = await db.execute(sql, [clienteId, cnpjId])
+        const [rows] = await db.execute(sql, [idVinculo]);
 
         return rows[0] || null;
     },
+    
+    async buscarPorClienteECnpj(clienteId, cnpjId, idIgnorar = null) {
+
+        let sql = `
+            SELECT id_cliente_cnpj
+            FROM cliente_cnpj
+            WHERE cliente_id = ? AND cnpj_id = ?
+        `;
+
+        const params = [clienteId, cnpjId];
+
+        if (idIgnorar) {
+            sql += ' AND id_cliente_cnpj != ?';
+            params.push(idIgnorar);
+        }
+
+        const [rows] = await db.execute(sql, params);
+        return rows[0] || null;
+
+        },
     
     async buscarVinculoAutorizado(idClienteCnpj, userId) {
 
@@ -49,14 +69,18 @@ export const empresaClienteModel = {
         return rows;
     },
 
-    async atualizarClienteEmpresa(clienteIdNovo, cnpjIdNovo, clienteIdAntigo, cnpjIdAntigo) {
+    async atualizarClienteEmpresa(idVinculo, clienteId, cnpjId) {
 
-        const sql = "UPDATE cliente_cnpj SET cliente_id = ?, cnpj_id = ? WHERE cliente_id = ? AND cnpj_id = ?";
+        const sql = `
+            UPDATE cliente_cnpj
+            SET cliente_id = ?
+            WHERE id_cliente_cnpj = ?
+        `;
 
-        const [rows] = await db.execute(sql, [clienteIdNovo, cnpjIdNovo, clienteIdAntigo, cnpjIdAntigo]);
+        const [rows] = await db.execute(sql, [clienteId, idVinculo]);
 
         return rows.affectedRows;
-    },
+        },
 
     async excluirEmpresaCliente(idCnpj, conn) {
 

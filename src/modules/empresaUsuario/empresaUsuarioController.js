@@ -1,5 +1,5 @@
 import { empresaUsuarioService } from './empresaUsuarioService.js'; 
-import { AuthorizationError } from '../../errors/authorizationError.js';
+import { AuthorizationError } from '../../errors/AuthorizationError.js';
 
 const criarEmpresaUsuario = async (req, res) => { 
 
