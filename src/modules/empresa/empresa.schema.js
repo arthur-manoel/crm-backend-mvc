@@ -1,6 +1,15 @@
 import { z } from "zod";
 import { cnpj } from "cpf-cnpj-validator";
 
+export const clienteEmpresaParamsSchema = z.object({
+  clienteId: z.coerce.number().int().positive(),
+  cnpjId: z.coerce.number().int().positive()
+});
+
+export const cnpjIdParamSchema = z.object({
+  cnpjId: z.coerce.number().int().positive()
+});
+
 export const cadastroEmpresaSchema = z.object({
     nome: z.string().min(3).max(255).trim(),
 

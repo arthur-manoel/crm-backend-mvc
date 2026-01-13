@@ -47,19 +47,24 @@ export const empresaService = {
         return novaEmpresa;
     },
 
-    async empresas() {
+    async empresas(clienteId, cnpjId) {
 
-        return await empresaModel.empresas();
+        const vinculos = await empresaModel.empresas(clienteId, cnpjId);
 
+        if (!vinculos) {
+            throw new NotFoundError("Vinculo não estabelecido")
+        }
+
+        return vinculos;
     },
 
     async atualizarEmpresa(dados) {
 
-        const { nome, descricao_atividade, id } = dados;
+        const { nome, descricao_atividade, cnpjId } = dados;
 
-        await this.validarExistenciaEmpresa(id);
+        await this.validarExistenciaEmpresa(cnpjId);
 
-        const empresaAtualizada = await empresaModel.atualizarEmpresa({nome, descricao_atividade, id});
+        const empresaAtualizada = await empresaModel.atualizarEmpresa({nome, descricao_atividade, cnpjId});
 
         return empresaAtualizada;
     },

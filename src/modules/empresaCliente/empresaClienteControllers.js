@@ -70,10 +70,9 @@ const atualizarEmpresaCliente = async (req, res) => {
 const excluirVinculoClienteEmpresa = async (req, res) => {
     try {
 
-        const { id: idClienteEmpresa } = req.params;
-        const userId = req.user.id;
+        const { idVinculo } = req.params;
 
-        await empresaClienteService.excluirVinculoClienteEmpresa(idClienteEmpresa, userId);
+        await empresaClienteService.excluirVinculoClienteEmpresa(idVinculo);
 
         return res.status(204).send();
 

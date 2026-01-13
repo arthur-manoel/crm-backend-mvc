@@ -15,11 +15,11 @@ const cadastroEmpresa = async (req, res) => {
 
     } catch (error) {
 
-        if (error instanceof DomainError) {
+        if (error instanceof DomainError || error instanceof NotFoundError) {
             return res.status(error.status).json({ error: error.message });
         }
         
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Erro interno" });
     }
 }
 
@@ -27,11 +27,16 @@ const empresas = async (req, res) => {
 
     try {
 
-        const empresasCadastradas = await empresaService.empresas();
+        const { clienteId, cnpjId } = req.params;
 
-        return res.status(200).json({ empresas: empresasCadastradas });
+        const empresasCadastradas = await empresaService.empresas(clienteId, cnpjId);
+
+        return res.status(200).json({ empresa: empresasCadastradas });
 
     } catch (error) {
+        if (error instanceof DomainError || error instanceof NotFoundError) {
+            return error.status(error.status).json({ error: error.message })
+        }
         return res.status(500).json({ error: "Erro interno" });
     }
 }
@@ -39,12 +44,12 @@ const empresas = async (req, res) => {
 const atualizarEmpresa = async (req, res) => {
 
     try {
-        
+    
         const { nome, descricao_atividade } = req.body;
 
-        const { id } = req.params;
+        const { cnpjId } = req.params;
 
-        const empresaAtualizada = await empresaService.atualizarEmpresa({nome, descricao_atividade, id});
+        const empresaAtualizada = await empresaService.atualizarEmpresa({nome, descricao_atividade, cnpjId});
 
         return res.status(204).send();
 

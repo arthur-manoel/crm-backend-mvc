@@ -72,13 +72,13 @@ export const empresaClienteService = {
 
     },
 
-    async excluirVinculoClienteEmpresa(idClienteCnpj, userId) {
+    async excluirVinculoClienteEmpresa(idVinculo) {
 
         const conn = await db.getConnection();
 
         try {
 
-            const vinculo = await empresaClienteModel.buscarVinculoAutorizado(idClienteCnpj, userId);
+            const vinculo = await empresaClienteModel.buscarVinculoEmpresa(idVinculo);
 
             if (!vinculo) {
                 throw new NotFoundError("Vinculo não encontrado");
@@ -86,8 +86,9 @@ export const empresaClienteService = {
 
             await conn.beginTransaction();
 
-            await processoModel.excluirGeracaoLink(idClienteCnpj, conn);
-            const linhasExcluidas = await empresaClienteModel.excluirVinculoPorId(idClienteCnpj, conn);
+            await processoModel.excluirGeracaoLink(idVinculo, conn);
+
+            const linhasExcluidas = await empresaClienteModel.excluirVinculoPorId(idVinculo, conn);
 
             await conn.commit();
 

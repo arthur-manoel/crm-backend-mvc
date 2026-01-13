@@ -9,7 +9,7 @@ export const cadastrarEmpresaClienteSchema = z.object({
     cnpjId: z.coerce.number().int().positive()
 });
 
-export const atualizarEmpresaClienteParamsSchema = z.object({
+export const vinculoEmpresaClienteParamsSchema = z.object({
   idVinculo: z.coerce.number().int().positive(),
   cnpjId: z.coerce.number().int().positive()
 });

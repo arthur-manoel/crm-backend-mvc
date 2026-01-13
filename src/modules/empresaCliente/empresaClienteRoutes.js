@@ -1,7 +1,7 @@
 import express from "express";
 import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateBody } from "../../middlewares/validateBody.js";
-import { idSchema, cadastrarEmpresaClienteSchema, atualizarEmpresaClienteBodySchema, atualizarEmpresaClienteParamsSchema } from "./empresaCliente.schema.js";
+import { idSchema, cadastrarEmpresaClienteSchema, atualizarEmpresaClienteBodySchema, vinculoEmpresaClienteParamsSchema } from "./empresaCliente.schema.js";
 import { validateParams } from "../../middlewares/validateParams.js";
 import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
 
@@ -32,12 +32,18 @@ router.post(
 router.put(
   "/empresaCliente/:idVinculo/:cnpjId",
   verifyToken,
-  validateParams(atualizarEmpresaClienteParamsSchema),
+  validateParams(vinculoEmpresaClienteParamsSchema),
   autorizarPorCnpj("ADMIN"),
   validateBody(atualizarEmpresaClienteBodySchema),
   atualizarEmpresaCliente
 );
 
-router.delete("/empresaCliente/:id", verifyToken, excluirVinculoClienteEmpresa);
+router.delete(
+  "/empresaCliente/:idVinculo/:cnpjId",
+  verifyToken,
+  validateParams(vinculoEmpresaClienteParamsSchema),
+  autorizarPorCnpj("ADMIN"),
+  excluirVinculoClienteEmpresa
+);
 
 export default router;

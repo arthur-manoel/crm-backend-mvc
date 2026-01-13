@@ -14,13 +14,13 @@ export function autorizarPorCnpj(papelMinimo) {
       if (!PAPEL_HIERARQUIA[papelMinimo]) {
         throw new Error('Papel mínimo inválido');
       }
-
+      
       if (!cnpjId) {
         throw new AuthorizationError();
       }
-
+      
       const vinculo = await empresaUsuarioModel.buscarPapel(usuarioId, cnpjId);
-
+      
       if (!vinculo) {
         throw new AuthorizationError();
       }

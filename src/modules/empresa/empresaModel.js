@@ -30,26 +30,28 @@ export const empresaModel = {
         return rows[0] || null;
     },
 
-    async empresas() {
+    async empresas(clienteId, cnpjId) {
         
         const sql = `
-            SELECT id_cnpj, nome, numero_cnpj, data_criacao, descricao_atividade
+            SELECT cnpj.*
             FROM cnpj
-            ORDER BY id_cnpj DESC
+            INNER JOIN cliente_cnpj ON cnpj.id_cnpj = cliente_cnpj.cnpj_id
+            WHERE cliente_cnpj.cliente_id = ? AND cnpj.id_cnpj = ?;
+
         `;
 
-        const [rows] = await db.execute(sql);
+        const [rows] = await db.execute(sql, [clienteId, cnpjId]);
 
-        return rows;
+        return rows[0] || null;
     },
 
     async atualizarEmpresa(dados) {
 
-        const { nome, descricao_atividade, id } = dados;
+        const { nome, descricao_atividade, cnpjId } = dados;
 
         const sql = "UPDATE cnpj SET nome = ?, descricao_atividade = ? WHERE id_cnpj = ?";
 
-        const [rows] = await db.execute(sql, [nome, descricao_atividade, id]);
+        const [rows] = await db.execute(sql, [nome, descricao_atividade, cnpjId]);
 
         return rows.affectedRows;
     },
