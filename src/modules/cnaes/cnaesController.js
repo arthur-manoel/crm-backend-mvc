@@ -1,5 +1,6 @@
 import { cnaesService } from "./cnaesService.js";
 import { DomainError } from "../../errors/domainError.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
 
 const listarCnaes = async (req, res) => {
 
@@ -22,10 +23,30 @@ const listarCnaes = async (req, res) => {
 
     } catch (error) {
         if (error instanceof DomainError) {
-            return res.status(400).json({ erro: error.message });
+            return res.status(error.status).json({ erro: error.message });
         }
-        return res.status(500).json({ erro: "Erro interno do servidor" });
-    }
+        return res.status(500).json({ error: "Erro interno" });
+    } 
 };
 
-export { listarCnaes };
+const criarVinculo = async (req, res) => {
+
+    try {
+        
+        const { cnaeId, cnpjId } = req.params;
+
+        const novoVinculo = await cnaesService.criarVinculoCnaeCnpj(cnaeId, cnpjId);
+
+        return res.status(201).json({ Vinculo: novoVinculo, message: "Vinculo estabelecido" });
+
+    } catch (error) {
+
+        if (error instanceof DomainError || error instanceof NotFoundError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: error.message });
+    }
+}
+
+export { listarCnaes, criarVinculo };

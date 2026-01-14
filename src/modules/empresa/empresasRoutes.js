@@ -26,6 +26,13 @@ router.put(
 );
 
 router.post("/empresas", verifyToken, validateBody(cadastroEmpresaSchema), cadastroEmpresa);
-router.delete("/empresas/:id", verifyToken, excluirEmpresa);
+
+router.delete(
+  "/empresas/:cnpjId", 
+  verifyToken, 
+  validateParams(cnpjIdParamSchema), 
+  autorizarPorCnpj("ADMIN"), 
+  excluirEmpresa
+);
 
 export default router;

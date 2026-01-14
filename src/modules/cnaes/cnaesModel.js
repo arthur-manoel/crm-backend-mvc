@@ -51,14 +51,31 @@ export const cnaesModel = {
 
     },
 
-    async VinculoCnaeCnpj(cnaeId, cnpjId) {
+    async buscarVinculoPorId(cnaeId, cnpjId) {
 
-        const sql = "INSERT INTO (cnaeId, cnpjId) VALUES (?, ?)";
+        const sql = "SELECT id_cnpj_cnae FROM cnpj_cnae WHERE cnae_id = ? AND cnpj_id = ?";
 
         const [rows] = await db.execute(sql, [cnaeId, cnpjId]);
 
-        return rows.affectedRows;
+        return rows[0] || null;
+    },
 
+    async buscarCnaePorId(cnaeId) {
+
+        const sql = "SELECT id_cnae FROM cnae WHERE id_cnae = ?";
+
+        const [rows] = await db.execute(sql, [cnaeId]);
+
+        return rows[0] || null;
+    },
+
+    async criarVinculo(cnaeId, cnpjId) {
+
+        const sql = "INSERT INTO cnpj_cnae (cnae_id, cnpj_id) VALUES (?, ?)";
+
+        const [rows] = await db.execute(sql, [cnaeId, cnpjId]);
+
+        return rows.insertId;
     }
 
 }

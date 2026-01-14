@@ -68,9 +68,9 @@ const excluirEmpresa = async (req, res) => {
 
     try {
         
-        const { id } = req.params;
+        const { cnpjId } = req.params;
 
-        const empresaExcluida = await empresaService.excluirEmpresa(id);
+        const empresaExcluida = await empresaService.excluirEmpresa(cnpjId);
 
         return res.status(204).send();
 
