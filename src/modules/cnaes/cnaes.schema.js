@@ -5,7 +5,7 @@ export const cnaeVinculoSchema = z.object({
     cnpjId: z.coerce.number().int().positive(),
 })
 
-export const atualizarVinculoSchema = z.object({
+export const vinculoParamsSchema = z.object({
     idVinculo: z.coerce.number().int().positive(),
     cnpjId: z.coerce.number().int().positive()
 })

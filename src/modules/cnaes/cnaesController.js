@@ -71,4 +71,24 @@ const atualizarVinculo = async (req, res) => {
     }
 }
 
-export { listarCnaes, criarVinculo, atualizarVinculo };
+const excluirVinculo = async (req, res) => {
+
+    try {
+        const { idVinculo, cnpjId } = req.params;
+
+        await cnaesService.excluirVinculo(idVinculo, cnpjId);
+
+        return res.status(204).send()
+
+    } catch (error) {
+
+        if (error instanceof DomainError || error instanceof NotFoundError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: "Erro Interno" })
+    }
+
+}
+
+export { listarCnaes, criarVinculo, atualizarVinculo, excluirVinculo };

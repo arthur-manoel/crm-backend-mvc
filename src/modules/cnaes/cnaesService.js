@@ -76,11 +76,26 @@ export const cnaesService = {
 
         const affectedRows = await cnaesModel.atualizarVinculo(cnaeId, idVinculo);
 
-        if (affectedRows === 0) {
-            throw new DomainError("Falha ao estabelecer vinculo")
+        return affectedRows;
+
+    },
+
+    async excluirVinculo(idVinculo, cnpjId) {
+
+        const vinculo = await cnaesModel.buscarVinculo(idVinculo);
+
+        if (!vinculo) {
+            throw new NotFoundError("Vinculo não encontradao");
         }
 
-        return affectedRows;
+        if (vinculo.cnpj_id !== cnpjId) {
+            throw new DomainError("Vinculo não pertence a essa empresa")
+        }
+
+        const excluirVinculo = await cnaesModel.excluirVinculo(idVinculo);
+
+        return excluirVinculo;
+
     }
     
 }

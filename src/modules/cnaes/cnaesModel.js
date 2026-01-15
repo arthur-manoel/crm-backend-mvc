@@ -53,7 +53,7 @@ export const cnaesModel = {
 
     async buscarVinculo(idVinculo) {
 
-        const [rows] = await db.execute("SELECT id_cnpj_cnae FROM cnpj_cnae WHERE id_cnpj_cnae = ?", [idVinculo]);
+        const [rows] = await db.execute("SELECT id_cnpj_cnae, cnpj_id FROM cnpj_cnae WHERE id_cnpj_cnae = ?", [idVinculo]);
 
         return rows[0] || null;
     },
@@ -100,6 +100,16 @@ export const cnaesModel = {
         const [rows] = await db.execute(sql, [cnaeId, idVinculo]);
 
         return rows.affectedRows;
-    }
+    },
 
+    async excluirVinculo(idVinculo) {
+
+        const sql = "DELETE FROM cnpj_cnae WHERE id_cnpj_cnae = ?";
+
+        const [rows] = await db.execute(sql, [idVinculo]);
+
+        return rows.affectedRows;
+    },
+
+    
 }
