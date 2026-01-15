@@ -26,27 +26,61 @@ export const cnaesService = {
         if (vinculo) {
             throw new DomainError("Vinculo já estabelecido");
          }
-
-        const existeEmpresa = await empresaService.validarExistenciaEmpresa(cnpjId);
-        
-        if (!existeEmpresa) {
-            throw new NotFoundError("Empresa não encontrada");
-        }
-
-        const existeCnae = await cnaesModel.buscarCnaePorId(cnaeId);
+         
+         const existeEmpresa = await empresaService.validarExistenciaEmpresa(cnpjId);
+         
+         if (!existeEmpresa) {
+             throw new NotFoundError("Empresa não encontrada");
+            }
+            
+            const existeCnae = await cnaesModel.buscarCnaePorId(cnaeId);
         
         if (!existeCnae) {
             throw new NotFoundError("Cnae não encontrado");
         }
-
+        
         const novaEmpresa = await cnaesModel.criarVinculo(cnaeId, cnpjId);
-
+        
         return {
             id: novaEmpresa,
             cnaeId,
             cnpjId
         };
+        
+    },
+    
+    async atualizarVinculo(idVinculo, cnaeId, cnpjId) {
+        
+        const vinculoAtual = await cnaesModel.buscarVinculo(idVinculo);
 
+        if (!vinculoAtual) {
+            throw new NotFoundError("Vinculo não encontrado")
+        }
+        
+        if (vinculoAtual.cnpj_id !== cnpjId) {
+            throw new DomainError("Vínculo não pertence a esta empresa");
+        }
+
+           const existeCnae = await cnaesModel.buscarCnaePorId(cnaeId);
+        
+        if (!existeCnae) {
+           throw new NotFoundError("Cnae não encontrado");
+        }
+
+        const duplicidade = await cnaesModel.buscarVinculoPorId(cnaeId, cnpjId, idVinculo);
+        
+        if (duplicidade) {
+            throw new DomainError("Vinculo já estabelecido");
+        }
+        
+
+        const affectedRows = await cnaesModel.atualizarVinculo(cnaeId, idVinculo);
+
+        if (affectedRows === 0) {
+            throw new DomainError("Falha ao estabelecer vinculo")
+        }
+
+        return affectedRows;
     }
-
+    
 }

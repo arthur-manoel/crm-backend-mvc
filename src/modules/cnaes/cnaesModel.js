@@ -51,11 +51,25 @@ export const cnaesModel = {
 
     },
 
-    async buscarVinculoPorId(cnaeId, cnpjId) {
+    async buscarVinculo(idVinculo) {
 
-        const sql = "SELECT id_cnpj_cnae FROM cnpj_cnae WHERE cnae_id = ? AND cnpj_id = ?";
+        const [rows] = await db.execute("SELECT id_cnpj_cnae FROM cnpj_cnae WHERE id_cnpj_cnae = ?", [idVinculo]);
 
-        const [rows] = await db.execute(sql, [cnaeId, cnpjId]);
+        return rows[0] || null;
+    },
+
+    async buscarVinculoPorId(cnaeId, cnpjId, idIgnorar = null) {
+
+        let sql = "SELECT id_cnpj_cnae FROM cnpj_cnae WHERE cnae_id = ? AND cnpj_id = ?";
+
+        const params = [cnaeId, cnpjId];
+
+        if (idIgnorar) {
+            sql += " AND id_cnpj_cnae != ?";
+            params.push(idIgnorar);
+        }
+        
+        const [rows] = await db.execute(sql, params);
 
         return rows[0] || null;
     },
@@ -76,6 +90,16 @@ export const cnaesModel = {
         const [rows] = await db.execute(sql, [cnaeId, cnpjId]);
 
         return rows.insertId;
+    },
+
+
+    async atualizarVinculo(cnaeId, idVinculo) {
+
+        const sql = "UPDATE cnpj_cnae SET cnae_id = ? WHERE id_cnpj_cnae = ?";
+
+        const [rows] = await db.execute(sql, [cnaeId, idVinculo]);
+
+        return rows.affectedRows;
     }
 
 }
