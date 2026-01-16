@@ -51,6 +51,7 @@ import empresaRef from "./modules/empresa/empresasRoutes.js"
 import empresaClienteRef from "./modules/empresaCliente/empresaClienteRoutes.js"
 import empresaUsuarioRef from "./modules/empresaUsuario/empresaUsuarioRouter.js";
 import cnaeRef from "./modules/cnaes/cnaesRoutes.js";
+import documentosRef from "./modules/documentos/documentosRoutes.js";
 
 app.use("/", authRef);
 app.use("/", usuarioRef);
@@ -59,5 +60,6 @@ app.use("/", empresaRef);
 app.use("/", empresaClienteRef);
 app.use("/", empresaUsuarioRef)
 app.use("/", cnaeRef);
+app.use("/", documentosRef);
 
 export default app;
