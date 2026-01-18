@@ -48,4 +48,11 @@ const documentosSolicitados = async (req, res) => {
 
 };
 
-export { listarDocumentos, documentosSolicitados };
+const tipsoDocumentos = async (req, res) => {
+
+  const documentos = await documentosService.tiposDocumento();
+
+  return res.status(200).json(documentos);
+
+}
+export { listarDocumentos, documentosSolicitados, tipsoDocumentos };

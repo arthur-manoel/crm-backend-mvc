@@ -4,7 +4,7 @@ import { validateParams } from "../../middlewares/validateParams.js";
 import { validateQuery } from "../../middlewares/validateQuery.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
-import { documentosSolicitados, listarDocumentos } from "./documentosControllers.js";
+import { documentosSolicitados, listarDocumentos, tipsoDocumentos } from "./documentosControllers.js";
 
 import { 
   documentosParamsSchema, 
@@ -31,4 +31,5 @@ router.post(
   documentosSolicitados
 );
 
+router.get("/tiposDocumento", verifyToken, tipsoDocumentos)
 export default router;

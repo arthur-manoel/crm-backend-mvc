@@ -19,7 +19,7 @@ export const documentosService = {
   },
 
   async documentosSolicitados(ids) {
-    
+
     const documentos = await documentosModel.documentosSolicitados(ids);
 
     if (documentos.length !== ids.length) {
@@ -27,6 +27,13 @@ export const documentosService = {
     }
 
     return documentos;
+  },
+
+  async tiposDocumento() {
+
+    const tiposDocumento = await documentosModel.tiposDocumento();
+    
+    return tiposDocumento;
   }
 
 };

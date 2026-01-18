@@ -8,9 +8,9 @@ export function validateParams(schema) {
             const erros = resultado.error.issues.map(e => e.message) || ["Erro de validação desconhecido"];
             return res.status(400).json({ erros });
         }
-
+        
         req.params = resultado.data;
-
+        
         next();
         
     }

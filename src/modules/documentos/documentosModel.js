@@ -38,5 +38,14 @@ export const documentosModel = {
     
     return rows;
 
+  },
+
+  async tiposDocumento() {
+
+    const sql = "SELECT id_tipo_documento, nome FROM tipo_documento";
+
+    const [rows] = await db.execute(sql);
+
+    return rows;
   }
 };
