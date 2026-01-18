@@ -24,6 +24,19 @@ export const documentosModel = {
     const [rows] = await db.execute(sql, params);
     return rows;
     
-  }
+  },
 
+  async documentosSolicitados(ids) {
+    
+    const sql = `
+          SELECT nome
+          FROM tipo_documento 
+          WHERE id_tipo_documento IN (${ids.map(() => '?').join(',')})
+        `;
+
+    const [rows] = await db.execute(sql, ids);
+    
+    return rows;
+
+  }
 };

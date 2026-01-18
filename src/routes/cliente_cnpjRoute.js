@@ -9,6 +9,6 @@ const router = express.Router();
 
 // router.put("/atualizarcnpjcliente/:id", atualizar_cnpj)
 
-router.delete("/excluircnpjcliente/:id", excluir_cnpj)
+// router.delete("/excluircnpjcliente/:id", excluir_cnpj)
 
 export default router;

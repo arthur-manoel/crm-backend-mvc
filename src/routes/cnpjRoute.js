@@ -17,6 +17,6 @@ const router = express.Router();
 
 // router.put("/atualizarcnpj/:id", atualizarCNPJ);
 
-router.delete("/excluircnpj/:id", excluirCNPJ);
+// router.delete("/excluircnpj/:id", excluirCNPJ);
 
 export default router;

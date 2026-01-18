@@ -13,3 +13,7 @@ export const documentosQuerySchema = z.object({
     z.coerce.number().int().positive().optional()
   )
 });
+
+export const documentosSolicitadosSchema = z.object({
+  ids: z.array(z.coerce.number().int().positive()).min(1)
+});

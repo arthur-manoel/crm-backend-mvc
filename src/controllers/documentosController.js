@@ -40,16 +40,13 @@ const documentos_solicitados = async (req, res) => {
         res.json(rows)
 
     } catch (error) {
-    res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
     }
-
 }
 
 const visualizar_documentos = async (req, res) => {
 
     try {
-
-        
 
         const sql = "SELECT id_tipo_documento, nome FROM tipo_documento";
 

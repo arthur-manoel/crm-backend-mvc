@@ -4,8 +4,8 @@ import { documentos, documentos_solicitados, visualizar_documentos } from "../co
 
 const router = express.Router();
 
-router.post("/documentos/:cliente_id", documentos);
-router.post("/documentos_solicitados", documentos_solicitados);
+// router.post("/documentos/:cliente_id", documentos);
+// router.post("/documentos_solicitados", documentos_solicitados);
 router.get("/visualizardocumentos", visualizar_documentos);
 
 export default router;

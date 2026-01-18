@@ -27,4 +27,25 @@ const listarDocumentos = async (req, res) => {
 
 };
 
-export { listarDocumentos };
+const documentosSolicitados = async (req, res) => {
+
+  try {
+
+    const { ids } = req.body;
+
+    const documentos = await documentosService.documentosSolicitados(ids);
+
+    return res.json(documentos);
+
+  } catch (error) {
+
+    if (error instanceof DomainError || error instanceof NotFoundError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: "Erro interno" });
+  }
+
+};
+
+export { listarDocumentos, documentosSolicitados };
