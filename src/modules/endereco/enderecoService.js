@@ -21,6 +21,16 @@ export const enderecoService = {
         const novoEndereco = await enderecoModel.criarEndereco(cnpjId, clienteId, cep, rua, numero, complemento, bairro, cidade, estado);
 
         return novoEndereco;
-    }  
-    
+    },
+
+    async buscarEnderecoPorId(idEndereco) {
+
+        const endereco = await enderecoModel.buscarPorId(idEndereco);
+
+        if (!endereco) {
+            throw new NotFoundError("Endereço não encontrado");
+        }
+
+        return endereco;
+    }
 }

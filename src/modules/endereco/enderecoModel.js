@@ -2,6 +2,16 @@ import db from "../../database/db.js";
 
 export const enderecoModel = {
 
+    async buscarPorId(idEndereco) {
+
+        const sql = "SELECT * FROM endereco WHERE id_endereco = ?";
+
+        const [rows] = await db.execute(sql, [idEndereco]);
+
+        return rows[0] || null;
+        
+    },
+
     async buscarEndereco(cnpjId, clienteId) {
 
         const sql = "SELECT id_endereco FROM endereco WHERE id_cnpj = ? AND id_cliente = ?";

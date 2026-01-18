@@ -27,3 +27,8 @@ export const enderecoParamsSchema = z.object({
     clienteId: z.coerce.number().int().positive(),
     cnpjId: z.coerce.number().int().positive(),
 });
+
+
+export const enderecoIdParamsSchema = z.object({
+    idEndereco: z.coerce.number().int().positive()
+});
