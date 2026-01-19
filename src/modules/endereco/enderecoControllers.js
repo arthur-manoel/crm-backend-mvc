@@ -44,4 +44,24 @@ const buscarEndereco = async (req, res) => {
     }
 };
 
-export { criarEndereco, buscarEndereco };
+const atualizarEndereco = async (req, res) => {
+
+    try {
+
+        const dados = req.body;
+        const { idEndereco, clienteId, cnpjId } = req.params;
+
+        await enderecoService.atualizarEndereco(clienteId, cnpjId, idEndereco, dados)
+        return res.status(204).send();
+
+    } catch (error) {
+
+        if (error instanceof NotFoundError || error instanceof DomainError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: error.message });
+    }
+};
+
+export { criarEndereco, buscarEndereco, atualizarEndereco };

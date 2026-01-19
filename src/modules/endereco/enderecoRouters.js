@@ -1,10 +1,10 @@
 import express from "express";
 import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateParams } from "../../middlewares/validateParams.js";
-import { enderecoBodySchema, enderecoParamsSchema, enderecoIdParamsSchema } from "./endereco.schema.js";
+import { enderecoBodySchema, enderecoParamsSchema, enderecoIdParamsSchema, enderecoIdsSchema, enderecoPatchSchema } from "./endereco.schema.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
-import { buscarEndereco, criarEndereco } from "./enderecoControllers.js";
+import { atualizarEndereco, buscarEndereco, criarEndereco } from "./enderecoControllers.js";
 
 const router = express.Router();
 
@@ -23,5 +23,14 @@ router.post(
     autorizarPorCnpj("ADMIN"),
     criarEndereco
 );
+
+router.patch(
+    "/endereco/:idEndereco/cliente/:clienteId/empresa/:cnpjId",
+    verifyToken,
+    validateParams(enderecoIdsSchema),
+    validateBody(enderecoPatchSchema),
+    autorizarPorCnpj("ADMIN"),
+    atualizarEndereco
+)
 
 export default router;

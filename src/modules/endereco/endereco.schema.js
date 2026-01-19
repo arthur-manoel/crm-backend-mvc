@@ -32,3 +32,22 @@ export const enderecoParamsSchema = z.object({
 export const enderecoIdParamsSchema = z.object({
     idEndereco: z.coerce.number().int().positive()
 });
+
+export const enderecoPatchSchema = z.object({
+  cep: z.string().regex(/^\d{5}-?\d{3}$/).optional(),
+  rua: z.string().min(3).optional(),
+  numero: z.string().min(1).optional(),
+  complemento: z.string().optional(),
+  bairro: z.string().min(2).optional(),
+  cidade: z.string().min(2).optional(),
+  estado: z.string().length(2).transform(v => v.toUpperCase()).optional()
+}).refine(data => Object.keys(data).length > 0, {
+  message: "Envie ao menos um campo para atualização"
+});
+
+export const enderecoIdsSchema = z.object({
+    idEndereco: z.coerce.number().positive(),
+    cnpjId: z.coerce.number().positive(),
+    clienteId: z.coerce.number().positive(),
+
+})
