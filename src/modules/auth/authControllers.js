@@ -1,4 +1,4 @@
-import { DomainError } from "../../errors/domainError.js";
+import { DomainError } from "../../errors/DomainError.js";
 import { authService } from "./authService.js";
 
 const login = async (req, res) => {

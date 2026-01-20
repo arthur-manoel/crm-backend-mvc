@@ -1,5 +1,5 @@
 import { documentosService } from "./documentosService.js";
-import { DomainError } from "../../errors/domainError.js";
+import { DomainError } from "../../errors/DomainError.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 
 const listarDocumentos = async (req, res) => {

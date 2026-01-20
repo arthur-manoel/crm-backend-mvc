@@ -53,6 +53,8 @@ import empresaUsuarioRef from "./modules/empresaUsuario/empresaUsuarioRouter.js"
 import cnaeRef from "./modules/cnaes/cnaesRoutes.js";
 import documentosRef from "./modules/documentos/documentosRoutes.js";
 import enderecoRef from "./modules/endereco/enderecoRouters.js";
+import linkRef from "./modules/link/linkRoutes.js";
+import dashboardRef from "./modules/dashboard/dashboardRoutes.js";
 
 app.use("/", authRef);
 app.use("/", usuarioRef);
@@ -63,5 +65,7 @@ app.use("/", empresaUsuarioRef)
 app.use("/", cnaeRef);
 app.use("/", documentosRef);
 app.use("/", enderecoRef);
+app.use("/", linkRef);
+app.use("/", dashboardRef);
 
 export default app;

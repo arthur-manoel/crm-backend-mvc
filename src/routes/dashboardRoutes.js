@@ -4,7 +4,7 @@ import { dashboard, qtd_tiposProcesso, tipos_processo, clientes_detalhados } fro
 
 const router = express.Router();
 
-router.get("/dashboard", dashboard);
+// router.get("/dashboard", dashboard);
 router.get("/qtd-tiposProcesso", qtd_tiposProcesso)
 router.get("/tiposProcesso", tipos_processo)
 router.get("/clientes-detalhes", clientes_detalhados)

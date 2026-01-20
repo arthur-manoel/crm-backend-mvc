@@ -1,5 +1,5 @@
 import { usuarioService } from "./usuarioService.js";
-import { DomainError } from "../../errors/domainError.js";
+import { DomainError } from "../../errors/DomainError.js";
 
 const usuarios = async (req, res) => {
   try {

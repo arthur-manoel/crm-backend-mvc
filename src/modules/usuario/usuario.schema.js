@@ -9,5 +9,5 @@ export const cadastroSchema = z.object({
 
   password: z.string().min(6).max(255),
 
-  role: z.number().int()
+  role: z.coerce.number().int().positive()
 })

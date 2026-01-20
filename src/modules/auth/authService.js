@@ -1,7 +1,7 @@
 import { authModel } from "./authModel.js";
 import bcrypt from "bcrypt";
 import { gerarToken } from "./tokenService.js";
-import { DomainError } from "../../errors/domainError.js";
+import { DomainError } from "../../errors/DomainError.js";
 
 const FAKE_HASH = "$2b$10$CwTycUXWue0Thq9StjUM0uJ8kF9E8Z4eQ1lZ9Ff8n3Z1nQGzKp6a";
 

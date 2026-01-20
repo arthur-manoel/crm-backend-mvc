@@ -1,4 +1,4 @@
-import { DomainError } from "../../errors/domainError.js";
+import { DomainError } from "../../errors/DomainError.js";
 import  { empresaClienteModel } from "./empresaClienteModel.js";
 import { empresaService } from "../empresa/empresaService.js";
 import { clienteService } from "../cliente/clienteService.js";

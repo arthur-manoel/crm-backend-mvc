@@ -1,6 +1,6 @@
 import { documentosModel } from "./documentosModel.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
-import { DomainError } from "../../errors/domainError.js";
+import { DomainError } from "../../errors/DomainError.js";
 
 export const documentosService = {
 

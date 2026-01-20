@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { usuarioModel } from "./usuarioModel.js";
-import { DomainError } from "../../errors/domainError.js";
+import { DomainError } from "../../errors/DomainError.js";
 
 export const usuarioService = {
 

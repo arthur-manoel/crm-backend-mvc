@@ -1,6 +1,6 @@
 import { empresaUsuarioModel } from './empresaUsuarioModel.js';
 import { AuthorizationError } from '../../errors/AuthorizationError.js';
-import { DomainError } from '../../errors/domainError.js';
+import { DomainError } from '../../errors/DomainError.js';
 
 export const empresaUsuarioService = {
 
