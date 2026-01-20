@@ -95,5 +95,24 @@ export const enderecoService = {
         await enderecoModel.atualizarEndereco(idEndereco, camposParaUpdate);
 
         return;
-    }
+    },
+
+    async deletarEndereco(clienteId, cnpjId, idEndereco) {
+
+        const vinculo = await empresaClienteModel.buscarPorClienteECnpj(clienteId, cnpjId);
+
+        if (!vinculo) {
+            throw new DomainError("Empresa não possui vínculo com cliente");
+        }
+
+        const endereco = await enderecoModel.validarEndereco(idEndereco, clienteId, cnpjId);
+
+        if (!endereco) {
+            throw new NotFoundError("Endereço não encontrado");
+        }
+
+        await enderecoModel.excluirEnderecoPorId(idEndereco);
+
+        return;
+    },
 }

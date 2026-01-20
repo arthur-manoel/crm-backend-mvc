@@ -1,3 +1,4 @@
+import { cnpj } from 'cpf-cnpj-validator';
 import { z } from 'zod';
 
 export const enderecoBodySchema = z.object({
@@ -49,5 +50,10 @@ export const enderecoIdsSchema = z.object({
     idEndereco: z.coerce.number().positive(),
     cnpjId: z.coerce.number().positive(),
     clienteId: z.coerce.number().positive(),
-
 })
+
+export const deleteEnderecoSchema = z.object({
+    idEndereco: z.coerce.number().int().positive(),
+    clienteId: z.coerce.number().int().positive(),
+    cnpjId: z.coerce.number().int().positive(),
+});

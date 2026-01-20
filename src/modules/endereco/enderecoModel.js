@@ -99,6 +99,15 @@ export const enderecoModel = {
 
         return rows.affectedRows;
     },
+    
+    async excluirEnderecoPorId(idEndereco) {
+
+        const sql = "DELETE FROM endereco WHERE id_endereco = ?";
+
+        const [rows] = await db.execute(sql, [idEndereco]);
+
+        return rows.affectedRows;
+    },
 
     async excluirEndereco(idCnpj, conn) {
 
