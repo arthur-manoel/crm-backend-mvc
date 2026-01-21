@@ -26,6 +26,7 @@ const adicionar_endereco = async (req, res) => {
 
         const sql = "INSERT INTO endereco (id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
+        //verificar se existe vinculo entre cnpj-cliente
         const [rows] = await db.execute(sql, [id_cnpj, id_cliente, cep, rua, numero, complemento, bairro, cidade, estado]);
 
         res.json({

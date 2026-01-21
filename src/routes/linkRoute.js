@@ -4,6 +4,6 @@ import { links } from "../controllers/linkController.js";
 
 const router = express.Router();
 
-router.get("/links", links);
+// router.get("/links", links);
 
 export default router;

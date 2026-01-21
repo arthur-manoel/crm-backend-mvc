@@ -7,7 +7,7 @@ export function autorizarPorCnpj(papelMinimo) {
   return async (req, res, next) => {
 
     try {
-
+  
       const usuarioId = req.user.id;
       const { cnpjId } = req.params;
       

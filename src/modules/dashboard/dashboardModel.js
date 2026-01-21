@@ -39,4 +39,37 @@ export const dashboardModel = {
 
         return rows[0] || null;
     },
+
+    async processTypes() {
+
+        const sql = "SELECT * FROM tipo_processo";
+
+        const [rows] = await db.execute(sql);
+
+        return rows;
+    },
+
+    async getClientDetails(clienteId) {
+        
+        const sql = `
+            SELECT 
+                cl.id_cliente,
+                cl.nome AS cliente,
+                cl.gmail AS email,
+                c.numero_cnpj AS CNPJ,
+                c.id_cnpj AS id_CNPJ,
+                c.nome AS nome_fantasia,
+                c.data_criacao
+            FROM cliente cl
+            LEFT JOIN cliente_cnpj cc ON cl.id_cliente = cc.cliente_id
+            LEFT JOIN cnpj c ON cc.cnpj_id = c.id_cnpj
+            WHERE cl.id_cliente = ?
+            `;
+
+        
+        const [rows] = await db.execute(sql, [clienteId]);
+
+        return rows;
+
+    }
 }

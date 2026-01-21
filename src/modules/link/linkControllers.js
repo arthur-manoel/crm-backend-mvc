@@ -6,9 +6,9 @@ const links = async (req, res) => {
 
     try {
 
-        const { clienteCnpjId } = req.params;
+        const { clienteCnpjId, cnpjId } = req.params;
     
-        const links = await linkService.links(clienteCnpjId)
+        const links = await linkService.links(clienteCnpjId, cnpjId)
 
         return res.status(200).json(links)
 
@@ -19,7 +19,7 @@ const links = async (req, res) => {
             return res.status(error.status).json({ error: error.message });
         }
         
-        return res.status(500).json({ error: "Erro interno" });
+        return res.status(500).json({ error: error.message });
 
     }
 }

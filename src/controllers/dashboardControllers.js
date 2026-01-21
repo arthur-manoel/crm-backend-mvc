@@ -13,8 +13,6 @@ const dashboard = async (req, res) => {
         (SELECT COUNT(*) FROM processo WHERE id_tipo_processo = 52) AS totalFechamentoCnpj
     `;
 
-    //se der erro trocar de string pra inteiro os ids do tipo de processo
-    
     const [rows] = await db.query(sql);
 
     if (!rows || rows.length === 0) {
@@ -87,16 +85,14 @@ const clientes_detalhados = async (req, res) => {
       SELECT 
         cl.id_cliente,
         cl.nome AS cliente,
-        cl.gmail AS email,  -- Retorna o campo 'email' da tabela cliente (assumindo que o campo seja 'email')
-        c.numero_cnpj AS CNPJ,     -- Retorna o 'numero_cnpj' da tabela 'cnpj'
+        cl.gmail AS email,
+        c.numero_cnpj AS CNPJ,
         c.id_cnpj AS id_CNPJ,
-        c.nome AS nome_fantasia,   -- Retorna o 'nome_fantasia' da tabela 'cnpj'
-        c.data_criacao     -- Retorna a 'data_criacao' da tabela 'cnpj'
+        c.nome AS nome_fantasia,
+        c.data_criacao
       FROM cliente cl
       LEFT JOIN cliente_cnpj cc ON cl.id_cliente = cc.cliente_id
       LEFT JOIN cnpj c ON cc.cnpj_id = c.id_cnpj;
-
-
     `;
 
     const [rows] = await db.query(sql);

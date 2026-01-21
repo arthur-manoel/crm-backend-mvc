@@ -1,3 +1,4 @@
+import { NotFoundError } from '../../errors/NotFoundError.js';
 import { dashboardModel } from './dashboardModel.js';
 
 export const dashboardService = {
@@ -16,4 +17,21 @@ export const dashboardService = {
         });
         return normalizarNumeros(rows);
     },
+
+    async processTypes() {
+        const rows = await dashboardModel.processTypes();
+        return rows;
+    },
+
+    async getClientDetails(clienteId) {
+
+        const details = await dashboardModel.getClientDetails(clienteId);
+
+        if (details === 0) {
+            throw new NotFoundError("Cliente não encontrado");
+        }
+
+        return details;
+        
+    }
 };

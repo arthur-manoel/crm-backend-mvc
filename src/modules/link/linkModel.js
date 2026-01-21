@@ -8,7 +8,15 @@ export const linkModel = {
 
         const [rows] = await db.execute(sql, [clienteCnpjId]);
 
-        return rows[0] || null;
+        return rows;
     },
 
+    async isCnpjAssociated(clienteCnpjId, cnpjId) {
+
+        const sql = "SELECT id_cliente_cnpj FROM cliente_cnpj WHERE id_cliente_cnpj = ? AND cnpj_id = ?";
+
+        const [rows] = await db.execute(sql, [clienteCnpjId, cnpjId]);
+
+        return rows[0] || null;
+    },
 }
