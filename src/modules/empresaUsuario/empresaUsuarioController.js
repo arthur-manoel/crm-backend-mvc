@@ -59,4 +59,24 @@ const updateEmpresaUsuario = async (req, res) => {
     }
 }
 
-export { criarEmpresaUsuario, updateEmpresaUsuario };
+const deleteEmpresaUsuario = async (req, res) => {
+    try {
+        
+        const { idVinculo, cnpjId } = req.params;
+        const usuarioLogadoId = req.user.id;
+
+        await empresaUsuarioService.deleteUserCompanyLink({ idVinculo, usuarioLogadoId, cnpjId });
+
+        return res.status(204).send();
+
+    } catch (error) {
+
+        if (error instanceof DomainError || error instanceof AuthorizationError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: error.message });
+    }   
+}
+
+export { criarEmpresaUsuario, updateEmpresaUsuario, deleteEmpresaUsuario };

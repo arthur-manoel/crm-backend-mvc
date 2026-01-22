@@ -53,12 +53,39 @@ export const empresaUsuarioService = {
             throw new DomainError("Não é possível remover o último admin do CNPJ");
         }
     }
-
+    
     if (vinculo.papel === papel) return vinculo;
-
+    
     const updated = await empresaUsuarioModel.updateVinculo(idVinculo, papel);
-
+    
     return updated;
-}
+  },
+  
+  async deleteUserCompanyLink({ idVinculo, usuarioLogadoId, cnpjId }){
 
+    const authorizeCompanyLink = await empresaUsuarioModel.buscarPapel(usuarioLogadoId, cnpjId);
+
+    if (!authorizeCompanyLink || authorizeCompanyLink.papel !== 'ADMIN') {
+    throw new AuthorizationError("Você não tem permissão para remover este vínculo");
+  }
+
+    const vinculo = await empresaUsuarioModel.findLinkById( idVinculo);
+
+    if (!vinculo || vinculo.cnpj_id !== Number(cnpjId)) {
+      throw new DomainError("Vínculo não existente");
+  }
+
+    if (vinculo.papel === 'ADMIN') {
+
+        const totalAdmins = await empresaUsuarioModel.contarAdmins(cnpjId);
+
+        if (totalAdmins <= 1) {
+            throw new DomainError("Não é possível remover o último admin do CNPJ");
+        }
+    }
+
+    const deleted = await empresaUsuarioModel.deleteVinculo(idVinculo);
+
+    return deleted;
+  }
 };

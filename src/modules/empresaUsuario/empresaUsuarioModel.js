@@ -26,6 +26,17 @@ export const empresaUsuarioModel = {
     return rows[0] || null;
 
   },
+  async findLinkById(id) {
+
+    const sql = `
+      SELECT *
+      FROM cnpj_usuario
+      WHERE id = ?
+    `;
+
+    const [rows] = await db.execute(sql, [id]);
+    return rows[0] || null;
+  },
 
   async contarAdmins(cnpjId) {
     const sql = `
@@ -44,6 +55,18 @@ export const empresaUsuarioModel = {
       WHERE id = ?
     `;
     const [rows] = await db.execute(sql, [papel, id]);
+    return rows.affectedRows;
+  },
+
+  async deleteVinculo(id) {
+
+    const sql = `
+      DELETE FROM cnpj_usuario
+      WHERE id = ?
+    `;
+
+    const [rows] = await db.execute(sql, [id]);
+
     return rows.affectedRows;
   }
 };

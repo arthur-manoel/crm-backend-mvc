@@ -1,6 +1,10 @@
 import express from "express";
-import { criarEmpresaUsuario, updateEmpresaUsuario } from "./empresaUsuarioController.js";
 import { verifyToken } from "../../middlewares/tokenVerify.js";
+import { 
+  criarEmpresaUsuario, 
+  deleteEmpresaUsuario, 
+  updateEmpresaUsuario 
+} from "./empresaUsuarioController.js";
 
 const router = express.Router();
 
@@ -16,4 +20,9 @@ router.put(
   updateEmpresaUsuario
 );
 
+router.delete(
+  "/empresa/:cnpjId/usuario/:idVinculo",
+  verifyToken,
+  deleteEmpresaUsuario
+);
 export default router;
