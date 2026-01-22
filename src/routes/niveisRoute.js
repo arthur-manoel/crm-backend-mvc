@@ -8,10 +8,10 @@ import {
 
 const router = express.Router();
 
-router.get("/niveis", listarNiveis);
-router.post("/niveis", adicionarNivel);
-router.put("/niveis/:id", editarNivel);
-router.delete("/niveis/:id", excluirNivel);
+// router.get("/niveis", listarNiveis);
+// router.post("/niveis", adicionarNivel);
+// router.put("/niveis/:id", editarNivel);
+// router.delete("/niveis/:id", excluirNivel);
 
 export default router;
 
