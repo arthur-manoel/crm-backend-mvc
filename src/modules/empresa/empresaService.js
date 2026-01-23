@@ -4,7 +4,7 @@ import { empresaModel } from "./empresaModel.js";
 import { empresaClienteModel } from "../empresaCliente/empresaClienteModel.js";
 import { empresaCnaeModel } from "../empresaCnae/empresaCnaeModel.js";
 import { enderecoModel } from "../endereco/enderecoModel.js";
-import { processoModel } from "../processos/processoModel.js";
+import { processoModel } from "../processo/processoModel.js";
 
 import db from "../../database/db.js";
 import { empresaUsuarioModel } from "../empresaUsuario/empresaUsuarioModel.js";
@@ -73,13 +73,11 @@ export const empresaService = {
 
         const conn = await db.getConnection();
 
-
         try {
             
             await this.validarExistenciaEmpresa(idCnpj)
 
             await conn.beginTransaction();
-
             
             await processoModel.excluirProcesso(idCnpj, conn);
             await empresaClienteModel.excluirEmpresaCliente(idCnpj, conn);
