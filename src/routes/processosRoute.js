@@ -1,15 +1,12 @@
 import express from "express";
 import {
   processos,
-  processo,
-  criarProcesso,
-  excluirprocesso,
-  atualizarprocesso
+  processo
 } from "../controllers/processosController.js";
 
 const router = express.Router();
 
-router.get("/processos", processos);
+// router.get("/processos", processos);
 
 router.get("/processo/:id", processo);
 

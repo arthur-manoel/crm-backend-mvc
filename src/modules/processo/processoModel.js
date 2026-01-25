@@ -2,6 +2,33 @@ import db from "../../database/db.js";
 
 export const processoModel = {
 
+    async allProcessByCnpjId(cnpjId, idProcess = null) {
+
+        const sql = `
+            SELECT 
+            p.*, 
+            t.tipo,
+            g.data_expiracao,
+            s.status
+            FROM processo p
+            JOIN tipo_processo t 
+            ON p.id_tipo_processo = t.id_tipo_processo
+            JOIN geracao_link g
+            ON p.geracao_link_id = g.id_geracao_link
+            JOIN status_link s
+            ON g.id_geracao_link = s.geracao_link_id
+            WHERE p.id_cnpj = ?
+            ${idProcess ? "AND p.id_processo = ?" : ""}
+            ORDER BY p.data_atualizacao DESC
+        `;
+
+    const params = idProcess ? [cnpjId, idProcess] : [cnpjId];
+
+    const [rows] = await db.execute(sql, params);
+
+    return rows;
+    },
+
     async createGeracaoLink(linkGerado, clienteId, clienteCnpjId, dataExpiracaoFormatada, tipoProcessoId, conn) {
 
         const sql = `

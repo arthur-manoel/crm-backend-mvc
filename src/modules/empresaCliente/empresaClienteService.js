@@ -3,7 +3,7 @@ import  { empresaClienteModel } from "./empresaClienteModel.js";
 import { empresaService } from "../empresa/empresaService.js";
 import { clienteService } from "../cliente/clienteService.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
-import { processoModel } from "../processos/processoModel.js";
+import { processoModel } from "../processo/processoModel.js";
 import db from "../../database/db.js";
 import { AuthorizationError } from "../../errors/AuthorizationError.js";
 

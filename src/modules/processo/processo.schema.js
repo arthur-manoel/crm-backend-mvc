@@ -6,7 +6,7 @@ export const createProcessBodySchema = z.object({
         .coerce
         .number()
         .int()
-        .refine(id => [50, 51, 52].includes(id), {
+        .refine(id => [50, 51, 52, 53].includes(id), {
         message: "tipoProcessoId inválido"
         }),
 
@@ -30,4 +30,12 @@ export const createProcessParamsSchema = z.object({
         .int()
         .positive(),
 
+})
+
+export const cnpjIdParamsSchema = z.object({
+    cnpjId: z.coerce.number().int().positive()
+})
+
+export const idProcessQuerySchema = z.object({
+    idProcess: z.coerce.number().int().positive().optional()
 })

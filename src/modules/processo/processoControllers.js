@@ -28,4 +28,20 @@ const createProcess = async (req, res) => {
   }
 }
 
-export { createProcess };
+const allProcessByCnpj = async (req, res) => {
+
+  try {
+    
+    const { cnpjId } = req.params;
+    const { idProcess } = req.query;
+
+    const processes = await processoService.allProcessByCnpj(cnpjId, idProcess);
+
+    return res.status(200).json(processes);
+
+  } catch (error) {
+    return res.status(500).json({ error: "Erro interno" });
+  }
+}
+
+export { createProcess, allProcessByCnpj };

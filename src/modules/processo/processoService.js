@@ -5,6 +5,11 @@ import db from "../../database/db.js";
 
 export const processoService = {
 
+    async allProcessByCnpj(cnpjId, idProcess) {
+
+        return processoModel.allProcessByCnpjId(cnpjId, idProcess);
+    },
+
     async createProcess({ clienteId, cnpjId, tipoProcessoId, status }) {
 
         const conn = await db.getConnection();
@@ -24,7 +29,7 @@ export const processoService = {
             }
 
             const clienteEmpresaId = existsCompany.id_cliente_cnpj;
-
+   
             const linkGerado = `https://facilita-compet.vercel.app${clienteId}`;
 
             const dataExpiracao = new Date();

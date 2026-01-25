@@ -35,4 +35,4 @@ const processo = async (req, res) => {
   }
 };
 
-export { processos, processo, criarProcesso, atualizarprocesso, excluirprocesso };
+export { processos, processo };
