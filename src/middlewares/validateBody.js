@@ -10,7 +10,6 @@ export function validateBody(schema) {
         }
 
         req.body = resultado.data;
-
         next();
         
     }

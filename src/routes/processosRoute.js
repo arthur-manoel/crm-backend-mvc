@@ -8,7 +8,7 @@ const router = express.Router();
 
 // router.get("/processos", processos);
 
-router.get("/processo/:id", processo);
+// router.get("/processo/:id", processo);
 
 // router.post("/processo", criarProcesso);
 

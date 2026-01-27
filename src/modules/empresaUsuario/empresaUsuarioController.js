@@ -6,7 +6,6 @@ const criarEmpresaUsuario = async (req, res) => {
 
     try { 
 
-        console.log('Controller - criarEmpresaUsuario called with:', { body: req.body, params: req.params });
         const usuarioLogadoId = req.user.id; 
         const { cnpjId } = req.params; 
         const { usuarioId, papel } = req.body; 

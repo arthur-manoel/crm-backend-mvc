@@ -56,6 +56,7 @@ import enderecoRef from "./modules/endereco/enderecoRouters.js";
 import linkRef from "./modules/link/linkRoutes.js";
 import dashboardRef from "./modules/dashboard/dashboardRoutes.js";
 import processoRef from "./modules/processo/processoRouter.js";
+import uploadRef from "./modules/upload/uploadRoute.js";
 
 app.use("/", authRef);
 app.use("/", usuarioRef);
@@ -69,5 +70,6 @@ app.use("/", enderecoRef);
 app.use("/", linkRef);
 app.use("/", dashboardRef);
 app.use("/", processoRef);
+app.use("/", uploadRef);
 
 export default app;

@@ -53,7 +53,7 @@ const uploadArquivos = async (req, res, next) => {
 
     const bucket = process.env.R2_BUCKET_NAME;
     const prefix = process.env.UPLOAD_PREFIX || "uploads";
-
+    
     // Gera um nome único (mantenha a extensão original se souber)
     const original = req.file.originalname || "arquivo.bin";
     const ext = original.includes(".") ? original.split(".").pop() : "";
@@ -90,7 +90,7 @@ const uploadArquivos = async (req, res, next) => {
       publicUrl,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: "Erro interno" });
   }
 };
 
@@ -153,6 +153,7 @@ const inserirDocumentoComLink = async (req, res, next) => {
 };
 
 
+//já existe 
 const criarLink = async (req, res) => {
   const { link, id_cliente, id_cnpj, id_tipo_processo } = req.body;
   const cnae_id = 3282; // CNAE fixado como 3282
