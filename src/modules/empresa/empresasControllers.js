@@ -41,6 +41,26 @@ const empresas = async (req, res) => {
     }
 }
 
+const companyActivity = async (req, res) => {
+
+    try {
+        
+        const { cnpjId } = req.params;
+
+        const atividades = await empresaService.companyActivity(cnpjId);
+
+        return res.status(200).json({ atividades });
+
+    } catch (error) {
+
+        if (error instanceof NotFoundError) {
+            return res.status(error.status).json({ error: error.message });
+        }
+
+        return res.status(500).json({ error: error.message });
+    }
+}
+
 const atualizarEmpresa = async (req, res) => {
 
     try {
@@ -84,4 +104,4 @@ const excluirEmpresa = async (req, res) => {
     }
 }
 
-export { cadastroEmpresa, empresas, atualizarEmpresa, excluirEmpresa };
+export { cadastroEmpresa, empresas, companyActivity, atualizarEmpresa, excluirEmpresa };

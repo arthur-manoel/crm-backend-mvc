@@ -58,6 +58,17 @@ export const empresaService = {
         return vinculos;
     },
 
+    async companyActivity(cnpjId) {
+
+        const activitys = await empresaModel.companyActivity(cnpjId);
+
+        if (activitys.length === 0) {
+            throw new NotFoundError("Atividade da empresa não encontrada");
+        }
+
+        return activitys;
+    },
+
     async atualizarEmpresa(dados) {
 
         const { nome, descricao_atividade, cnpjId } = dados;

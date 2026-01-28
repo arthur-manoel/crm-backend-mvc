@@ -45,6 +45,26 @@ export const empresaModel = {
         return rows[0] || null;
     },
 
+    async companyActivity(cnpjId) {
+
+        const sql = `
+        SELECT 
+            cnpj.nome AS company,
+            cnae.nome AS cnae
+        FROM cnpj
+        INNER JOIN cnpj_cnae 
+            ON cnpj.id_cnpj = cnpj_cnae.cnpj_id
+        INNER JOIN cnae 
+            ON cnpj_cnae.cnae_id = cnae.id_cnae
+        WHERE cnpj.id_cnpj = ?; 
+        `;
+
+        const [rows] = await db.execute(sql, [cnpjId]);
+
+        return rows;
+
+    },
+
     async atualizarEmpresa(dados) {
 
         const { nome, descricao_atividade, cnpjId } = dados;
