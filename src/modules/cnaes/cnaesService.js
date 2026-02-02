@@ -1,6 +1,6 @@
 import { DomainError } from "../../errors/DomainError.js";
 import { cnaesModel } from "./cnaesModel.js"
-import { empresaService } from "../empresa/empresaService.js";
+import { companyService } from "../company/companyService.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 
 export const cnaesService = {
@@ -27,7 +27,7 @@ export const cnaesService = {
             throw new DomainError("Vinculo já estabelecido");
          }
          
-         const existeEmpresa = await empresaService.validarExistenciaEmpresa(cnpjId);
+         const existeEmpresa = await companyService.validateCompanyExists(cnpjId);
          
          if (!existeEmpresa) {
              throw new NotFoundError("Empresa não encontrada");

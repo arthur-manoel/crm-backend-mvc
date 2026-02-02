@@ -5,19 +5,19 @@ const login = async (req, res) => {
 
   try {
 
-    const { email, senha } = req.body;
+    const { email, password } = req.body;
 
-    const result = await authService.login(email, senha);
+    const result = await authService.login(email, password);
 
     res.status(200).json(result);
 
   } catch (error) {
 
     if (error instanceof DomainError) {
-    return res.status(401).json({ error: "Email ou senha inválidos" });
+    return res.status(401).json({ error: "Invalid email or password" });
     }
 
-    return res.status(500).json({ error: "Erro interno" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

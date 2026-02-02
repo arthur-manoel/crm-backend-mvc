@@ -1,5 +1,0 @@
-export const PAPEL_HIERARQUIA = {
-  ADMIN: 3,
-  OPERADOR: 2,
-  VISUALIZADOR: 1
-};

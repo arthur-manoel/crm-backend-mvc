@@ -3,7 +3,7 @@ import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateParams } from "../../middlewares/validateParams.js";
 import { validateQuery } from "../../middlewares/validateQuery.js";
 import { validateBody } from "../../middlewares/validateBody.js";
-import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
+import { authorizeByCompany } from "../../middlewares/authorizeByCompany.js";
 import { documentosSolicitados, listarDocumentos, tipsoDocumentos } from "./documentosControllers.js";
 
 import { 
@@ -20,7 +20,7 @@ router.get(
   verifyToken,
   validateParams(documentosParamsSchema),
   validateQuery(documentosQuerySchema),
-  autorizarPorCnpj("VISUALIZADOR"),
+  authorizeByCompany("VIEWER"),
   listarDocumentos
 );
 

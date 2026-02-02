@@ -5,10 +5,11 @@ dotenv.config();
 const SECRET = process.env.SECRET;
 
 if (!SECRET) {
-    throw new Error("O secret/variável de ambiente obrigatório 'SECRET' não foi definido.")
+    throw new Error("Required environment variable 'SECRET' is not defined.");
 }
 
-export function gerarToken(payload) {
+// Generate a JWT for the given payload. Token expiration: 30 days.
+export function generateToken(payload) {
     
     return jwt.sign(payload, SECRET, {
         expiresIn: "30d"

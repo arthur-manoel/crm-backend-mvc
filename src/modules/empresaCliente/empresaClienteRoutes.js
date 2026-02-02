@@ -3,7 +3,7 @@ import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 import { idSchema, cadastrarEmpresaClienteSchema, atualizarEmpresaClienteBodySchema, vinculoEmpresaClienteParamsSchema } from "./empresaCliente.schema.js";
 import { validateParams } from "../../middlewares/validateParams.js";
-import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
+import { authorizeByCompany } from "../../middlewares/authorizeByCompany.js";
 
 import {
     atualizarEmpresaCliente,
@@ -25,7 +25,7 @@ router.post(
   "/empresaCliente/:clienteId/:cnpjId",
   verifyToken,
   validateParams(cadastrarEmpresaClienteSchema),
-  autorizarPorCnpj("ADMIN"),
+  authorizeByCompany("ADMIN"),
   cadastrarEmpresaCliente
 );
 
@@ -33,7 +33,7 @@ router.put(
   "/empresaCliente/:idVinculo/:cnpjId",
   verifyToken,
   validateParams(vinculoEmpresaClienteParamsSchema),
-  autorizarPorCnpj("ADMIN"),
+  authorizeByCompany("ADMIN"),
   validateBody(atualizarEmpresaClienteBodySchema),
   atualizarEmpresaCliente
 );
@@ -42,7 +42,7 @@ router.delete(
   "/empresaCliente/:idVinculo/:cnpjId",
   verifyToken,
   validateParams(vinculoEmpresaClienteParamsSchema),
-  autorizarPorCnpj("ADMIN"),
+  authorizeByCompany("ADMIN"),
   excluirVinculoClienteEmpresa
 );
 

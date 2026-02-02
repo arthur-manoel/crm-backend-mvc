@@ -1,30 +1,31 @@
 import { authModel } from "./authModel.js";
 import bcrypt from "bcrypt";
-import { gerarToken } from "./tokenService.js";
+import { generateToken } from "./tokenService.js";
 import { DomainError } from "../../errors/DomainError.js";
 
-const FAKE_HASH = "$2b$10$CwTycUXWue0Thq9StjUM0uJ8kF9E8Z4eQ1lZ9Ff8n3Z1nQGzKp6a";
+// Fake hash used to prevent user enumeration via timing attacks.
+// Ensures bcrypt comparison always runs, even when the email does not exist.
 
 export const authService = {
 
-    async login(emailInput, senha) {
+    async login(emailInput, password) {
 
         
-        const usuario = await authModel.buscarPorEmail(emailInput);
+        const user = await authModel.findByEmail(emailInput);
 
-        const hashParaComparar = usuario ? usuario.senha : FAKE_HASH;
-        const senhaCorreta = await bcrypt.compare(senha, hashParaComparar);
+        const hashToCompare = user ? user.password : FAKE_PASSWORD_HASH;
+        const isPasswordCorrect = await bcrypt.compare(password, hashToCompare);
 
-        if (!usuario || !senhaCorreta) {
-            throw new DomainError("Falha de autenticação", 401);
+        if (!user || !isPasswordCorrect) {
+            throw new DomainError("Authentication failed", 401);
         }
 
-        const { id, email, role, nome } = usuario;
+        const { id, email, role, name } = user;
 
         const payload = { id, role };
 
-        const token = gerarToken(payload);
+        const token = generateToken(payload);
 
-        return { token, user: { id, nome, email, role } };
+        return { token, user: { id, name, email, role } };
     }
 }

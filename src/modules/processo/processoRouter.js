@@ -2,7 +2,7 @@ import express from "express";
 
 import { validateParams } from "../../middlewares/validateParams.js";
 import { validateBody } from "../../middlewares/validateBody.js";
-import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
+import { authorizeByCompany } from "../../middlewares/authorizeByCompany.js";
 import { cnpjIdParamsSchema, createProcessParamsSchema, idProcessQuerySchema } from "./processo.schema.js";
 import { createProcessBodySchema } from "./processo.schema.js";
 import { verifyToken } from "../../middlewares/tokenVerify.js";
@@ -17,7 +17,7 @@ router.get(
     verifyToken,
     validateParams(cnpjIdParamsSchema),
     validateQuery(idProcessQuerySchema),
-    autorizarPorCnpj("VISUALIZADOR"),
+    authorizeByCompany("VIEWER"),
     allProcessByCnpj
 )
 
@@ -26,7 +26,7 @@ router.post(
     verifyToken,
     validateParams(createProcessParamsSchema),
     validateBody(createProcessBodySchema),
-    autorizarPorCnpj("OPERADOR"),
+    authorizeByCompany("EDITOR"),
     createProcess
 );
 

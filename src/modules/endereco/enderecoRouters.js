@@ -3,7 +3,7 @@ import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateParams } from "../../middlewares/validateParams.js";
 import { enderecoBodySchema, enderecoParamsSchema, enderecoIdParamsSchema, enderecoIdsSchema, enderecoPatchSchema, deleteEnderecoSchema } from "./endereco.schema.js";
 import { validateBody } from "../../middlewares/validateBody.js";
-import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
+import { authorizeByCompany } from "../../middlewares/authorizeByCompany.js";
 import { atualizarEndereco, buscarEndereco, criarEndereco, deletarEndereco } from "./enderecoControllers.js";
 
 const router = express.Router();
@@ -20,7 +20,7 @@ router.post(
     verifyToken,
     validateParams(enderecoParamsSchema),
     validateBody(enderecoBodySchema),
-    autorizarPorCnpj("ADMIN"),
+    authorizeByCompany("ADMIN"),
     criarEndereco
 );
 
@@ -29,7 +29,7 @@ router.patch(
     verifyToken,
     validateParams(enderecoIdsSchema),
     validateBody(enderecoPatchSchema),
-    autorizarPorCnpj("ADMIN"),
+    authorizeByCompany("ADMIN"),
     atualizarEndereco
 );
 
@@ -37,7 +37,7 @@ router.delete(
     "/endereco/:idEndereco/cliente/:clienteId/empresa/:cnpjId",
     verifyToken,
     validateParams(deleteEnderecoSchema),
-    autorizarPorCnpj("ADMIN"),
+    authorizeByCompany("ADMIN"),
     deletarEndereco
 );
 

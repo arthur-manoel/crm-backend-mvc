@@ -1,7 +1,7 @@
 import { empresaUsuarioModel } from './empresaUsuarioModel.js';
 import { AuthorizationError } from '../../errors/AuthorizationError.js';
 import { DomainError } from '../../errors/DomainError.js';
-import { PAPEL_HIERARQUIA } from '../../constants/papeisCnpj.js';
+import { ROLE_HIERARCHY } from '../../constants/RoleHierarchy.js';
 
 export const empresaUsuarioService = {
 
@@ -31,14 +31,14 @@ export const empresaUsuarioService = {
 
   async UpdateCompanyLink({ usuarioLogadoId, idVinculo, usuarioId, cnpjId, papel }) {
 
-    if (!PAPEL_HIERARQUIA[papel]) {
+    if (!ROLE_HIERARCHY[papel]) {
         throw new DomainError(
-            `Papel '${papel}' é inválido. Escolha entre: ${Object.keys(PAPEL_HIERARQUIA).join(', ')}`
+            `Papel '${papel}' é inválido. Escolha entre: ${Object.keys(ROLE_HIERARCHY).join(', ')}`
         );
     }
 
     const authorizeCompanyLink = await empresaUsuarioModel.buscarPapel(usuarioLogadoId, cnpjId);
-    if (!authorizeCompanyLink || PAPEL_HIERARQUIA[authorizeCompanyLink.papel] < PAPEL_HIERARQUIA['ADMIN']) {
+    if (!authorizeCompanyLink || ROLE_HIERARCHY[authorizeCompanyLink.papel] < ROLE_HIERARCHY['ADMIN']) {
         throw new AuthorizationError("Você não tem permissão para alterar este vínculo");
     }
 

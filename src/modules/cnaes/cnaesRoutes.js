@@ -4,7 +4,7 @@ import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 import { validateParams } from "../../middlewares/validateParams.js";
 import { vinculoParamsSchema, cnaeIdSchema, cnaeVinculoSchema } from "./cnaes.schema.js";
-import { autorizarPorCnpj } from "../../middlewares/autorizarPorCnpj.js";
+import { authorizeByCompany } from "../../middlewares/authorizeByCompany.js";
 
 const router = express.Router();
 
@@ -14,7 +14,7 @@ router.post(
     "/cnaes/:cnaeId/:cnpjId", 
     verifyToken, 
     validateParams(cnaeVinculoSchema), 
-    autorizarPorCnpj("ADMIN"), 
+    authorizeByCompany("ADMIN"), 
     criarVinculo
 )
 
@@ -23,7 +23,7 @@ router.put(
     verifyToken,
     validateParams(vinculoParamsSchema),
     validateBody(cnaeIdSchema),
-    autorizarPorCnpj("ADMIN"),
+    authorizeByCompany("ADMIN"),
     atualizarVinculo
 )
 
@@ -31,7 +31,7 @@ router.delete(
     "/cnaes/:idVinculo/:cnpjId",
     verifyToken,
     validateParams(vinculoParamsSchema),
-    autorizarPorCnpj("ADMIN"),
+    authorizeByCompany("ADMIN"),
     excluirVinculo
 )
 

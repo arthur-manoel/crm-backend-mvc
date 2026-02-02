@@ -1,8 +1,8 @@
 import { empresaUsuarioModel } from '../modules/empresaUsuario/empresaUsuarioModel.js';
 import { AuthorizationError } from '../errors/AuthorizationError.js';
-import { PAPEL_HIERARQUIA } from '../constants/papeisCnpj.js';
+import { ROLE_HIERARCHY } from '../constants/RoleHierarchy.js';
 
-export function autorizarPorCnpj(papelMinimo) {
+export function authorizeByCompany(papelMinimo) {
 
   return async (req, res, next) => {
 
@@ -11,9 +11,9 @@ export function autorizarPorCnpj(papelMinimo) {
       const usuarioId = req.user.id;
       const { cnpjId } = req.params;
       
-      if (!PAPEL_HIERARQUIA[papelMinimo]) {
+      if (!ROLE_HIERARCHY[papelMinimo]) {
         throw new Error('Papel mínimo inválido');
-      }
+      } 
       
       if (!cnpjId) {
         throw new AuthorizationError();
@@ -25,7 +25,7 @@ export function autorizarPorCnpj(papelMinimo) {
         throw new AuthorizationError();
       }
 
-      if (PAPEL_HIERARQUIA[vinculo.papel] < PAPEL_HIERARQUIA[papelMinimo]) {
+      if (ROLE_HIERARCHY[vinculo.papel] < ROLE_HIERARCHY[papelMinimo]) {
         throw new AuthorizationError();
       }
 

@@ -1,7 +1,7 @@
 import { DomainError } from "../../errors/DomainError.js";
 import  { empresaClienteModel } from "./empresaClienteModel.js";
-import { empresaService } from "../empresa/empresaService.js";
-import { clienteService } from "../cliente/clienteService.js";
+import { companyService } from "../company/companyService.js";
+import { clientService } from "../client/clientService.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 import { processoModel } from "../processo/processoModel.js";
 import db from "../../database/db.js";
@@ -22,8 +22,8 @@ export const empresaClienteService = {
 
     async cadastrarEmpresaCliente(clienteId, cnpjId) {
 
-        await empresaService.validarExistenciaEmpresa(cnpjId);
-        await clienteService.validarExistenciaCliente(clienteId);
+        await companyService.validateCompanyExists(cnpjId);
+        await clientService.validarExistenciaCliente(clienteId);
     
         const empresaVinculos = await empresaClienteModel.buscarVinculoEmpresa(clienteId, cnpjId);
 
@@ -39,9 +39,9 @@ export const empresaClienteService = {
     async atualizarEmpresaCliente(idVinculo, clienteId, cnpjId) {
 
         
-        await empresaService.validarExistenciaEmpresa(cnpjId);
+        await companyService.validateCompanyExists(cnpjId);
 
-        await clienteService.validarExistenciaCliente(clienteId);
+        await clientService.validarExistenciaCliente(clienteId);
 
         const empresaVinculos = await empresaClienteModel.buscarVinculoEmpresa(idVinculo);
 
