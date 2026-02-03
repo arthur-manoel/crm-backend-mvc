@@ -25,4 +25,5 @@ router.delete(
   verifyToken,
   deleteEmpresaUsuario
 );
+
 export default router;

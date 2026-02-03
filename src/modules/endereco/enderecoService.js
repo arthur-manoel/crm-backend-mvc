@@ -1,6 +1,6 @@
 import { DomainError } from "../../errors/DomainError.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
-import { empresaClienteModel } from "../empresaCliente/empresaClienteModel.js";
+import { companyClientModel } from "../companyClient/companyClientModel.js";
 import { enderecoModel } from "./enderecoModel.js"
 
 export const enderecoService = {
@@ -37,7 +37,7 @@ export const enderecoService = {
 
      async atualizarEndereco(clienteId, cnpjId, idEndereco, dados) {
 
-        const vinculo = await empresaClienteModel.buscarPorClienteECnpj(clienteId, cnpjId);
+        const vinculo = await companyClientModel.findByClientAndCompany(clienteId, cnpjId);
 
         if (!vinculo) {
             throw new DomainError("Empresa não possui vínculo com cliente");
@@ -99,7 +99,7 @@ export const enderecoService = {
 
     async deletarEndereco(clienteId, cnpjId, idEndereco) {
 
-        const vinculo = await empresaClienteModel.buscarPorClienteECnpj(clienteId, cnpjId);
+        const vinculo = await companyClientModel.findByClientAndCompany(clienteId, cnpjId);
 
         if (!vinculo) {
             throw new DomainError("Empresa não possui vínculo com cliente");

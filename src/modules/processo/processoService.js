@@ -1,5 +1,5 @@
 import { DomainError } from "../../errors/DomainError.js";
-import { empresaClienteModel } from "../empresaCliente/empresaClienteModel.js";
+import { companyClientModel } from "../companyClient/companyClientModel.js";
 import { processoModel } from "./processoModel.js";
 import db from "../../database/db.js";
 
@@ -16,7 +16,7 @@ export const processoService = {
         
         try {
             
-            const existsCompany = await empresaClienteModel.buscarPorClienteECnpj(clienteId, cnpjId);
+            const existsCompany = await companyClientModel.findByClientAndCompany(clienteId, cnpjId);
 
             if (!existsCompany) {
                 throw new DomainError("A empresa não está vinculada ao cliente");

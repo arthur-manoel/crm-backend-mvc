@@ -1,31 +1,33 @@
+
+// TEMP: domain not refactored yet
 import { empresaUsuarioModel } from '../modules/empresaUsuario/empresaUsuarioModel.js';
 import { AuthorizationError } from '../errors/AuthorizationError.js';
 import { ROLE_HIERARCHY } from '../constants/RoleHierarchy.js';
 
-export function authorizeByCompany(papelMinimo) {
+export function authorizeByCompany(minimumRole) {
 
   return async (req, res, next) => {
 
     try {
-  
-      const usuarioId = req.user.id;
-      const { cnpjId } = req.params;
-      
-      if (!ROLE_HIERARCHY[papelMinimo]) {
-        throw new Error('Papel mínimo inválido');
-      } 
-      
-      if (!cnpjId) {
-        throw new AuthorizationError();
+
+      const userId = req.user.id;
+      const { companyId } = req.params;
+
+      if (!ROLE_HIERARCHY[minimumRole]) {
+        throw new Error('Invalid minimum role');
       }
-      
-      const vinculo = await empresaUsuarioModel.buscarPapel(usuarioId, cnpjId);
-      
-      if (!vinculo) {
+
+      if (!companyId) {
         throw new AuthorizationError();
       }
 
-      if (ROLE_HIERARCHY[vinculo.papel] < ROLE_HIERARCHY[papelMinimo]) {
+      const companyUser = await empresaUsuarioModel.buscarPapel(userId, companyId);
+
+      if (!companyUser) {
+        throw new AuthorizationError();
+      }
+
+      if (ROLE_HIERARCHY[companyUser.role] < ROLE_HIERARCHY[minimumRole]) {
         throw new AuthorizationError();
       }
 

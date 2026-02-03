@@ -17,9 +17,9 @@ export const empresaUsuarioModel = {
   async buscarPapel(usuarioId, cnpjId) {
 
     const sql = `
-      SELECT papel
-      FROM cnpj_usuario
-      WHERE usuario_id = ? AND cnpj_id = ?
+      SELECT role
+      FROM company_users
+      WHERE user_id = ? AND company_id = ?
     `;
 
     const [rows] = await db.execute(sql, [usuarioId, cnpjId]);

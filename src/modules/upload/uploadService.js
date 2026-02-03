@@ -1,7 +1,7 @@
 import { DomainError } from "../../errors/DomainError.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 import { uploadModel } from "./uploadModel.js";
-import { empresaClienteModel } from "../empresaCliente/empresaClienteModel.js";
+import { companyClientModel } from "../companyClient/companyClientModel.js";
 import { r2Client } from "../../r2.js";
 import { v4 as uuid } from "uuid";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
@@ -16,7 +16,7 @@ export const uploadService = {
   }) {
 
     const vinculo =
-      await empresaClienteModel.buscarVinculoEmpresa(empresaClienteId);
+      await companyClientModel.findLinkById(empresaClienteId); 
 
     if (!vinculo) {
       throw new NotFoundError("Vinculo empresa-cliente não encontrado.");
