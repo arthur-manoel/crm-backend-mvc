@@ -49,7 +49,7 @@ import usuarioRef from "./modules/usuario/usuarioRoutes.js";
 import clienteRef from "./modules/client/clientRoutes.js";
 import empresaRef from "./modules/company/companyRoutes.js"
 import empresaClienteRef from "./modules/companyClient/companyClientRoutes.js";
-import empresaUsuarioRef from "./modules/empresaUsuario/empresaUsuarioRouter.js";
+import companyUser from "./modules/companyUser/companyUserRoutes.js";
 import cnaeRef from "./modules/cnaes/cnaesRoutes.js";
 import documentosRef from "./modules/documentos/documentosRoutes.js";
 import enderecoRef from "./modules/endereco/enderecoRouters.js";
@@ -63,7 +63,7 @@ app.use("/", usuarioRef);
 app.use("/", clienteRef);
 app.use("/", empresaRef);
 app.use("/", empresaClienteRef);
-app.use("/", empresaUsuarioRef)
+app.use("/", companyUser);
 app.use("/", cnaeRef);
 app.use("/", documentosRef);
 app.use("/", enderecoRef);

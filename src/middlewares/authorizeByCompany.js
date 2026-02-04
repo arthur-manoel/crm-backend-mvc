@@ -1,6 +1,6 @@
 
 // TEMP: domain not refactored yet
-import { empresaUsuarioModel } from '../modules/empresaUsuario/empresaUsuarioModel.js';
+import { companyUserModel } from '../modules/companyUser/companyUserModel.js';
 import { AuthorizationError } from '../errors/AuthorizationError.js';
 import { ROLE_HIERARCHY } from '../constants/RoleHierarchy.js';
 
@@ -21,7 +21,7 @@ export function authorizeByCompany(minimumRole) {
         throw new AuthorizationError();
       }
 
-      const companyUser = await empresaUsuarioModel.buscarPapel(userId, companyId);
+      const companyUser = await companyUserModel.findRole(userId, companyId);
 
       if (!companyUser) {
         throw new AuthorizationError();

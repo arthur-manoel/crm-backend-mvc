@@ -1,20 +1,19 @@
 import db from "../../database/db.js";
 
-export const empresaUsuarioModel = {
+export const companyUserModel = {
 
-  async criarVinculo({ usuarioId, cnpjId, papel }) {
+  async createLink({ userId, companyId, role }) {
 
     const sql = `
-      INSERT INTO cnpj_usuario (usuario_id, cnpj_id, papel)
+      INSERT INTO company_users (user_id, company_id, role)
       VALUES (?, ?, ?)
     `;
 
-    const [result] = await db.execute(sql, [usuarioId, cnpjId, papel]);
+    const [result] = await db.execute(sql, [userId, companyId, role]);
     return result.insertId;
-
   },
 
-  async buscarPapel(usuarioId, cnpjId) {
+  async findRole(userId, companyId) {
 
     const sql = `
       SELECT role
@@ -22,15 +21,15 @@ export const empresaUsuarioModel = {
       WHERE user_id = ? AND company_id = ?
     `;
 
-    const [rows] = await db.execute(sql, [usuarioId, cnpjId]);
+    const [rows] = await db.execute(sql, [userId, companyId]);
     return rows[0] || null;
-
   },
+
   async findLinkById(id) {
 
     const sql = `
       SELECT *
-      FROM cnpj_usuario
+      FROM company_users
       WHERE id = ?
     `;
 
@@ -38,35 +37,38 @@ export const empresaUsuarioModel = {
     return rows[0] || null;
   },
 
-  async contarAdmins(cnpjId) {
+  async countAdmins(companyId) {
+
     const sql = `
       SELECT COUNT(*) AS total
-      FROM cnpj_usuario
-      WHERE cnpj_id = ? AND papel = 'ADMIN'
+      FROM company_users
+      WHERE company_id = ? AND role = 'ADMIN'
     `;
-    const [rows] = await db.execute(sql, [cnpjId]);
+
+    const [rows] = await db.execute(sql, [companyId]);
     return rows[0].total;
   },
 
-  async updateVinculo(id, papel) {
+  async updateRole(id, role) {
+
     const sql = `
-      UPDATE cnpj_usuario
-      SET papel = ?
+      UPDATE company_users
+      SET role = ?
       WHERE id = ?
     `;
-    const [rows] = await db.execute(sql, [papel, id]);
+
+    const [rows] = await db.execute(sql, [role, id]);
     return rows.affectedRows;
   },
 
-  async deleteVinculo(id) {
+  async deleteLink(id) {
 
     const sql = `
-      DELETE FROM cnpj_usuario
+      DELETE FROM company_users
       WHERE id = ?
     `;
 
     const [rows] = await db.execute(sql, [id]);
-
     return rows.affectedRows;
   }
 };
