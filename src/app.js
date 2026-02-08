@@ -55,7 +55,7 @@ import documentosRef from "./modules/documentos/documentosRoutes.js";
 import enderecoRef from "./modules/endereco/enderecoRouters.js";
 import linkRef from "./modules/link/linkRoutes.js";
 import dashboardRef from "./modules/dashboard/dashboardRoutes.js";
-import processoRef from "./modules/processo/processoRouter.js";
+import processoRef from "./modules/process/processRouter.js";
 import uploadRef from "./modules/upload/uploadRoute.js";
 
 app.use("/", authRef);
