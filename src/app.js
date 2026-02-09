@@ -52,7 +52,7 @@ import empresaClienteRef from "./modules/companyClient/companyClientRoutes.js";
 import companyUser from "./modules/companyUser/companyUserRoutes.js";
 import cnaeRef from "./modules/cnaes/cnaesRoutes.js";
 import documentosRef from "./modules/documentos/documentosRoutes.js";
-import enderecoRef from "./modules/endereco/enderecoRouters.js";
+import enderecoRef from "./modules/address/addressRouters.js";
 import linkRef from "./modules/link/linkRoutes.js";
 import dashboardRef from "./modules/dashboard/dashboardRoutes.js";
 import processoRef from "./modules/process/processRouter.js";

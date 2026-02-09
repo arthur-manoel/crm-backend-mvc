@@ -2,7 +2,7 @@ import { DomainError } from "../../errors/DomainError.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 import { companyClientService } from "./companyClientService.js";
 
-export const listClientCompanies = async (req, res) => {
+const listClientCompanies = async (req, res) => {
 
   try {
     const { id } = req.params;
@@ -20,7 +20,7 @@ export const listClientCompanies = async (req, res) => {
   }
 };
 
-export const createCompanyClient = async (req, res) => {
+const createCompanyClient = async (req, res) => {
 
   try {
 
@@ -36,12 +36,12 @@ export const createCompanyClient = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
     
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
 
   }
 };
 
-export const updateCompanyClient = async (req, res) => {
+const updateCompanyClient = async (req, res) => {
 
   try {
 
@@ -58,12 +58,12 @@ export const updateCompanyClient = async (req, res) => {
 
       return res.status(error.status).json({ error: error.message });
     }
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
 
   }
 };
 
-export const deleteCompanyClient = async (req, res) => {
+const deleteCompanyClient = async (req, res) => {
 
   try {
 
@@ -78,6 +78,8 @@ export const deleteCompanyClient = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export { listClientCompanies, createCompanyClient, updateCompanyClient, deleteCompanyClient };

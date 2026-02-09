@@ -1,7 +1,7 @@
 import { DomainError } from "../../errors/DomainError.js";
 import { processService } from "./processService.js";
 
-export const createProcess = async (req, res) => {
+const createProcess = async (req, res) => {
 
   try {
     const { clientId, companyId } = req.params;
@@ -28,7 +28,7 @@ export const createProcess = async (req, res) => {
   }
 };
 
-export const getProcessesByCompany = async (req, res) => {
+const getProcessesByCompany = async (req, res) => {
   try {
     
     const { companyId } = req.params;
@@ -45,3 +45,5 @@ export const getProcessesByCompany = async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export { createProcess, getProcessesByCompany };
