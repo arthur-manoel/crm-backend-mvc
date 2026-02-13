@@ -51,7 +51,7 @@ import empresaRef from "./modules/company/companyRoutes.js"
 import empresaClienteRef from "./modules/companyClient/companyClientRoutes.js";
 import companyUser from "./modules/companyUser/companyUserRoutes.js";
 import cnaeRef from "./modules/cnaes/cnaesRoutes.js";
-import documentosRef from "./modules/documentos/documentosRoutes.js";
+import documentosRef from "./modules/documents/documentsRoutes.js";
 import enderecoRef from "./modules/address/addressRouters.js";
 import linkRef from "./modules/link/linkRoutes.js";
 import dashboardRef from "./modules/dashboard/dashboardRoutes.js";

@@ -7,7 +7,7 @@ export const cnaesModel = {
         if (!codigosArray.length) return { invalidos: [] };
         
         const placeholders = codigosArray.map(() => "?").join(",");
-        const sql = `SELECT numero FROM cnae WHERE numero IN (${placeholders})`;
+        const sql = `SELECT numero FROM cnaes WHERE numero IN (${placeholders})`;
             
         const [rows] = await db.execute(sql, codigosArray);
 
@@ -20,7 +20,7 @@ export const cnaesModel = {
     async cnaes(codigosArray, descricao, limite, offset) {
 
         let params = []
-        let sql = "SELECT * FROM cnae WHERE 1=1";
+        let sql = "SELECT * FROM cnaes WHERE 1=1";
 
         if (codigosArray.length) {
 

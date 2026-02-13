@@ -1,11 +1,11 @@
 import z from "zod";
 
-export const documentosParamsSchema = z.object({
-  cnpjId: z.coerce.number().int().positive(),
+export const documentsParamsSchema = z.object({
+  clientCompanyId: z.coerce.number().int().positive(),
 });
 
-export const documentosQuerySchema = z.object({
-  tipoDocumentoId: z.preprocess(
+export const documentsQuerySchema = z.object({
+  documentTypeId: z.preprocess(
     (v) => {
       if (v === undefined || v === "") return undefined;
       return v;
@@ -14,6 +14,6 @@ export const documentosQuerySchema = z.object({
   )
 });
 
-export const documentosSolicitadosSchema = z.object({
+export const requestedDocumentsSchema = z.object({
   ids: z.array(z.coerce.number().int().positive()).min(1)
 });
