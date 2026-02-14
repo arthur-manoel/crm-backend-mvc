@@ -1,101 +1,90 @@
 import { DomainError } from "../../errors/DomainError.js";
-import { cnaesModel } from "./cnaesModel.js"
-import { companyService } from "../company/companyService.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
+import { cnaeModel } from "./cnaesModel.js";
+import { companyService } from "../company/companyService.js";
 
-export const cnaesService = {
+export const cnaeService = {
 
-    async cnaes(codigosArray, descricao, limite, offset) {
+  async list(codes, description, limit, offset) {
 
-        const { invalidos } = await cnaesModel.validarCodigos(codigosArray);
+    const { invalidCodes } = await cnaeModel.validateCodes(codes);
 
-        if (invalidos.length > 0) {
-            throw new DomainError("Código inválido");
-        }
-
-        const cnaes = await cnaesModel.cnaes(codigosArray, descricao, limite, offset);
-
-        return cnaes;
-
-    },
-
-    async criarVinculoCnaeCnpj(cnaeId, cnpjId) {
-
-        const vinculo = await cnaesModel.buscarVinculoPorId(cnaeId, cnpjId);
-
-        if (vinculo) {
-            throw new DomainError("Vinculo já estabelecido");
-         }
-         
-         const existeEmpresa = await companyService.validateCompanyExists(cnpjId);
-         
-         if (!existeEmpresa) {
-             throw new NotFoundError("Empresa não encontrada");
-            }
-            
-            const existeCnae = await cnaesModel.buscarCnaePorId(cnaeId);
-        
-        if (!existeCnae) {
-            throw new NotFoundError("Cnae não encontrado");
-        }
-        
-        const novaEmpresa = await cnaesModel.criarVinculo(cnaeId, cnpjId);
-        
-        return {
-            id: novaEmpresa,
-            cnaeId,
-            cnpjId
-        };
-        
-    },
-    
-    async atualizarVinculo(idVinculo, cnaeId, cnpjId) {
-        
-        const vinculoAtual = await cnaesModel.buscarVinculo(idVinculo);
-
-        if (!vinculoAtual) {
-            throw new NotFoundError("Vinculo não encontrado")
-        }
-        
-        if (vinculoAtual.cnpj_id !== cnpjId) {
-            throw new DomainError("Vínculo não pertence a esta empresa");
-        }
-
-           const existeCnae = await cnaesModel.buscarCnaePorId(cnaeId);
-        
-        if (!existeCnae) {
-           throw new NotFoundError("Cnae não encontrado");
-        }
-
-        const duplicidade = await cnaesModel.buscarVinculoPorId(cnaeId, cnpjId, idVinculo);
-        
-        if (duplicidade) {
-            throw new DomainError("Vinculo já estabelecido");
-        }
-        
-
-        const affectedRows = await cnaesModel.atualizarVinculo(cnaeId, idVinculo);
-
-        return affectedRows;
-
-    },
-
-    async excluirVinculo(idVinculo, cnpjId) {
-
-        const vinculo = await cnaesModel.buscarVinculo(idVinculo);
-
-        if (!vinculo) {
-            throw new NotFoundError("Vinculo não encontradao");
-        }
-
-        if (vinculo.cnpj_id !== cnpjId) {
-            throw new DomainError("Vinculo não pertence a essa empresa")
-        }
-
-        const excluirVinculo = await cnaesModel.excluirVinculo(idVinculo);
-
-        return excluirVinculo;
-
+    if (invalidCodes.length > 0) {
+      throw new DomainError("Invalid CNAE code");
     }
-    
-}
+
+    return await cnaeModel.find(codes, description, limit, offset);
+  },
+
+  async createLink(cnaeId, companyId) {
+
+    const existingLink = await cnaeModel.findLink(cnaeId, companyId);
+
+    if (existingLink) {
+      throw new DomainError("Link already exists");
+    }
+
+    const companyExists = await companyService.validateCompanyExists(companyId);
+
+    if (!companyExists) {
+      throw new NotFoundError("Company not found");
+    }
+
+    const cnaeExists = await cnaeModel.findById(cnaeId);
+
+    if (!cnaeExists) {
+      throw new NotFoundError("CNAE not found");
+    }
+
+    const linkId = await cnaeModel.createLink(cnaeId, companyId);
+
+    return {
+      id: linkId,
+      cnaeId,
+      companyId
+    };
+  },
+
+  async updateLink(linkId, cnaeId, companyId) {
+
+    const currentLink = await cnaeModel.findLinkById(linkId);
+
+    if (!currentLink) {
+      throw new NotFoundError("Link not found");
+    }
+
+    if (currentLink.company_id !== companyId) {
+      throw new DomainError("Link does not belong to this company");
+    }
+
+    const cnaeExists = await cnaeModel.findById(cnaeId);
+
+    if (!cnaeExists) {
+      throw new NotFoundError("CNAE not found");
+    }
+
+    const duplicate = await cnaeModel.findLink(cnaeId, companyId, linkId);
+
+    if (duplicate) {
+      throw new DomainError("Link already exists");
+    }
+
+    await cnaeModel.updateLink(cnaeId, linkId);
+  },
+
+  async deleteLink(linkId, companyId) {
+
+    const link = await cnaeModel.findLinkById(linkId);
+
+    if (!link) {
+      throw new NotFoundError("Link not found");
+    }
+
+    if (link.company_id !== companyId) {
+      throw new DomainError("Link does not belong to this company");
+    }
+
+    await cnaeModel.deleteLink(linkId);
+  }
+
+};

@@ -1,38 +1,49 @@
 import express from "express";
-import { atualizarVinculo, criarVinculo, excluirVinculo, listarCnaes } from "./cnaesController.js";
 import { verifyToken } from "../../middlewares/tokenVerify.js";
-import { validateBody } from "../../middlewares/validateBody.js";
 import { validateParams } from "../../middlewares/validateParams.js";
-import { vinculoParamsSchema, cnaeIdSchema, cnaeVinculoSchema } from "./cnaes.schema.js";
+import { validateBody } from "../../middlewares/validateBody.js";
 import { authorizeByCompany } from "../../middlewares/authorizeByCompany.js";
+
+import {
+  listCnaes,
+  createCnaeLink,
+  updateCnaeLink,
+  deleteCnaeLink
+} from "./cnaesController.js";
+
+import {
+  cnaeLinkParamsSchema,
+  createCnaeLinkParamsSchema,
+  updateCnaeLinkBodySchema
+} from "./cnaes.schema.js";
 
 const router = express.Router();
 
-router.get("/cnaes", verifyToken, listarCnaes);
+router.get("/cnaes", verifyToken, listCnaes);
 
 router.post(
-    "/cnaes/:cnaeId/:cnpjId", 
-    verifyToken, 
-    validateParams(cnaeVinculoSchema), 
-    authorizeByCompany("ADMIN"), 
-    criarVinculo
-)
+  "/cnaes/:cnaeId/:companyId",
+  verifyToken,
+  validateParams(createCnaeLinkParamsSchema),
+  authorizeByCompany("ADMIN"),
+  createCnaeLink
+);
 
 router.put(
-    "/cnaes/:idVinculo/:cnpjId", 
-    verifyToken,
-    validateParams(vinculoParamsSchema),
-    validateBody(cnaeIdSchema),
-    authorizeByCompany("ADMIN"),
-    atualizarVinculo
-)
+  "/cnae-links/:linkId/:companyId",
+  verifyToken,
+  validateParams(cnaeLinkParamsSchema),
+  validateBody(updateCnaeLinkBodySchema),
+  authorizeByCompany("ADMIN"),
+  updateCnaeLink
+);
 
 router.delete(
-    "/cnaes/:idVinculo/:cnpjId",
-    verifyToken,
-    validateParams(vinculoParamsSchema),
-    authorizeByCompany("ADMIN"),
-    excluirVinculo
-)
+  "/cnae-links/:linkId/:companyId",
+  verifyToken,
+  validateParams(cnaeLinkParamsSchema),
+  authorizeByCompany("ADMIN"),
+  deleteCnaeLink
+);
 
 export default router;

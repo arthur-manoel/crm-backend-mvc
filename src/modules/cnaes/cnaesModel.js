@@ -1,115 +1,113 @@
 import db from "../../database/db.js";
 
-export const cnaesModel = {
+export const cnaeModel = {
 
-    async validarCodigos(codigosArray) {
-        
-        if (!codigosArray.length) return { invalidos: [] };
-        
-        const placeholders = codigosArray.map(() => "?").join(",");
-        const sql = `SELECT numero FROM cnaes WHERE numero IN (${placeholders})`;
-            
-        const [rows] = await db.execute(sql, codigosArray);
+  async validateCodes(codes) {
+    if (!codes || codes.length === 0) return { invalidCodes: [] };
 
-        const validos = rows.map(r => r.numero);
-        const invalidos = codigosArray.filter(c => !validos.includes(c));
+    const placeholders = codes.map(() => "?").join(",");
+    const sql = `SELECT code FROM cnaes WHERE code IN (${placeholders})`;
 
-        return { invalidos };
-    },
+    const [rows] = await db.execute(sql, codes);
 
-    async cnaes(codigosArray, descricao, limite, offset) {
+    const validCodes = rows.map(r => r.number);
+    const invalidCodes = codes.filter(c => !validCodes.includes(c));
 
-        let params = []
-        let sql = "SELECT * FROM cnaes WHERE 1=1";
+    return { invalidCodes };
+  },
 
-        if (codigosArray.length) {
+  async find(codes = [], description, limit, offset) {
+    let sql = "SELECT * FROM cnaes WHERE 1=1";
+    const params = [];
 
-            const placeholder = codigosArray.map(() => "?").join(",");
+    if (codes.length) {
+      const placeholders = codes.map(() => "?").join(",");
+      sql += ` AND code IN (${placeholders})`;
+      params.push(...codes);
+    }
 
-            sql += ` AND numero IN (${placeholder})`;
-            params.push(...codigosArray);
-        }
+    if (description) {
+      sql += " AND LOWER(name) LIKE ?";
+      params.push(`%${description.toLowerCase()}%`);
+    }
 
-        if (descricao) {
-            sql += " AND nome LIKE ?";
-            params.push(`%${descricao.toLowerCase()}%`);
-        }
+    if (limit !== undefined) {
+      sql += " LIMIT ?";
+      params.push(limit);
+    }
 
-        if (limite) {
-            sql += " LIMIT ?";
-            params.push(limite);
-        }
+    if (offset !== undefined) {
+      sql += " OFFSET ?";
+      params.push(offset);
+    }
 
-        if (offset) {
-            sql += " OFFSET ?";
-            params.push(offset);
-        }
+    const [rows] = await db.execute(sql, params);
+    return rows;
+  },
 
-        const [rows] = await db.execute(sql, params);
+  async findLinkById(linkId) {
+    const sql = `
+      SELECT id, company_id
+      FROM company_cnaes
+      WHERE id = ?
+    `;
 
-        return rows;
+    const [rows] = await db.execute(sql, [linkId]);
+    return rows[0] || null;
+  },
 
-    },
+  async findLink(cnaeId, companyId, ignoreId = null) {
+    let sql = `
+      SELECT id
+      FROM company_cnaes
+      WHERE cnae_id = ? AND company_id = ?
+    `;
+    const params = [cnaeId, companyId];
 
-    async buscarVinculo(idVinculo) {
+    if (ignoreId) {
+      sql += " AND id != ?";
+      params.push(ignoreId);
+    }
 
-        const [rows] = await db.execute("SELECT id_cnpj_cnae, cnpj_id FROM cnpj_cnae WHERE id_cnpj_cnae = ?", [idVinculo]);
+    const [rows] = await db.execute(sql, params);
+    return rows[0] || null;
+  },
 
-        return rows[0] || null;
-    },
+  async findById(cnaeId) {
+    const sql = "SELECT id FROM cnaes WHERE id = ?";
+    const [rows] = await db.execute(sql, [cnaeId]);
+    return rows[0] || null;
+  },
 
-    async buscarVinculoPorId(cnaeId, cnpjId, idIgnorar = null) {
+  async createLink(cnaeId, companyId) {
+    const sql = `
+      INSERT INTO company_cnaes (cnae_id, company_id)
+      VALUES (?, ?)
+    `;
 
-        let sql = "SELECT id_cnpj_cnae FROM cnpj_cnae WHERE cnae_id = ? AND cnpj_id = ?";
+    const [result] = await db.execute(sql, [cnaeId, companyId]);
+    return result.insertId;
+  },
 
-        const params = [cnaeId, cnpjId];
+  async updateLink(cnaeId, linkId) {
+    const sql = `
+      UPDATE company_cnaes
+      SET cnae_id = ?
+      WHERE id = ?
+    `;
 
-        if (idIgnorar) {
-            sql += " AND id_cnpj_cnae != ?";
-            params.push(idIgnorar);
-        }
-        
-        const [rows] = await db.execute(sql, params);
+    const [result] = await db.execute(sql, [cnaeId, linkId]);
+    return result.affectedRows;
+  },
 
-        return rows[0] || null;
-    },
+  async deleteLink(linkId) {
+    const sql = `
+      DELETE FROM company_cnaes
+      WHERE id = ?
+    `;
 
-    async buscarCnaePorId(cnaeId) {
+    const [result] = await db.execute(sql, [linkId]);
+    return result.affectedRows;
+  }
 
-        const sql = "SELECT id_cnae FROM cnae WHERE id_cnae = ?";
-
-        const [rows] = await db.execute(sql, [cnaeId]);
-
-        return rows[0] || null;
-    },
-
-    async criarVinculo(cnaeId, cnpjId) {
-
-        const sql = "INSERT INTO cnpj_cnae (cnae_id, cnpj_id) VALUES (?, ?)";
-
-        const [rows] = await db.execute(sql, [cnaeId, cnpjId]);
-
-        return rows.insertId;
-    },
-
-
-    async atualizarVinculo(cnaeId, idVinculo) {
-
-        const sql = "UPDATE cnpj_cnae SET cnae_id = ? WHERE id_cnpj_cnae = ?";
-
-        const [rows] = await db.execute(sql, [cnaeId, idVinculo]);
-
-        return rows.affectedRows;
-    },
-
-    async excluirVinculo(idVinculo) {
-
-        const sql = "DELETE FROM cnpj_cnae WHERE id_cnpj_cnae = ?";
-
-        const [rows] = await db.execute(sql, [idVinculo]);
-
-        return rows.affectedRows;
-    },
-
-    
-}
+};
