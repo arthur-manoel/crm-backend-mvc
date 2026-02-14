@@ -2,6 +2,30 @@ import db from "../../database/db.js";
 
 export const authModel = {
 
+      async create({ name, email, phone, hashedPassword, roleId }) {
+
+        const sql = `
+        INSERT INTO users (name, email, phone, password_hash, role_id)
+        VALUES (?, ?, ?, ?, ?)
+        `;
+
+        const [result] = await db.execute(sql, [
+        name,
+        email,
+        phone,
+        hashedPassword,
+        roleId
+        ]);
+
+        return {
+        id: result.insertId,
+        name,
+        email,
+        phone,
+        roleId
+        };
+    },
+
     async findByEmail(email) {
 
         const sql = `

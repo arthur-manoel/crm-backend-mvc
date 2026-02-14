@@ -21,4 +21,33 @@ const login = async (req, res) => {
   }
 };
 
-export { login };
+const createUser = async (req, res) => {
+
+  try {
+
+    const { name, email, phone, password, role } = req.body;
+
+    const newUser = await authService.create({
+      name,
+      email,
+      phone,
+      password,
+      role
+    });
+
+    return res.status(201).json({
+      message: "User created successfully",
+      user: newUser
+    });
+
+  } catch (error) {
+
+    if (error instanceof DomainError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export { login, createUser };

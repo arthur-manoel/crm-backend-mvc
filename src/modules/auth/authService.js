@@ -8,6 +8,28 @@ import { DomainError } from "../../errors/DomainError.js";
 
 export const authService = {
 
+    async create({ name, email, phone, password, role }) {
+
+        const existingUser = await authModel.findByEmail(email);
+
+        if (existingUser) {
+        throw new DomainError("Email already registered");
+        }
+
+        if (![1, 2].includes(role)) {
+        throw new DomainError("Invalid user role");
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        return await authModel.create({
+        name,
+        email,
+        phone,
+        hashedPassword,
+        roleId: role
+        });
+    },
     async login(emailInput, password) {
 
         

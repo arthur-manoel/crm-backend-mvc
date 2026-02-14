@@ -45,7 +45,7 @@ app.get("/", (req, res) => {
 
 //refatorados
 import authRef from "./modules/auth/authRoutes.js";
-import usuarioRef from "./modules/usuario/usuarioRoutes.js";
+import usuarioRef from "./modules/user/userRoutes.js";
 import clienteRef from "./modules/client/clientRoutes.js";
 import empresaRef from "./modules/company/companyRoutes.js"
 import empresaClienteRef from "./modules/companyClient/companyClientRoutes.js";
