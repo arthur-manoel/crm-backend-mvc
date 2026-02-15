@@ -2,21 +2,25 @@ import db from "../../database/db.js";
 
 export const linkModel = {
 
-    async links(clienteCnpjId) {
+  async findByClientCompanyId(clientCompanyId) {
+    const sql = `
+      SELECT *
+      FROM generated_links
+      WHERE client_company_id = ?
+    `;
 
-        const sql = "SELECT * FROM geracao_link WHERE cliente_cnpj_id = ?";
+    const [rows] = await db.execute(sql, [clientCompanyId]);
+    return rows;
+  },
 
-        const [rows] = await db.execute(sql, [clienteCnpjId]);
+  async clientCompanyExists(clientCompanyId) {
+    const sql = `
+      SELECT id
+      FROM client_companies
+      WHERE id = ?
+    `;
 
-        return rows;
-    },
-
-    async isCnpjAssociated(clienteCnpjId, cnpjId) {
-
-        const sql = "SELECT id_cliente_cnpj FROM cliente_cnpj WHERE id_cliente_cnpj = ? AND cnpj_id = ?";
-
-        const [rows] = await db.execute(sql, [clienteCnpjId, cnpjId]);
-
-        return rows[0] || null;
-    },
-}
+    const [rows] = await db.execute(sql, [clientCompanyId]);
+    return rows[0] || null;
+  },
+};

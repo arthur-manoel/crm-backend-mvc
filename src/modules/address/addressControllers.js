@@ -29,7 +29,7 @@ const createAddress = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -46,7 +46,7 @@ const getAddress = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
     
-    return res.status(500).json({ error: "Internal error" });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -63,7 +63,7 @@ const updateAddress = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -79,7 +79,7 @@ const deleteAddress = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

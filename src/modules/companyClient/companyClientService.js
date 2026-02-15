@@ -40,7 +40,7 @@ export const companyClientService = {
     await companyService.validateCompanyExists(companyId);
     await clientService.validateClientExists(clientId);
 
-    const link = await companyClientModel.findLinkById(linkId);
+    const link = await companyClientModel.findById(linkId);
 
     if (!link) {
       throw new NotFoundError("Company-client link not found");
@@ -72,7 +72,7 @@ export const companyClientService = {
     const conn = await db.getConnection();
 
     try {
-      const link = await companyClientModel.findLinkById(linkId);
+      const link = await companyClientModel.findById(linkId);
 
       if (!link) {
         throw new NotFoundError("Company-client link not found");

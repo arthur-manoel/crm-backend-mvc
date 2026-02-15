@@ -15,7 +15,7 @@ export const companyClientModel = {
     return rows;
   },
 
-  async findLinkById(linkId) {
+  async findById(linkId) {
     const sql = `
       SELECT client_id, company_id
       FROM client_companies

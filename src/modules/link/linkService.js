@@ -4,22 +4,20 @@ import { linkModel } from "./linkModel.js";
 
 export const linkService = {
 
-    async links(clienteCnpjId, cnpjId) {
+  async getLinks(clientCompanyId) {
 
-        
-        const link = await linkModel.isCnpjAssociated(clienteCnpjId, cnpjId);
+    const association = await linkModel.clientCompanyExists(clientCompanyId);
 
-        if (!link) {
-            throw new DomainError("CNPJ não associado ao cliente");
-        }
-
-        const affectedRows = await linkModel.links(clienteCnpjId);
-
-        if (affectedRows === 0) {
-            throw new NotFoundError("Links não encontrado")
-        }
-
-        return { affectedRows };
-
+    if (!association) {
+      throw new DomainError("Association not found");
     }
-}
+
+    const links = await linkModel.findByClientCompanyId(clientCompanyId);
+
+    if (!links || links.length === 0) {
+      throw new NotFoundError("No links found for this association");
+    }
+
+    return links;
+  }
+};

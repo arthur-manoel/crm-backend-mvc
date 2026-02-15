@@ -24,7 +24,7 @@ const createCompanyUser = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -51,7 +51,7 @@ const updateCompanyUser = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error"});
   }
 };
 
@@ -75,7 +75,7 @@ const deleteCompanyUser = async (req, res) => {
       return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 

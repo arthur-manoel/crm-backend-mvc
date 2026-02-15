@@ -20,7 +20,7 @@ const createClient = async (req, res) => {
             return res.status(error.status).json({ error: error.message });
         }
 
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
@@ -50,7 +50,7 @@ const updateClient = async (req, res) => {
             return res.status(error.status).json({ error: error.message });
         }
 
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
@@ -63,7 +63,7 @@ const deleteClient = async (req, res) => {
         if (error instanceof NotFoundError) {
             return res.status(error.status).json({ error: error.message });
         }
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 

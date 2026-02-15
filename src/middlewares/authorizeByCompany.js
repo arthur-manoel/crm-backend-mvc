@@ -14,7 +14,7 @@ export function authorizeByCompany(minimumRole) {
       const { companyId } = req.params;
 
       if (!ROLE_HIERARCHY[minimumRole]) {
-        throw new Error('Invalid minimum role');
+        throw new AuthorizationError('Invalid minimum role');
       }
 
       if (!companyId) {
