@@ -3,19 +3,20 @@ import { dashboardModel } from './dashboardModel.js';
 
 export const dashboardService = {
 
-    async dashboard(usuarioId) {
+    async dashboard(userId) {
 
-        const rows = await dashboardModel.dashboard(usuarioId);
+        const rows = await dashboardModel.dashboard(userId);
 
-        const normalizarNumeros = (row) => ({
-            totalCnpjs: Number(row.totalCnpjs),
-            totalLinksAtivos: Number(row.totalLinksAtivos),
-            totalLinksPendentes: Number(row.totalLinksPendentes),
-            totalAberturaCnpj: Number(row.totalAberturaCnpj),
-            totalAlteracaoCnpj: Number(row.totalAlteracaoCnpj),
-            totalFechamentoCnpj: Number(row.totalFechamentoCnpj),
+        const normalizeNumbers = (row) => ({
+            totalCompanies: Number(row.totalCompanies),
+            totalActiveLinks: Number(row.totalActiveLinks),
+            totalPendingLinks: Number(row.totalPendingLinks),
+            totalCompanyOpening: Number(row.totalCompanyOpening),
+            totalCompanyChange: Number(row.totalCompanyChange),
+            totalCompanyClosing: Number(row.totalCompanyClosing),
         });
-        return normalizarNumeros(rows);
+
+        return normalizeNumbers(rows);
     },
 
     async processTypes() {
@@ -23,12 +24,12 @@ export const dashboardService = {
         return rows;
     },
 
-    async getClientDetails(clienteId) {
+    async getClientDetails(clientId) {
 
-        const details = await dashboardModel.getClientDetails(clienteId);
+        const details = await dashboardModel.getClientDetails(clientId);
 
-        if (details === 0) {
-            throw new NotFoundError("Cliente não encontrado");
+        if (!details.length) {
+            throw new NotFoundError("Client not found");
         }
 
         return details;

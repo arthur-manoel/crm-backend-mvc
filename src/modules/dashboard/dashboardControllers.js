@@ -6,11 +6,11 @@ const dashboard = async (req, res) => {
 
   try {
 
-    const usuarioId = req.user.id;
+    const userId = req.user.id;
 
-    const informacoes = await dashboardService.dashboard(usuarioId);
+    const information = await dashboardService.dashboard(userId);
 
-    return res.json(informacoes);
+    return res.json(information);
 
   } catch (error) {
 
@@ -18,7 +18,7 @@ const dashboard = async (req, res) => {
         return res.status(error.status).json({ error: error.message });
     }
 
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -26,9 +26,9 @@ const processTypes = async (req, res) => {
 
     try {
 
-        const tiposProcesso = await dashboardService.processTypes();
+        const processTypes = await dashboardService.processTypes();
 
-        return res.status(200).json(tiposProcesso);
+        return res.status(200).json(processTypes);
 
     } catch (error) {
 
@@ -36,7 +36,7 @@ const processTypes = async (req, res) => {
             return res.status(error.status).json({ error: error.message });
         }
 
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ error: "Internal server error" });
       }
 }
 
@@ -44,9 +44,9 @@ const getClientDetails = async (req, res) => {
 
   try {
     
-    const { clienteId } = req.params;
+    const { clientId } = req.params;
 
-    const result = await dashboardService.getClientDetails(clienteId);
+    const result = await dashboardService.getClientDetails(clientId);
 
     return res.status(200).json(result);
 
@@ -56,7 +56,7 @@ const getClientDetails = async (req, res) => {
       return res.status(error.status).json({ error: error.message })
     }
 
-    return res.status(500).json({ error: "Erro interno" })
+    return res.status(500).json({ error: error.message })
   }
 
 }

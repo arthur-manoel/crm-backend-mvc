@@ -7,7 +7,7 @@ import { clientIdSchema } from './dashboard.schema.js';
 const router = express.Router();
 
 router.get('/dashboard', verifyToken, dashboard);
-router.get("/tiposProcesso", verifyToken, processTypes);
-router.get("/clientes-detalhes/:clienteId", verifyToken, validateParams(clientIdSchema), getClientDetails)
+router.get("/process-types", verifyToken, processTypes);
+router.get("/clients-details/:clientId", verifyToken, validateParams(clientIdSchema), getClientDetails);
 
 export default router;
