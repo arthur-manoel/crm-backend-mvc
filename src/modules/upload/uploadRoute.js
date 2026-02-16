@@ -8,15 +8,15 @@ import multer from 'multer';
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 10 * 1024 * 1024 }, // 50MB (ajuste se quiser)
+  limits: { fileSize: 10 * 1024 * 1024 }, //50mb
 });
 
 const router = express.Router();
 
-router.post("/upload/documentos/:empresaClienteId",
+router.post("/upload/documents/:clientCompanyId",
     verifyToken,
     validateParams(uploadParamsSchema),
-    upload.single("arquivo"),
+    upload.single("file"),
     validateBody(uploadBodySchema),
     insertDocument
 );

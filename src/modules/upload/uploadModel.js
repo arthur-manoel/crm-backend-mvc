@@ -5,16 +5,16 @@ export const uploadModel = {
   async insertDocument({
     link,
     documentTypeId,
-    empresaClienteId,
-    generationLinkId,
+    clientCompanyId,
+    generatedLinkId,
   }) {
 
     const sql = `
-      INSERT INTO documento (
-        link,
-        tipo_documento_id,
-        cliente_cnpj_id,
-        geracao_link_id
+      INSERT INTO documents (
+        url,
+        document_type_id,
+        client_company_id,
+        generated_link_id
       )
       VALUES (?, ?, ?, ?)
     `;
@@ -22,22 +22,22 @@ export const uploadModel = {
     const [result] = await db.execute(sql, [
       link,
       documentTypeId,
-      empresaClienteId,
-      generationLinkId,
+      clientCompanyId,
+      generatedLinkId,
     ]);
 
     return result.insertId;
 
   },
 
-  async findGenerationLink(generationLinkId) {
+  async findGeneratedLink(generatedLinkId) {
     const sql = `
-      SELECT id_geracao_link
-      FROM geracao_link
-      WHERE id_geracao_link = ?
+      SELECT id
+      FROM generated_links
+      WHERE id = ?
     `;
 
-    const [rows] = await db.execute(sql, [generationLinkId]);
+    const [rows] = await db.execute(sql, [generatedLinkId]);
 
     return rows[0] ?? null;
   },

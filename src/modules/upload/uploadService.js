@@ -11,51 +11,54 @@ export const uploadService = {
   async insertDocument({
     file,
     documentTypeId,
-    empresaClienteId,
-    generationLinkId,
+    clientCompanyId,
+    generatedLinkId,
   }) {
 
-    const vinculo =
-      await companyClientModel.findLinkById(empresaClienteId); 
-
-    if (!vinculo) {
-      throw new NotFoundError("Vinculo empresa-cliente não encontrado.");
+    
+    const link =
+    await companyClientModel.findById(clientCompanyId); 
+    
+    if (!link) {
+      throw new NotFoundError("Client-company link not found.");
     }
-
-    const generationLink =
-      await uploadModel.findGenerationLink(generationLinkId);
-
-    if (!generationLink) {
-      throw new DomainError("Processo de geração de link inválido.");
+    
+    const generatedLink =
+    await uploadModel.findGeneratedLink(generatedLinkId);
+    
+    if (!generatedLink) {
+      throw new DomainError("Invalid generated link process.");
     }
-
+    
     const bucket = process.env.R2_BUCKET_NAME;
     const prefix = process.env.UPLOAD_PREFIX || "uploads";
+    console.log(clientCompanyId, documentTypeId, generatedLinkId)
 
     const ext = file.originalname?.includes(".")
       ? "." + file.originalname.split(".").pop()
       : "";
-
-    const key = `${prefix}/${empresaClienteId}/${uuid()}${ext}`;
-
-    await r2Client.send(
-      new PutObjectCommand({
-        Bucket: bucket,
-        Key: key,
+      
+      const key = `${prefix}/${clientCompanyId}/${uuid()}${ext}`;
+      
+      await r2Client.send(
+        new PutObjectCommand({
+          Bucket: bucket,
+          Key: key,
         Body: file.buffer,
         ContentType: file.mimetype,
       })
     );
-
+    
     const publicUrl = `${process.env.R2_PUBLIC_BASE_URL}/${key}`;
     
     const documentId = await uploadModel.insertDocument({
-        link: publicUrl,
+      link: publicUrl,
         documentTypeId,
-        empresaClienteId,
-        generationLinkId,
-    });
-    
-    return { documentId };
-  },
-};
+        clientCompanyId,
+        generatedLinkId,
+      });
+      
+      return { documentId };
+    },
+  };
+  
