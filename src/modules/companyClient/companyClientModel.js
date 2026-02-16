@@ -78,5 +78,13 @@ export const companyClientModel = {
     const [result] = await conn.execute(sql, [linkId]);
     
     return result.affectedRows;
+  },
+
+  async deleteByCompany(companyId, conn) {
+    
+    const sql = "DELETE FROM client_companies WHERE company_id = ?";
+
+    const [rows] = await conn.execute(sql, [companyId]);
+    return rows.affectedRows;
   }
 };

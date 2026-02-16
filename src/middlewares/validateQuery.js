@@ -2,14 +2,14 @@ export function validateQuery(schema) {
 
     return (req, res, next) => {
         
-        const resultado = schema.safeParse(req.query);
+        const result = schema.safeParse(req.query);
 
-        if (!resultado.success) {
-            const erros = resultado.error.issues.map(e => e.message) || ["Erro de validação desconhecido"];
-            return res.status(400).json({ erros });
+        if (!result.success) {
+            const errors = result.error.issues.map(e => e.message) || ["Unknown validation error"];
+            return res.status(400).json({ errors });
         }
 
-        req.query = resultado.data;
+        req.query = result.data;
 
         next();
 

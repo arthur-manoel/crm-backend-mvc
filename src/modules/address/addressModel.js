@@ -145,7 +145,7 @@ export const addressModel = {
     return rows.affectedRows;
   },
 
-  async deleteAddress(companyId, conn) {
+  async deleteByCompany(companyId, conn) {
 
     const sql = "DELETE FROM addresses WHERE company_id = ?";
 

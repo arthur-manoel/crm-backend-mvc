@@ -108,6 +108,17 @@ export const cnaeModel = {
 
     const [result] = await db.execute(sql, [linkId]);
     return result.affectedRows;
+  },
+
+  async deleteByCompany(companyId, conn) {
+
+    const sql = `
+    DELETE FROM company_cnaes
+    WHERE company_id = ?
+    `;
+
+    const [rows] = await conn.execute(sql, [companyId]);
+    return rows.affectedRows;
   }
 
 };

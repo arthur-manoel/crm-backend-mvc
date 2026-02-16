@@ -3,13 +3,11 @@ import { NotFoundError } from "../../errors/NotFoundError.js";
 import { companyModel } from "./companyModel.js";
 import db from "../../database/db.js";
 
-// TEMP: domain not refactored yet
-
-// import { companyUserModel } from "../companyUser/companyUserModel.js";
-// import { processModel } from "../process/processModel.js";
-// import { companyClientModel } from "../companyClient/companyClientModel.js";
-// import { companyActivityModel } from "../companyActivity/companyActivityModel.js";
-// import { addressModel } from "../address/addressModel.js";
+import { companyUserModel } from "../companyUser/companyUserModel.js";
+import { processModel } from "../process/processModel.js";
+import { companyClientModel } from "../companyClient/companyClientModel.js";
+import { cnaeModel } from "../cnaes/cnaesModel.js"; 
+import { addressModel } from "../address/addressModel.js";
 
 export const companyService = {
     
@@ -51,8 +49,6 @@ export const companyService = {
             companyId: newCompany.id,
             role: "ADMIN"
         });
-
-        // TEMP: user-company link disabled until companyUser domain is refactored
 
         return newCompany;
     },
@@ -105,7 +101,7 @@ export const companyService = {
             // Manual cascade delete to preserve business rules
             await processModel.deleteByCompany(companyId, conn);
             await companyClientModel.deleteByCompany(companyId, conn);
-            await companyActivityModel.deleteByCompany(companyId, conn);
+            await cnaeModel.deleteByCompany(companyId, conn);
             await addressModel.deleteByCompany(companyId, conn);
 
             const deleted = await companyModel.deleteCompany(companyId, conn);
