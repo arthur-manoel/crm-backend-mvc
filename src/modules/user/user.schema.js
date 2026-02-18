@@ -1,13 +1,23 @@
 import { z } from "zod";
 
-// export const UserSchema = z.object({
-//   name: z.string().min(3).max(255).trim(),
+export const patchUserSchema = z.object({
+  currentPassword: z.string().min(1),
 
-//   email: z.string().trim().toLowerCase().email().max(255),
+  email: z.string().email().optional(),
 
-//   phone: z.string().regex(/^\d{10,11}$/).optional(),
+  name: z.string().min(2).optional(),
 
-//   password: z.string().min(6).max(255),
+  phone: z.string().min(8).optional(),
 
-//   role: z.coerce.number().int().positive()
-// });
+  newPassword: z.string().min(6).optional(),
+})
+.refine(
+  (data) =>
+    data.email !== undefined ||
+    data.name !== undefined ||
+    data.phone !== undefined ||
+    data.newPassword !== undefined,
+    {
+    message: "At least one field must be provided"
+  }
+);

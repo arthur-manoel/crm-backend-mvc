@@ -16,4 +16,5 @@ router.post(
   validateBody(createUserSchema),
   createUser
 );
+
 export default router;

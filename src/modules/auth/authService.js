@@ -49,5 +49,5 @@ export const authService = {
         const token = generateToken(payload);
 
         return { token, user: { id, name, email, role } };
-    }
+    },
 }

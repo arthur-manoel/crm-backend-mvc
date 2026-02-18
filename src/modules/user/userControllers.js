@@ -1,7 +1,8 @@
 import { userService } from "./userService.js";
 import { DomainError } from "../../errors/DomainError.js";
+import { NotFoundError } from "../../errors/NotFoundError.js";
 
-export const listUsers = async (req, res) => {
+const listUsers = async (req, res) => {
 
   try {
 
@@ -14,3 +15,26 @@ export const listUsers = async (req, res) => {
   }
 };
 
+const patchUser = async (req, res) => {
+
+  try {
+
+    const userId = req.user.id;
+
+    const validatedData = req.body;
+
+    await userService.patchUser(userId, validatedData);
+
+    return res.status(204).send();
+
+  } catch (error) {
+
+    if (error instanceof DomainError || error instanceof NotFoundError) {
+      return res.status(error.status).json({ error: error.message })
+    }
+
+    return res.status(500).json({ error: "Internal server error" })
+  }
+}
+
+export { listUsers, patchUser }

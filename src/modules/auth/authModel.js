@@ -44,5 +44,4 @@ export const authModel = {
 
         return rows[0] || null;
     }
-
 };

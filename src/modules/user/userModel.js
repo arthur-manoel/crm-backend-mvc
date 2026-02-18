@@ -12,7 +12,7 @@ export const userModel = {
   },
 
   async findAll() {
-
+    
     const sql = `
       SELECT
         id,
@@ -26,6 +26,38 @@ export const userModel = {
     const [rows] = await db.execute(sql);
 
     return rows;
-  }
+  },
+  
+    async findById(userId) {
+        
+        const sql = "SELECT * FROM users WHERE id = ?";
 
+        const [rows] = await db.execute(sql, [userId]);
+
+        return rows[0] || null;
+    },
+    
+    async patchUser(userId, fields) {
+
+        const sets = [];
+        const values = [];
+
+        for (const [key, value] of Object.entries(fields)) {
+            sets.push(`${key} = ?`);
+            values.push(value);
+        }
+
+        if (sets.length === 0) return 0;
+
+        const sql = `
+            UPDATE users
+            SET ${sets.join(", ")}
+            WHERE id = ?
+        `;
+
+        values.push(userId);
+
+        const [rows] = await db.execute(sql, values);
+        return rows.affectedRows;
+    }
 };

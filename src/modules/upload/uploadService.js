@@ -32,7 +32,6 @@ export const uploadService = {
     
     const bucket = process.env.R2_BUCKET_NAME;
     const prefix = process.env.UPLOAD_PREFIX || "uploads";
-    console.log(clientCompanyId, documentTypeId, generatedLinkId)
 
     const ext = file.originalname?.includes(".")
       ? "." + file.originalname.split(".").pop()
