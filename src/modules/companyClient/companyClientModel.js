@@ -46,6 +46,24 @@ export const companyClientModel = {
     return rows[0] || null;
   },
 
+  async findUserAssociationContext(userId, associationId) {
+
+    const sql = `
+      SELECT 
+        cc.id AS association_id,
+        cc.company_id,
+        cu.role
+    FROM client_companies cc
+    LEFT JOIN company_users cu
+        ON cu.company_id = cc.company_id
+        AND cu.user_id = ?
+    WHERE cc.id = ?;
+    `;
+
+    const [rows] = await db.execute(sql, [userId, associationId]);
+    return rows[0] || null;
+  },
+
   async create(clientId, companyId) {
 
     const sql = `
@@ -54,7 +72,6 @@ export const companyClientModel = {
     `;
 
     const [result] = await db.execute(sql, [clientId, companyId]);
-
     return result;
   },
 

@@ -3,7 +3,6 @@ import { verifyToken } from "../../middlewares/tokenVerify.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 import { authorizeByCompany } from "../../middlewares/authorizeByCompany.js";
 import { validateParams } from "../../middlewares/validateParams.js";
-import { checkCompanyExists } from "../../middlewares/checkCompanyExists.js";
 
 import { 
   clientCompanyParamsSchema, 
@@ -34,7 +33,6 @@ router.get(
   "/companies/:companyId/activities",
   verifyToken,
   validateParams(companyIdParamSchema),
-  checkCompanyExists,
   authorizeByCompany("VIEWER"),
   getCompanyActivities
 );

@@ -37,6 +37,21 @@ export const companyUserModel = {
     return rows[0] || null;
   },
 
+  async findUserCompanyContext(userId, companyId) {
+
+    const sql = `
+      SELECT c.id, cu.role
+      FROM companies c
+      LEFT JOIN company_users cu
+        ON cu.company_id = c.id
+        AND cu.user_id = ?
+      WHERE c.id = ?
+      `;
+
+    const [rows] = await db.execute(sql, [userId, companyId]);
+    return rows[0] || null
+  },
+
   async countAdmins(companyId) {
 
     const sql = `
