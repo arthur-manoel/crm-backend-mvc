@@ -21,3 +21,7 @@ export const patchUserSchema = z.object({
     message: "At least one field must be provided"
   }
 );
+
+export const deleteUserSchema = z.object({
+  currentPassword: z.string().min(1),
+});

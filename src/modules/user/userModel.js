@@ -59,5 +59,13 @@ export const userModel = {
 
         const [rows] = await db.execute(sql, values);
         return rows.affectedRows;
+    },
+
+    async deleteById(userId) {
+
+      const sql = "DELETE FROM users WHERE id = ?";
+
+      const [rows] = await db.execute(sql, [userId]);
+      return rows.affectedRows
     }
 };

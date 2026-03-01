@@ -4,7 +4,7 @@ import { DomainError } from "../../errors/DomainError.js";
 import { NotFoundError } from "../../errors/NotFoundError.js";
 
 export const userService = {
-
+  
   async list() {
 
     return await userModel.findAll();
@@ -74,6 +74,25 @@ export const userService = {
         throw new DomainError("No changes detected");
       }
       
-    await userModel.patchUser(userId, fieldsToUpdate);
+      await userModel.patchUser(userId, fieldsToUpdate);
+    },
+
+    async deleteUser(userId, data) {
+
+      const user = await userModel.findById(userId)
+      if (!user) {
+        throw new NotFoundError("User not found");
+      }
+
+      const isPasswordCorrect = await bcrypt.compare(
+        data.currentPassword,
+        user.password_hash
+      );
+
+      if (!isPasswordCorrect) {
+        throw new DomainError("Authentication failed", 401);
+      }
+
+      await userModel.deleteById(userId);
     }
 };

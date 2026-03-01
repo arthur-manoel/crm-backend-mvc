@@ -37,4 +37,26 @@ const patchUser = async (req, res) => {
   }
 }
 
-export { listUsers, patchUser }
+const deleteUser = async (req, res) => {
+
+  try {
+
+    const userId = req.user.id;
+
+    const validatedData = req.body;
+
+    await userService.deleteUser(userId, validatedData);
+
+    return res.status(204).send();
+
+  } catch (error) {
+
+    if (error instanceof DomainError || error instanceof NotFoundError) {
+      return res.status(error.status).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+export { listUsers, patchUser, deleteUser }
