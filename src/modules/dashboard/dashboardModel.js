@@ -8,12 +8,12 @@ export const dashboardModel = {
         SELECT
             COUNT(DISTINCT cu.company_id) AS totalCompanies,
 
-            SUM(ls.status = 'active')    AS totalActiveLinks,
-            SUM(ls.status = 'pending')   AS totalPendingLinks,
+            SUM(ls.status = 'active')  AS totalActiveLinks,
+            SUM(ls.status = 'pending') AS totalPendingLinks,
 
-            SUM(gl.process_type_id = 50) AS totalCompanyOpening,
-            SUM(gl.process_type_id = 51) AS totalCompanyChange,
-            SUM(gl.process_type_id = 52) AS totalCompanyClosing
+            SUM(gl.link_type_id = 50) AS totalCompanyOpening,
+            SUM(gl.link_type_id = 51) AS totalCompanyChange,
+            SUM(gl.link_type_id = 52) AS totalCompanyClosing
 
         FROM company_users cu
 

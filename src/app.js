@@ -18,9 +18,8 @@ import companyUser from "./modules/companyUser/companyUserRoutes.js";
 import cnaeRef from "./modules/cnaes/cnaesRoutes.js";
 import documentosRef from "./modules/documents/documentsRoutes.js";
 import enderecoRef from "./modules/address/addressRouters.js";
-import linkRef from "./modules/link/linkRoutes.js";
 import dashboardRef from "./modules/dashboard/dashboardRoutes.js";
-import processoRef from "./modules/process/processRouter.js";
+import linkRef from "./modules/link/linkRoutes.js";
 import uploadRef from "./modules/upload/uploadRoute.js";
 
 app.use("/", authRef);
@@ -32,9 +31,8 @@ app.use("/", companyUser);
 app.use("/", cnaeRef);
 app.use("/", documentosRef);
 app.use("/", enderecoRef);
-app.use("/", linkRef);
 app.use("/", dashboardRef);
-app.use("/", processoRef);
+app.use("/", linkRef);
 app.use("/", uploadRef);
 
 app.get("/", (req, res) => {

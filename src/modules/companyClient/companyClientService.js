@@ -5,7 +5,6 @@ import { companyClientModel } from "./companyClientModel.js";
 import { companyService } from "../company/companyService.js";
 import { clientService } from "../client/clientService.js";
 
-import { processModel } from "../process/processModel.js";
 import db from "../../database/db.js";
 
 export const companyClientService = {
@@ -78,9 +77,6 @@ export const companyClientService = {
       }
 
       await conn.beginTransaction();
-
-      // Remove dependent processes before deleting the link
-      await processModel.deleteGeneratedLinksByCompany(linkId, conn);
 
       const deleted =
         await companyClientModel.deleteById(linkId, conn);
