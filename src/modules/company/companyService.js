@@ -20,17 +20,6 @@ export const companyService = {
         }
     },
 
-    async validateCompanyExists(companyId) {
-
-        const company = await companyModel.findById(companyId);
-
-        if (!company) {
-            throw new NotFoundError("Company not found");
-        }
-
-        return company;
-    },
-
     async createCompany(name, cnpj, createdAt, activityDescription, userId) {
 
         await this.validateDuplicateCnpj({ cnpj });
@@ -78,8 +67,6 @@ export const companyService = {
 
         const { name, activityDescription, companyId } = data;
 
-        await this.validateCompanyExists(companyId);
-
         return companyModel.updateCompany({
             name,
             activityDescription,
@@ -92,8 +79,6 @@ export const companyService = {
         const conn = await db.getConnection();
 
         try {
-
-            await this.validateCompanyExists(companyId);
 
             await conn.beginTransaction();
 

@@ -20,7 +20,7 @@ export const companyClientService = {
   },
 
   async createLink(clientId, companyId) {
-    await companyService.validateCompanyExists(companyId);
+
     await clientService.ensureClientExists(clientId);
 
     const existingLink =
@@ -35,7 +35,6 @@ export const companyClientService = {
 
   async updateLink(linkId, clientId, companyId) {
     
-    await companyService.validateCompanyExists(companyId);
     await clientService.validateClientExists(clientId);
 
     const link = await companyClientModel.findById(linkId);
@@ -66,32 +65,8 @@ export const companyClientService = {
   },
 
   async deleteLink(linkId) {
-    
-    const conn = await db.getConnection();
 
-    try {
-      const link = await companyClientModel.findById(linkId);
-
-      if (!link) {
-        throw new NotFoundError("Company-client link not found");
-      }
-
-      await conn.beginTransaction();
-
-      const deleted =
-        await companyClientModel.deleteById(linkId, conn);
-
-      await conn.commit();
-
-      return deleted;
-
-    } catch (error) {
-
-      await conn.rollback();
-      throw error;
-
-    } finally {
-      conn.release();
-    }
+    const deleted = await companyClientModel.deleteById(linkId);
+    return deleted;
   }
 };

@@ -12,3 +12,7 @@ export const createLinkParamsSchema = z.object({
 export const linkIdQuerySchema = z.object({
   linkId: z.coerce.number().int().positive().optional()
 });
+
+export const deleteLinkParamsSchema = z.object({
+  linkId: z.coerce.number().int().positive()
+});

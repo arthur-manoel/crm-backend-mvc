@@ -88,11 +88,11 @@ export const companyClientModel = {
     return result.affectedRows;
   },
 
-  async deleteById(linkId, conn) {
+  async deleteById(linkId) {
 
     const sql = "DELETE FROM client_companies WHERE id = ?";
 
-    const [result] = await conn.execute(sql, [linkId]);
+    const [result] = await db.execute(sql, [linkId]);
     
     return result.affectedRows;
   },

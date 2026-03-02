@@ -19,8 +19,8 @@ export const dashboardService = {
         return normalizeNumbers(rows);
     },
 
-    async processTypes() {
-        const rows = await dashboardModel.processTypes();
+    async linkTypes() {
+        const rows = await dashboardModel.linkTypes();
         return rows;
     },
 

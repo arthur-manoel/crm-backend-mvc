@@ -11,11 +11,13 @@ import { authorizeByAssociation } from "../../middlewares/authorizeByAssociation
 import {
   createLinkBodySchema,
   createLinkParamsSchema,
+  deleteLinkParamsSchema,
   linkIdQuerySchema
 } from "./link.schema.js";
 
 import {
   createLink,
+  deleteLink,
   getLinksByClientCompany
 } from "./linkControllers.js";
 
@@ -37,6 +39,13 @@ router.post(
   validateBody(createLinkBodySchema),
   authorizeByAssociation("EDITOR"),
   createLink
+);
+
+router.delete(
+  "/links/:linkId",
+  verifyToken,
+  validateParams(deleteLinkParamsSchema),
+  deleteLink
 );
 
 export default router;

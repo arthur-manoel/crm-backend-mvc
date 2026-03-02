@@ -44,9 +44,9 @@ export const dashboardModel = {
         };
     },
 
-    async processTypes() {
+    async linkTypes() {
 
-        const sql = "SELECT * FROM process_types";
+        const sql = "SELECT * FROM link_types";
 
         const [rows] = await db.execute(sql);
 

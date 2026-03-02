@@ -8,7 +8,8 @@ import {
   idParamSchema,
   createCompanyClientSchema,
   updateCompanyClientBodySchema,
-  companyClientParamsSchema
+  companyClientParamsSchema,
+  companyClientDeleteParamsSchema
 } from "./companyClient.schema.js";
 
 import {
@@ -17,6 +18,7 @@ import {
   updateCompanyClient,
   deleteCompanyClient
 } from "./companyClientControllers.js";
+import { authorizeByAssociation } from "../../middlewares/authorizeByAssociation.js";
 
 const router = express.Router();
 
@@ -45,10 +47,10 @@ router.put(
 );
 
 router.delete(
-  "/company-clients/:linkId/:companyId",
+  "/company-clients/:clientCompanyId",
   verifyToken,
-  validateParams(companyClientParamsSchema),
-  authorizeByCompany("ADMIN"),
+  validateParams(companyClientDeleteParamsSchema),
+  authorizeByAssociation("ADMIN"),
   deleteCompanyClient
 );
 

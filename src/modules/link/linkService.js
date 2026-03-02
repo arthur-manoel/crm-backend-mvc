@@ -3,6 +3,7 @@ import { linkModel } from "./linkModel.js";
 import db from "../../database/db.js";
 
 export const linkService = {
+
   async getAllByClientCompany(clientCompanyId, linkId) {
     return linkModel.findAllByClientCompany(clientCompanyId, linkId);
   },
@@ -47,5 +48,9 @@ export const linkService = {
     } finally {
       conn.release();
     }
+  },
+
+  async deleteLink(linkId) {
+    await linkModel.deleteLink(linkId);
   }
 };

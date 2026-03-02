@@ -67,9 +67,10 @@ const deleteCompanyClient = async (req, res) => {
 
   try {
 
-    const { linkId } = req.params;
+    const { clientCompanyId } = req.params;
 
-    await companyClientService.deleteLink(linkId);
+    await companyClientService.deleteLink(clientCompanyId);
+    
     return res.status(204).send();
 
   } catch (error) {

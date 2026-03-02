@@ -22,13 +22,13 @@ const dashboard = async (req, res) => {
   }
 };
 
-const processTypes = async (req, res) => {
+const linkTypes = async (req, res) => {
 
     try {
 
-        const processTypes = await dashboardService.processTypes();
+        const linkTypes = await dashboardService.linkTypes();
 
-        return res.status(200).json(processTypes);
+        return res.status(200).json(linkTypes);
 
     } catch (error) {
 
@@ -61,4 +61,4 @@ const getClientDetails = async (req, res) => {
 
 }
 
-export { dashboard, processTypes, getClientDetails };
+export { dashboard, getClientDetails, linkTypes };

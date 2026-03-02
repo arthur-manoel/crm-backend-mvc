@@ -24,12 +24,6 @@ export const cnaeService = {
       throw new DomainError("Link already exists");
     }
 
-    const companyExists = await companyService.validateCompanyExists(companyId);
-
-    if (!companyExists) {
-      throw new NotFoundError("Company not found");
-    }
-
     const cnaeExists = await cnaeModel.findById(cnaeId);
 
     if (!cnaeExists) {
